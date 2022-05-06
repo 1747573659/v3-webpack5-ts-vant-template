@@ -10,6 +10,10 @@ files.keys().forEach(key => {
 
 const routes: Array<RouteRecordRaw> = [
   {
+    path: '/',
+    redirect: '/myWallet'
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import(/* webpackChunkName: "about" */ '../views/LoginPage/LoginPage.vue')
