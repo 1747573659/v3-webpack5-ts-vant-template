@@ -1,5 +1,5 @@
 <template>
-  <div>{{ store.state.userInfo.token }}</div>
+  <div class="login-size">{{ store.state.userInfo.token }}</div>
 </template>
 
 <script lang="ts" setup>
@@ -27,3 +27,9 @@ onMounted(() => {
 })
 
 </script>
+
+<style lang="scss">
+.login-size {
+  font-size: 50px;
+}
+</style>
