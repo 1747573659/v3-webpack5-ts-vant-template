@@ -14,25 +14,19 @@
       </div>
     </div>
     <div class="login-name">
-      <Field
-        :class="{'active-border': loginNameShowBorder}"
-        @focus="loginNameFocus"
-        placeholder="手机号码/钱包ID/法人身份证号"
-        v-model="loginName"
-        :clearable="true"
-      />
+      <login-box v-model="loginName" :errorMsg="errorMsg"></login-box>
     </div>
     <div class="login-btn">
-      <Large-button type="primary" size="large"></Large-button>
+      <large-button type="primary" @click="handleLogin" size="large"></large-button>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import shopImgDefault from '../../assets/img/shopImgDefault.png'
-import { ref } from '@vue/reactivity'
-import { Field } from 'vant'
+import { watch, ref } from 'vue'
 import LargeButton from '@/components/LargeButton/LargeButton.vue'
+import LoginBox from './components/LoginBox/LoginBox.vue'
 // import { onMounted } from '@vue/runtime-core'
 // import { useStore } from 'vuex'
 
@@ -40,12 +34,23 @@ import LargeButton from '@/components/LargeButton/LargeButton.vue'
 
 // onMounted(() => {})
 const shopImg = ref(shopImgDefault)
-const loginName = ref<string>('')
+const loginName = ref('')
 
-const loginNameShowBorder = ref<boolean>(false)
-const loginNameFocus = () => {
-  loginNameShowBorder.value = true
+const errorMsg = ref('')
+
+// 登录事件
+const handleLogin = () => {
+  console.log('login')
+  console.log(loginName.value)
+  errorMsg.value = '该号码尚未注册，请核实后重新输入'
 }
+
+// 清空错误信息
+watch(loginName, (newValue:string, oldValue:string) => {
+  if (newValue !== oldValue) {
+    errorMsg.value = ''
+  }
+})
 </script>
 
 <style lang="scss" scoped>
@@ -70,16 +75,8 @@ const loginNameFocus = () => {
     }
   }
   .login-name {
-    padding-top: 84px;
+    margin-top: 84px;
     height: 111px;
-    &:deep(.van-field__control) {
-      border-bottom: solid 1px $borderColor;
-    }
-  }
-  .active-border {
-    &:deep(.van-field__control) {
-      border-bottom: solid 1px $primaryColor;
-    }
   }
   .login-btn {
     margin-top: 176px;

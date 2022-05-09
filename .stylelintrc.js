@@ -70,6 +70,7 @@ module.exports = {
       {
         "ignorePseudoClasses": ["deep"]
       }
-    ]
+    ],
+    "selector-no-vendor-prefix": null
   }
 }
