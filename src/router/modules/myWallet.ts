@@ -7,6 +7,16 @@ const myWalletRoutes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: "about" */ '@/views/MyWallet/MyWallet.vue')
   },
   {
+    path: '/merchantInfo',
+    name: 'merchantInfo',
+    component: () => import(/* webpackChunkName: "about" */ '@/views/MerchantInfo/MerchantInfo.vue')
+  },
+  {
+    path: '/kmTechPolicy',
+    name: 'kmTechPolicy',
+    component: () => import(/* webpackChunkName: "about" */ '@/views/MerchantInfo/KmTechPolicy.vue')
+  },
+  {
     path: '/walletDetail',
     name: 'walletDetail',
     component: () => import(/* webpackChunkName: "about" */ '@/views/WalletDetail/WalletDetail.vue')
