@@ -1,7 +1,7 @@
 module.exports = ({ file }) => {
   let remUnit
   // 判断条件
-  if (file && file.dirname && file.dirname.indexOf('vant') > -1) {
+  if (file && file.indexOf('vant') > -1) {
     remUnit = 37.5
   } else {
     remUnit = 75
