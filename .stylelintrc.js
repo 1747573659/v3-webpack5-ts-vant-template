@@ -63,8 +63,13 @@ module.exports = {
 // 禁止未知的函数
     "function-no-unknown": [true, {
       "ignoreFunctions": ["constant", "env"]
-    }]
+    }],
 
-
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        "ignorePseudoClasses": ["deep"]
+      }
+    ]
   }
 }
