@@ -1,35 +1,27 @@
 <template>
-  <div class="login-size">{{ store.state.userInfo.token }}</div>
+  <div class="login-wrap">
+    <div class="shop-info"></div>
+    <div class="login-name"></div>
+    <div class="login-btn"></div>
+  </div>
 </template>
 
 <script lang="ts" setup>
 // import { ref } from '@vue/reactivity'
-import { onMounted } from '@vue/runtime-core'
-import { useStore } from "vuex"
+// import { onMounted } from '@vue/runtime-core'
+// import { useStore } from 'vuex'
 
-import {
-  Login
-} from '@/api/wallet'
+// import { Login } from '@/api/wallet'
 
-const store = useStore()
-
-const handleLogin = async () => {
-  const res = await Login({
-    loginName: 'admin',
-    password: '21218cca77804d2ba1922c33e0151105'
-  })
-  console.log(store)
-  store.commit('SET_TOKEN', res.data.token)
-}
-
-onMounted(() => {
-  handleLogin()
-})
-
+// onMounted(() => {})
 </script>
 
-<style lang="scss">
-.login-size {
+<style lang="scss" scoped>
+.login-wrap {
   font-size: 50px;
+  .shop-info {
+    height: 300px;
+    padding: 80px 40px;
+  }
 }
 </style>

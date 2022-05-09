@@ -20,7 +20,7 @@ module.exports = {
     'selector-type-no-unknown': null, // 不允许未知类型选择器
     'rule-empty-line-before': [
       // 不允许rules前空一行
-      'always',
+      'never',
       {
         ignore: ['after-comment', 'first-nested'],
       },
