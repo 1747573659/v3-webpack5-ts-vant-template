@@ -11,12 +11,7 @@
 import { watch, ref, computed } from 'vue'
 import LargeButton from '@/components/LargeButton/LargeButton.vue'
 import LoginBox from '../../components/LoginBox/LoginBox.vue'
-// import { onMounted } from '@vue/runtime-core'
-// import { useStore } from 'vuex'
-
-// import { Login } from '@/api/wallet'
-
-// onMounted(() => {})
+import { useStore } from 'vuex'
 
 const loginName = ref('')
 
@@ -30,16 +25,19 @@ const emit = defineEmits<{
   (e: 'loginSucess', flag: boolean): void
 }>()
 
+const store = useStore()
+
 // 登录事件
 const handleLogin = () => {
   loginBtnLoading.value = true
   setTimeout(() => {
     loginBtnLoading.value = false
+    store.dispatch('setUserInfo', {
+      loginName: '13147157405'
+    })
+    emit('loginSucess', true)
   }, 1000);
-  console.log('login')
-  console.log(loginName.value)
-  errorMsg.value = '该号码尚未注册，请核实后重新输入'
-  emit('loginSucess', true)
+  // errorMsg.value = '该号码尚未注册，请核实后重新输入'
 }
 
 // 清空错误信息

@@ -27,12 +27,6 @@ import { ref } from 'vue'
 import LoginForPhoneNum from './components/LoginForPhoneNum/LoginForPhoneNum.vue'
 // input VerifyCode
 import LoginForVerify from './components/LoginForVerify/LoginForVerify.vue'
-// import { onMounted } from '@vue/runtime-core'
-// import { useStore } from 'vuex'
-
-// import { Login } from '@/api/wallet'
-
-// onMounted(() => {})
 
 // 定义图片
 const shopImg = ref(shopImgDefault)

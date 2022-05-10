@@ -1,14 +1,5 @@
 import { Commit, GetterTree, MutationTree, ActionTree } from 'vuex'
-
-type LoginName = string | null
-type NumberOrNull = number | null
-
-type UserInfo = {
-  loginName: LoginName,
-  token: string,
-  loginType: NumberOrNull,
-  shopAdminId: NumberOrNull
-}
+import type { LoginName, NumberOrNull, UserInfo} from '../storeTypes'
 
 const state: UserInfo = {
   loginName: '',
@@ -41,10 +32,10 @@ const mutations: MutationTree<UserInfo> = {
 
 const actions: ActionTree<UserInfo, null> = {
   setUserInfo({ commit }: { commit: Commit }, userInfo: UserInfo) {
-    // commit('SET_LOGIN_NAME', userInfo.loginName)
+    commit('SET_LOGIN_NAME', userInfo.loginName)
     commit('SET_TOKEN', userInfo.token)
-    // commit('SET_LOGIN_TYPE', userInfo.loginType)
-    // commit('SET_SHOPADMINID', userInfo.shopAdminId)
+    commit('SET_LOGIN_TYPE', userInfo.loginType)
+    commit('SET_SHOPADMINID', userInfo.shopAdminId)
   }
 }
 
