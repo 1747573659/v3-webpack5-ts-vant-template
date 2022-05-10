@@ -21,3 +21,7 @@ export interface LoginReq {
 export interface LoginRep {
   token: string
 }
+export interface BillAmountRep {
+  expend: number|null,
+  income: number|null
+}

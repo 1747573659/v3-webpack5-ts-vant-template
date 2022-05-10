@@ -8,3 +8,11 @@ export const Login = (data: LoginReq) => {
     params: data
   })
 }
+
+export const queryBillStatement = (data:any) => {
+  return request({
+    url: '/',
+    method: 'post',
+    params: data
+  })
+}
