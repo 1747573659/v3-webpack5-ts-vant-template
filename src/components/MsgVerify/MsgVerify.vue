@@ -25,7 +25,6 @@ import { VerifyCode, CountDown } from './types'
 import { useStore } from 'vuex'
 import ResendVerifyCode from './ResendVerifyCode.vue'
 
-
 // 拿到vuex中存储的loginName
 const { loginName } = useStore().state.userInfo
 
