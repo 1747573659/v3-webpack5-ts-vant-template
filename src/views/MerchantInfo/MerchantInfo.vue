@@ -2,7 +2,7 @@
   import { reactive, onMounted } from 'vue'
   import { useRouter } from 'vue-router'
   const router = useRouter()
-  const merchantEnum = [
+  const merchantEnum: object[] = [
     {
       title: '基本信息',
       children: [
@@ -83,8 +83,10 @@
       <div class="merchantInfo-card" v-for="(item, index) in merchantEnum" :key="index">
         <div class="merchantInfo-title">{{ item.title }}</div>
         <div class="merchantInfo-item" v-for="childItem in item.children" :key="childItem.key">
-          <div class="left">{{ childItem.label }}</div>
-          <div class="right">{{ merchantInfo[childItem.key] }}</div>
+          <div class="merchantInfo-item-inner">
+            <div class="left">{{ childItem.label }}</div>
+            <div class="right">{{ merchantInfo[childItem.key] }}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -100,7 +102,7 @@
   .merchantInfo {
     &-wrap {
       text-align: left;
-      background-color: $bg-light-color-1;
+      background-color: #fff;
     }
     &-title {
       padding: 0 24px;
@@ -108,13 +110,17 @@
       color: $font-color-2;
       height: 86px;
       line-height: 86px;
+      background-color: $bg-light-color-1;
     }
   }
   .merchantInfo-item {
+    padding: 0 24px;
+  }
+  .merchantInfo-item-inner {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 30px 24px;
+    padding: 30px 0;
     font-size: 32px;
     background-color: #fff;
     border-bottom: 1px solid $border-split-color-1;
@@ -132,6 +138,7 @@
     height: 110px;
     line-height: 110px;
     color: $font-color-2;
+    background-color: $bg-light-color-1;
   }
   .merchantInfo-back {
     padding: 24px 32px;
