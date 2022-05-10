@@ -20,7 +20,7 @@ const loginNameShowBorder = ref<boolean>(false)
 const loginNameFocus = () => {
   loginNameShowBorder.value = true
 }
-const loginNameBlur = (event: Event) => {
+const loginNameBlur = () => {
   loginNameShowBorder.value = false
 }
 

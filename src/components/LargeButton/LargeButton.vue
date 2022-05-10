@@ -1,5 +1,7 @@
 <template>
-  <Button type="primary" v-bind="$attrs" color="#00A3FF" size="large">获取短信验证码</Button>
+  <Button type="primary" v-bind="$attrs" color="#00A3FF" size="large">
+    <slot></slot>
+  </Button>
 </template>
 
 <script lang="ts" setup>
