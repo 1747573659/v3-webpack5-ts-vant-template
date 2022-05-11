@@ -1,8 +1,8 @@
 <template>
   <div class="resend-verifycode">
     <div class="countdown-text" v-if="current.seconds">{{ current.seconds }}秒后可重新发送</div>
-    <div class="resend-text" @click="resend" v-else>重新发送</div>
-    <resend-confirm :show="showResendConfirm"></resend-confirm> 
+    <div class="resend-text" @click="showResendConfirm = true" v-else>重新发送</div>
+    <resend-confirm :show="showResendConfirm" @sucess="confirmSucess"></resend-confirm> 
   </div>
 </template>
 
@@ -15,7 +15,7 @@ import ResendConfirm from './ResendConfirm.vue'
 // 倒计时逻辑
 const countDown = useCountDown({
   // 倒计时 60s
-  time: 2 * 1000,
+  time: 6 * 1000,
 });
 onMounted(() => {
   countDown.start()
@@ -31,10 +31,12 @@ const showResendConfirm = ref(false)
 const emit = defineEmits<{
   (e: 'resend', countDown: CountDown): void
 }>()
-const resend = () => {
-  showResendConfirm.value = true
+
+const confirmSucess = () => {
+  showResendConfirm.value = false
   emit('resend', countDown)
 }
+
 </script>
 
 <style lang="scss" scoped>
