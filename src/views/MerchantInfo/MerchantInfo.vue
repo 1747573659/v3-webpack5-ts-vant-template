@@ -93,9 +93,9 @@
     <div class="merchantInfo-policy">
       <span @click="handleToTechPolicy">《科脉技术隐私政策》</span>
     </div>
-    <div class="merchantInfo-back">
+    <!-- <div class="merchantInfo-back">
       <van-button type="default" @click="handleBack">返回</van-button>
-    </div>
+    </div> -->
   </div>
 </template>
 <style lang="scss" scoped>
