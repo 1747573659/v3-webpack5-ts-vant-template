@@ -9,15 +9,18 @@
 <template>
   <div class="kmtechPolicy-wrap">
     <div class="kmtechPolicy-main-wrap">这是详情</div>
-    <div class="kmtechPolicy-back">
+    <!-- <div class="kmtechPolicy-back">
       <van-button type="default" @click="handleBack">返回</van-button>
-    </div>
+    </div> -->
   </div>
 </template>
 <style lang="scss" scoped>
+  .kmtechPolicy-wrap {
+    height: 100%;
+    background-color: $bg-light-color-1;
+  }
   .kmtechPolicy-main-wrap {
     height: 100%;
-    // background-color: $bg-light-color-1;
   }
   .kmtechPolicy-back {
     padding: 24px 32px;

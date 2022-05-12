@@ -13,6 +13,7 @@ module.exports = {
     'generator-star-spacing': 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-tabs': 'off',
+    "@typescript-eslint/no-explicit-any": ["off"],
     // 'nonblock-statement-body-position': 1,
     'object-curly-spacing': 'off',
     "vue/no-use-v-if-with-v-for": ["error", {

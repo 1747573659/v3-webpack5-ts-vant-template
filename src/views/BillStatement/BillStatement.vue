@@ -2,47 +2,23 @@
   import { reactive, ref } from 'vue'
   import { useRouter } from 'vue-router'
   import { queryBillStatement } from '@/api/wallet'
+  import { billTypeEnum } from '@/enum/billStatement'
   import { BillAmountRep } from '@/api/types'
-  const router = useRouter()
-  const billTypeEnum = {
-    recharge: {
-      key: 'recharge',
-      label: '充值',
-      isAdd: true,
-      src: require('../../assets/img/recharge.png')
-    },
-    deposit: {
-      key: 'deposit',
-      label: '提现',
-      isAdd: false,
-      src: require('../../assets/img/deposit.png')
-    },
-    transfer: {
-      key: 'transfer',
-      label: '转账',
-      isAdd: false,
-      src: require('../../assets/img/transfer.png')
-    },
-    payment: {
-      key: 'payment',
-      label: '小程序支付',
-      isAdd: false,
-      src: require('../../assets/img/payment.png')
-    },
-    refund: {
-      key: 'refund',
-      label: '小程序退款',
-      isAdd: true,
-      src: require('../../assets/img/refund.png')
-    }
+  type tableList = {
+    id: number
+    type: string
+    amount: number
+    time: string
+    shopName: string
   }
+  const router = useRouter()
+
   let totalAmount: BillAmountRep = reactive({
     expend: null,
     income: null
   })
   let tableLoading: ReturnType<typeof ref> = ref(false)
-  // let tableFinished: ReturnType<typeof ref> = ref(false)
-  let billList = reactive({
+  let billList: { list: tableList[]; tableFinished: boolean } = reactive({
     list: [],
     tableFinished: false
   })
@@ -50,9 +26,13 @@
     page: 1,
     size: false
   })
-  let loadBillStatement = () => {
-    console.log('数据加载了。。。')
+  let loadBillStatement = (init?: boolean) => {
     tableLoading.value = true
+    if (init) {
+      pageConfig.page = 1
+      billList.list = []
+      billList.tableFinished = false
+    }
     // MYTODO: 模拟数据
     new Promise(res => {
       setTimeout(() => {
@@ -60,27 +40,27 @@
       }, 1000)
     })
       .then(() => {
-        const mockList = [
+        const mockList: tableList[] = [
           {
             id: 1,
             type: 'recharge',
-            amount: 5005432,
+            amount: 5005437562,
             time: '2022-01 12:00:00',
             shopName: '商户名称商户名称商户名称商户名称商户名'
           },
           {
             id: 2,
             type: 'recharge',
-            amount: 800,
+            amount: 8776548799943543,
             time: '2022-01 12:00:00',
-            shopName: '商户名称'
+            shopName: '商户名d的的称呼'
           },
           {
             id: 2,
             type: 'deposit',
             amount: 500,
             time: '2022-01 12:00:00',
-            shopName: '商户名称'
+            shopName: '商户名称商户名称商户名称商户名称商户名称测试长度'
           }
         ]
         billList.list = billList.list.concat(mockList)
@@ -101,19 +81,31 @@
     //   tableLoading.value = false
     // })
   }
+
+  const showSelectTypeDialog = ref(false)
+  let activeBillType: ReturnType<typeof ref> = ref('all')
+  const handleChangeActiveType = (key: string) => {
+    showSelectTypeDialog.value = false
+    if (activeBillType.value !== key) {
+      activeBillType.value = key
+      loadBillStatement(true)
+    }
+  }
 </script>
 <template>
   <div class="billstate-wrap">
-    <div class="billstate-title-wrap">
-      <div class="left">
-        <span>全部账单</span>
-        <img src="../../assets/img/vector.png" />
+    <div class="billstate-header">
+      <div class="billstate-title-wrap">
+        <div class="left" @click="showSelectTypeDialog = true">
+          <span>{{ billTypeEnum[activeBillType].label }}</span>
+          <img src="../../assets/img/vector.png" />
+        </div>
+        <!-- <div class="right">今日</div> -->
       </div>
-      <!-- <div class="right">今日</div> -->
-    </div>
-    <div class="billstate-amount-wrap">
-      <span>支出：￥ {{ totalAmount.expend }}</span>
-      <span>收入：￥ {{ totalAmount.income }}</span>
+      <div class="billstate-amount-wrap">
+        <div class="billstate-amount-item">支出：￥ {{ totalAmount.expend }}</div>
+        <div class="billstate-amount-item">收入：￥ {{ totalAmount.income }}</div>
+      </div>
     </div>
     <van-list
       v-model:loading="tableLoading"
@@ -127,7 +119,7 @@
         @click="router.push(`/billDetail/${item.id}`)">
         <div class="billstate-main-item">
           <img :src="billTypeEnum[item.type].src" alt="" />
-          <div>
+          <div class="detail">
             <div class="title">
               {{ billTypeEnum[item.type].label }}{{ item.shopName ? `-${item.shopName}` : '' }}
             </div>
@@ -140,10 +132,34 @@
       </van-cell>
     </van-list>
   </div>
+  <van-action-sheet v-model:show="showSelectTypeDialog" title="选择账单类型">
+    <div class="billstate-type-wrap">
+      <div
+        :class="{ 'billstate-type-item': true, active: item.key === activeBillType }"
+        v-for="item in billTypeEnum"
+        :key="item.id"
+        @click="handleChangeActiveType(item.key)">
+        {{ item.label }}
+      </div>
+    </div>
+  </van-action-sheet>
 </template>
+
 <style lang="scss" scoped>
   .billstate-wrap {
     text-align: left;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: $bg-light-color-1;
+  }
+  .billstate-header {
+    // display: flex;
+    // flex-direction: column;
+  }
+  .billstate-main-wrap {
+    flex: 1 1 200px;
+    overflow-y: auto;
   }
   .billstate-title-wrap {
     padding: 32px 24px;
@@ -155,7 +171,6 @@
         color: $font-color-4;
         font-weight: 500;
         font-size: 36px;
-        font-family: PingFang SC;
       }
       img {
         width: 44px;
@@ -164,10 +179,17 @@
     }
   }
   .billstate-amount-wrap {
-    height: 87px;
     line-height: 87px;
     padding: 0 24px;
     background-color: $bg-light-color-1;
+    display: flex;
+    flex-wrap: wrap;
+    :first-child {
+      margin-right: 40px;
+    }
+  }
+  .billstate-amount-item {
+    min-width: 200px;
   }
 
   .billstate-main-item {
@@ -181,13 +203,17 @@
     img {
       width: 72px;
       margin-right: 24px;
-      flex: 0 0 auto;
+      flex: 0;
+    }
+    .detail {
+      flex: 1 1 auto;
+      overflow: hidden;
     }
     .title {
+      width: 100%;
       font-size: 32px;
       font-weight: 500;
       color: $font-color-1;
-      width: 300px;
       line-height: 48px;
       white-space: nowrap;
       overflow: hidden;
@@ -205,6 +231,27 @@
       &.isAdd {
         color: $warnColor;
       }
+    }
+  }
+  .billstate-type-wrap {
+    display: flex;
+    min-height: 800px;
+    justify-content: space-between;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    margin-bottom: 100px;
+    padding: 0 24px;
+  }
+  .billstate-type-item {
+    width: 218px;
+    height: 120px;
+    margin-top: 20px;
+    line-height: 120px;
+    background-color: $bg-light-color-1;
+    color: $font-color-3;
+    &.active {
+      background-color: $primaryColor;
+      color: #fff;
     }
   }
 </style>
