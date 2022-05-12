@@ -8,8 +8,11 @@ import OverlayLoading from '@/components/OverlayLoading/OverlayLoading.vue'
 import MsgVerify from '@/components/MsgVerify/MsgVerify.vue'
 import { ref } from 'vue';
 import { VerifyCode } from '@/components/MsgVerify/types';
+import { useRouter } from 'vue-router'
 
 const showOverlay = ref(false)
+
+const router = useRouter()
 
 // 处理发送验证码
 const handleVerifyCode = (verifyCode: VerifyCode) => {
@@ -17,6 +20,7 @@ const handleVerifyCode = (verifyCode: VerifyCode) => {
   console.log(verifyCode)
   setTimeout(() => {
     showOverlay.value = false
+    router.replace('/walletList')
   }, 1000);
 }
 
