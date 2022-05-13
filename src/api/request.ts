@@ -36,7 +36,13 @@ class Request {
     this.instance.interceptors.response.use(
       (res: AxiosResponse) => {
         console.log('全局响应拦截器')
-        return res.data
+        const result:any = res.data
+        if (result.code === 0){
+          return res.data.data || res.data
+        } else {
+          return Promise.reject(res.data.data || res.data)
+        }
+        
       },
       (err: AxiosError) => err
     )
