@@ -21,6 +21,14 @@ export interface LoginReq {
 export interface LoginRep {
   token: string
 }
+export interface withdrawalInfoReq {
+  shopAdminId: number,
+  walletId:string
+}
+export interface withdrawalInfoRep {
+  planType: number,
+  planTime?: string
+}
 export interface BillAmountRep {
   expend: number|null,
   income: number|null

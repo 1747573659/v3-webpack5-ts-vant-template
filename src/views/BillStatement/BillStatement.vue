@@ -149,6 +149,7 @@
   .billstate-wrap {
     text-align: left;
     height: 100%;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     background-color: $bg-light-color-1;

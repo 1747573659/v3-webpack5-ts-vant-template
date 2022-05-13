@@ -6,9 +6,12 @@ import {
   Row,
   Cell,
   List,
-  CellGroup,
-  Field
+  Field,
+  Switch,
+  Icon,
+  CellGroup
 } from 'vant'
+import './reset.scss'
 type stringKey = Record<string, any>
 const components:stringKey = {
   Button,
@@ -17,8 +20,10 @@ const components:stringKey = {
   Row,
   Cell,
   List,
-  CellGroup,
-  Field
+  Field,
+  Switch,
+  Icon,
+  CellGroup
 }
 export default function (app: ReturnType<typeof createApp>) {
   for (const key in components) {

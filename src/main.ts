@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 import '@/assets/styles/index.scss'
 import 'lib-flexible/flexible.js'
-import useVant from '@/plugin/vant.ts'
+import useVant from '@/plugin/vant/vant.ts'
 
 const app = createApp(App)
 useVant(app)
