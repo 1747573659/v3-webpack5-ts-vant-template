@@ -6,7 +6,8 @@ import {
   Row,
   Cell,
   List,
-  CellGroup
+  CellGroup,
+  Field
 } from 'vant'
 type stringKey = Record<string, any>
 const components:stringKey = {
@@ -16,7 +17,8 @@ const components:stringKey = {
   Row,
   Cell,
   List,
-  CellGroup
+  CellGroup,
+  Field
 }
 export default function (app: ReturnType<typeof createApp>) {
   for (const key in components) {
