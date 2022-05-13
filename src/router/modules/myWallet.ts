@@ -4,11 +4,17 @@ const myWalletRoutes: Array<RouteRecordRaw> = [
   {
     path: '/walletList',
     name: 'walletList',
+    meta: {
+      title: '选择钱包'
+    },
     component: () => import('@/views/WalletList/WalletList.vue')
   },
   {
     path: '/myWallet',
     name: 'myWallet',
+    meta: {
+      title: '企业钱包'
+    },
     component: () => import('@/views/MyWallet/MyWallet.vue')
   },
   {

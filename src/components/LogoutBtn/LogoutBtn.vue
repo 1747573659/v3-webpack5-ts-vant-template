@@ -16,6 +16,12 @@ const logout = () => {
     message: '确定要退出登录吗？',
     beforeClose
   })
+  .then(result => {
+    console.log(result)
+  })
+  .catch(reason => {
+    console.log(reason)
+  })
 }
 const beforeClose:Interceptor = (action) =>
   new Promise((resolve) => {
@@ -23,7 +29,7 @@ const beforeClose:Interceptor = (action) =>
       resolve(true);
     } else {
       // 拦截取消操作
-      resolve(false);
+      resolve(true);
     }
   });
 

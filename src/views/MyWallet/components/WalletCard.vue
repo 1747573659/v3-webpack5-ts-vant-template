@@ -7,12 +7,12 @@
       <div class="wallet-card-content-money">
         <div class="wallet-card-content-money-text">330,568.50</div>
         <div class="wallet-card-content-money-withdraw">
-          <van-button size="small" type="primary">提现</van-button>
+          <van-button size="small" type="primary" @click="gotoWithdraw">提现</van-button>
         </div>
       </div>
       <div class="wallet-card-content-detail">
         <div>张三</div>
-        <div class="wallet-card-content-detail-right">
+        <div class="wallet-card-content-detail-right" @click="gotoDetail">
           <span>详情</span>
           <img class="icon" :src="arrowRightSSvg" alt="arrowRightSSvg">
         </div>
@@ -24,7 +24,19 @@
 <script lang="ts" setup>
 import arrowRightS from '@/assets/icons/arrowRightS.svg'
 import { ref } from '@vue/reactivity'
+import { useRouter } from 'vue-router'
+
 const arrowRightSSvg = ref(arrowRightS)
+
+const router = useRouter()
+const gotoWithdraw = () => {
+  router.push('/walletWithdraw')
+}
+
+const gotoDetail = () => {
+  router.push('/merchantInfo')
+}
+
 </script>
 
 <style lang="scss" scoped>

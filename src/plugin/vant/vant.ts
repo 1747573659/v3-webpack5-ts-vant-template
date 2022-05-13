@@ -6,6 +6,7 @@ import {
   Row,
   Cell,
   List,
+  Field,
   Switch,
   Icon,
   CellGroup
@@ -19,6 +20,7 @@ const components:stringKey = {
   Row,
   Cell,
   List,
+  Field,
   Switch,
   Icon,
   CellGroup
