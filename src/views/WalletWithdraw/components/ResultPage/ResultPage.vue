@@ -1,0 +1,82 @@
+<template>
+  <van-popup v-model:show="show" position="right" :style="{ height: '100%', width: '100%' }" >
+    <div class="content">
+      <template v-if="status === Status.Sucess">
+        <img class="png" :src="withdrawSucessPng" alt="withdrawSucess">
+        <div class="title">提现成功</div>
+      </template>
+      <template v-if="status === Status.Error">
+        <img class="png" :src="withdrawErrorPng" alt="withdrawError">
+        <div class="title">提现失败</div>
+        <div class="desc">原因描述</div>
+      </template>
+      <div class="money">-500.00</div>
+    </div>
+    <back-btn @click="emits('update:show', false)"></back-btn>
+  </van-popup>
+</template>
+
+<script lang="ts" setup>
+import withdrawSucess from '@/assets/icons/withdrawSucess.png'
+import withdrawError from '@/assets/icons/withdrawError.png'
+import ErrorSvg from './ErrorSvg.vue'
+import { toRefs, ref } from 'vue';
+import BackBtn from '@/components/BackBtn/BackBtn.vue'
+
+const withdrawSucessPng = ref(withdrawSucess)
+const withdrawErrorPng = ref(withdrawError)
+
+const props = defineProps<{
+  show: boolean
+}>()
+const emits = defineEmits<{
+  (e: 'update:show', show:boolean): void
+}>()
+const { show } = toRefs(props)
+
+enum Status {
+  Sucess = 1,
+  Error
+}
+
+const status = ref<Status>(Status.Sucess)
+
+</script>
+
+<style lang="scss" scoped>
+.content {
+  padding-top: 160px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  .png {
+    width: 132px;
+    height: 132px;
+  }
+  .title {
+    margin-top: 24px;
+    font-family: 'PingFang SC';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 36px;
+    color: $font-color-1;
+  }
+  .desc {
+    margin-top: 24px;
+    font-family: 'PingFang SC';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 48px;
+    color: $font-color-2;
+  }
+  .money {
+    margin-top: 40px;
+    font-family: 'PingFang SC';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 70px;
+    color: $font-color-1;
+  }
+}
+</style>

@@ -9,7 +9,9 @@ import {
   Field,
   Switch,
   Icon,
-  CellGroup
+  CellGroup,
+  Popup,
+  Dialog
 } from 'vant'
 import './reset.scss'
 type stringKey = Record<string, any>
@@ -23,7 +25,9 @@ const components:stringKey = {
   Field,
   Switch,
   Icon,
-  CellGroup
+  CellGroup,
+  Popup,
+  Dialog
 }
 export default function (app: ReturnType<typeof createApp>) {
   for (const key in components) {
