@@ -1,4 +1,12 @@
 @import './reset.css';
 html,body{
   height: 100%;
+  font-family: "PingFang SC", Arial, "Microsoft Yahei", "Helvetica Neue", Helvetica, sans-serif;
+}
+#app {
+  height: 100%;
+  overflow-y: auto;
+}
+.van-overlay.overlay-cover{
+  z-index: 2099;
 }

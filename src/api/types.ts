@@ -29,6 +29,12 @@ export interface withdrawalInfoRep {
   planType: number,
   planTime?: string
 }
+export interface reviseConfigReq {
+  planType: number,
+  planTime?: string,
+  shopAdminId: number,
+  walletId: string
+}
 export interface BillAmountRep {
   expend: number|null,
   income: number|null

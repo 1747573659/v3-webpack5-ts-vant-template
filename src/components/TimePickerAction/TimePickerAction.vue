@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, watch, toRefs, onMounted } from 'vue'
+  import { ref, watch, toRefs } from 'vue'
   const props = defineProps<{
     modelValue: string
     visible: boolean
@@ -51,10 +51,10 @@
     selectTime.value = time
   }
   watch(modelValue, (newVal: string) => {
-    selectTime.value = newVal
+    selectTime.value = newVal || '00:00'
   })
   watch(visible, () => {
-    selectTime.value = modelValue.value
+    selectTime.value = modelValue.value || '00:00'
   })
 </script>
 <template>
@@ -71,8 +71,10 @@
           v-for="item in timeListEnum"
           :key="item"
           @click="handleChangeSelect(item)">
-          <span>{{ item }}</span>
-          <van-icon name="passed" />
+          <span>
+            {{ item }}
+          </span>
+          <img src="@/assets/img/checked.png" alt="" />
         </div>
       </div>
     </div>
@@ -85,6 +87,7 @@
   .timepicker-action-header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 34px 24px 60px;
   }
   .timepicker-action-title {
@@ -106,13 +109,20 @@
   }
   .timepicker-action-item {
     border-bottom: 1px solid $border-split-color-1;
+    font-size: 32px;
     padding: 32px 0;
     color: $font-color-3;
     &.active {
       color: $primaryColor;
+      & > img {
+        display: block;
+      }
     }
-    .van-icon {
+    & > img {
       float: right;
+      display: none;
+      width: 40px;
+      height: 40px;
     }
   }
 </style>

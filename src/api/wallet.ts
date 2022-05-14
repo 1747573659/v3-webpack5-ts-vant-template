@@ -1,5 +1,5 @@
 import request from './index'
-import { LoginReq, LoginRep,withdrawalInfoReq,withdrawalInfoRep } from './types'
+import { LoginReq, LoginRep,withdrawalInfoReq,withdrawalInfoRep, reviseConfigReq } from './types'
 
 export const Login = (data: LoginReq) => {
   return request<LoginReq, LoginRep>({
@@ -36,10 +36,10 @@ export const queryTimingWithdrawalInfo = (data:withdrawalInfoReq) => {
 }
 
 //  提现-提现设置-修改定时提现
-export const reviseTimingWithdrawal = (data:any) => {
-  return request({
-    url: '/',
+export const reviseTimingWithdrawal = (data:reviseConfigReq) => {
+  return request<reviseConfigReq, any>({
+    url: '/wallet/withdraw/config/edit',
     method: 'post',
-    params: data
+    data
   })
 }
