@@ -1,3 +1,8 @@
+<!--
+ * @Date         : 2022-05-12 11:22:45
+ * @LastEditors  : 庄鸿斌
+ * @LastEditTime : 2022-05-16 18:43:19
+-->
 <template>
   <div class="wallet-info">
     <div class="shop-logo-wrap">
@@ -8,17 +13,26 @@
       />
     </div>
     <div class="shop-info">
-      <div class="shop-info-name">门店-107店</div>
-      <div class="shop-info-walletID">QB5657653453453570</div>
+      <div class="shop-info-name">{{walletDetailInfo.shortShopName}}</div>
+      <div class="shop-info-walletID">{{walletDetailInfo.walletId}}</div>
     </div>
     <copy-btn :text="copyText"></copy-btn>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from '@vue/reactivity'
+import { ref, toRefs } from '@vue/reactivity'
 import shopImgDefault from '@/assets/img/shopImgDefault.png'
+import { walletDetailRep } from '@/api/types'
 import CopyBtn from '@/components/CopyBtn/CopyBtn.vue'
+
+const props = defineProps<{
+  walletDetailInfo: walletDetailRep
+}>()
+const { walletDetailInfo } = toRefs<{
+  walletDetailInfo: walletDetailRep
+}>(props)
+
 const shopImg = ref(shopImgDefault)
 const copyText = ref('copyText')
 </script>

@@ -50,6 +50,7 @@ class Request {
       this.instance
         .request<AxiosError, T>(config)
         .then(res => {
+          console.log(res)
           // 如果我们为单个响应设置拦截器，这里使用单个响应的拦截器
           if (config.interceptors?.responseInterceptors) {
             res = config.interceptors.responseInterceptors<T>(res)

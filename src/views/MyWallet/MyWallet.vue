@@ -1,9 +1,9 @@
 <template>
   <div class="my-wallet">
     <!-- 基础信息 -->
-    <wallet-info></wallet-info>
+    <wallet-info :walletDetailInfo="walletDetailInfo"></wallet-info>
     <!-- 余额 -->
-    <wallet-card></wallet-card>
+    <wallet-card :walletDetailInfo="walletDetailInfo"></wallet-card>
     <!-- 跳转条目 -->
     <handle-group></handle-group>
     <!-- 退出登录 -->
@@ -18,6 +18,9 @@ import WalletInfo from './components/WalletInfo.vue'
 import WalletCard from './components/WalletCard.vue'
 import HandleGroup from './components/HandleGroup.vue'
 import LogoutBtn from '@/components/LogoutBtn/LogoutBtn.vue'
+import useWalletDetail from '@/hooks/useWalletDetail'
+
+const { walletDetailInfo } = useWalletDetail()
 </script>
 
 <style lang="scss" scoped>

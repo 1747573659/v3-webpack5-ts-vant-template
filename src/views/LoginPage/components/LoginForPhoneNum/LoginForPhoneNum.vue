@@ -45,12 +45,14 @@ const handleLogin = async () => {
   }
   try {
     const res = await LoginGetCode(data)
-    console.log(res)
     store.dispatch('setUserInfo', {
-      loginName: res.phone
+      loginName: res.phone,
+      loginItemType: res.loginItemType,
+      shopAdminId: res.shopAdminId
     })
     emit('loginSucess', true)
-  } catch (error) {} finally {
+  } catch (error) {
+  } finally {
     loginBtnLoading.value = false
   }
 }

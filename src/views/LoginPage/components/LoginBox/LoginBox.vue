@@ -3,17 +3,18 @@
     <van-tab v-for="item in loginItemTypeList" :key="item.title" :title="item.title"/>
   </van-tabs>
   <Field
-    v-if="[0].includes(loginItemType)"
+    v-if="[0, 1].includes(loginItemType)"
     class="login"
     :class="{'active-border': loginNameShowBorder, error: !!errorMsg}"
     @focus="loginNameFocus"
+    :type="loginItemType ? 'tel' : 'text'"
     @blur="loginNameBlur"
     :placeholder="placeholder"
     :clearable="true"
     v-model="loginName"
   />
   <Field
-    v-if="[1, 2].includes(loginItemType)"
+    v-if="[2].includes(loginItemType)"
     readonly
     clickable
     @touchstart.stop="loginNameShowBorder = true"
@@ -27,11 +28,10 @@
   />
   <div class="error-msg" v-if="errorMsg"><img class="warn-icon" :src="warnIcon" alt="警告">{{errorMsg}}</div>
   <van-number-keyboard
-    v-if="[1, 2].includes(loginItemType)"
+    v-if="[2].includes(loginItemType)"
     v-model="loginName"
-    :extra-key="extraKey"
+    extra-key="x"
     :show="loginNameShowBorder"
-    :maxlength="6"
     @blur="loginNameShowBorder = false"
   />
 </template>
@@ -64,22 +64,18 @@ const loginItemTypeList = [
   {
     title: '钱包ID',
     placeHolder: '请输入钱包ID',
-    extraKey: ''
   },
   {
     title: '手机号',
     placeHolder: '请输入手机号',
-    extraKey: ''
   },
   {
     title: '法人身份证',
     placeHolder: '请输入法人身份证',
-    extraKey: 'X'
   }
 ]
 const loginItemType = ref(0)
 const placeholder = computed(() => loginItemTypeList[loginItemType.value].placeHolder)
-const extraKey = computed(() => loginItemTypeList[loginItemType.value].extraKey)
 const loginItemTypeChange = () => {
   loginName.value = ''
   emits('loginItemTypeChange', loginItemType.value)

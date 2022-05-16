@@ -1,6 +1,6 @@
 import type { ComputedRef } from 'vue'
 
-export type VerifyCode = undefined | string
+export type VerifyCode = string
 
 type CurrentTime = {
   days: number;

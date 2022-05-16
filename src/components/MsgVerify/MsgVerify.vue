@@ -37,13 +37,13 @@ const getLoginNameForDisplay = computed(() => {
 })
 
 // 验证码
-const verifyCode = ref<VerifyCode>(undefined)
+const verifyCode = ref<VerifyCode>('')
 // 是否展示键盘
 const showKeyboard = ref(true)
 // 当选中输入框时调起键盘并且清空输入框
 const passwordInputFocus = () => {
   showKeyboard.value = true
-  verifyCode.value = undefined
+  verifyCode.value = ''
 }
 
 // 定义emit事件

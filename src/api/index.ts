@@ -1,12 +1,8 @@
-/*
- * @Date         : 2022-05-06 11:02:27
- * @LastEditors  : 庄鸿斌
- * @LastEditTime : 2022-05-16 15:09:50
- */
+
 import Request from './request'
 import type { RequestConfig } from './types'
 import { Toast } from 'vant'
-
+import errorCode from './errorCode'
 const request = new Request({
   baseURL: process.env.VUE_APP_BASE_API,
   withCredentials: false, // 跨域请求时是否需要凭证
@@ -17,11 +13,17 @@ const request = new Request({
       return config
     },
     // 响应拦截器
-    responseInterceptors: <T>(result: MyResponse<T>): T => {
-      if (result.code === 0) {
+    responseInterceptors: <T>(result: MyResponse<T>): T | any => {
+      if (!errorCode.includes(result.code)) {
+        if (result.data) {
+          return result.data
+        } else {
+          return result.msg
+        }
         return result.data
       } else {
-        return Toast.fail(result.msg);
+        Toast.fail(result.msg);
+        return Promise.reject(result)
       }
     }
   },

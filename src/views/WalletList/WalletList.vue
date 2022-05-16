@@ -1,27 +1,34 @@
 <template>
   <van-cell-group>
-    <van-cell class="cell" label="商户简称" is-link @click="cellClick">
-      <template #title>
-        <div class="walletId">钱包ID</div>
-      </template>
-      <template #label>
-        <span class="shortName">商户简称</span>
-      </template>
-      <template #value>
-        <div class="walletId">QB265213213521</div>
-        <span class="shortName">过长长长长长长长长长长长长长长长长长长长长长长长长长长长长长的话就换行</span>
-      </template>
-    </van-cell>
+    <template v-for="item in walletList" :key="item">
+      <van-cell class="cell" label="商户简称" is-link @click="cellClick(item)">
+        <template #title>
+          <div class="walletId">钱包ID</div>
+        </template>
+        <template #label>
+          <span class="shortName">商户简称</span>
+        </template>
+        <template #value>
+          <div class="walletId">{{item.walletId}}</div>
+          <span class="shortName">{{item.shortShopName}}</span>
+        </template>
+      </van-cell>
+    </template>
   </van-cell-group>
 </template>
 
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
-
+import {useStore} from 'vuex'
+import { computed } from 'vue'
+import { WalletList } from '@/api/types';
 const router = useRouter()
+const store = useStore()
 
-const cellClick = () => {
-  router.push('/myWallet')
+const walletList = computed<WalletList[]>(() => store.state.walletList.walletList)
+
+const cellClick = ({ walletId }: WalletList) => {
+  router.push({path: '/myWallet', query: {walletId}})
 }
 </script>
 

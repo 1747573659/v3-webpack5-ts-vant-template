@@ -19,11 +19,38 @@ export interface LoginReq {
   openId: string,
   shopAdminId: number
 }
-
 export interface LoginRep {
   phone: string,
   shopAdminId: string,
   loginItemType: string
+}
+
+export interface LoginPhoneCodeReq {
+  code: string,
+  openId: string,
+  phone: string,
+  shopAdminId: number
+}
+export interface WalletList {
+  walletId: string,
+  shortShopName: string
+}
+export interface LoginPhoneCodeRep {
+  phone: string,
+  shopAdminId: number,
+  token: string,
+  walletList: WalletList
+}
+export interface walletDetailReq {
+  shopAdminId: number,
+  walletId: string
+}
+export interface walletDetailRep {
+  accountName: string,
+  availableAmount: number,
+  bankCard: string,
+  walletId: string,
+  shortShopName: string
 }
 export interface withdrawalInfoReq {
   shopAdminId: number,
