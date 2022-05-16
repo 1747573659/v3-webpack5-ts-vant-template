@@ -17,7 +17,6 @@ class Request {
     // 全局请求拦截器
     this.instance.interceptors.request.use(
       (res: AxiosRequestConfig) => {
-        console.log('全局请求拦截器')
         return res
       },
       (err: AxiosError) => err
@@ -32,7 +31,6 @@ class Request {
     // 全局响应拦截器
     this.instance.interceptors.response.use(
       (res: AxiosResponse) => {
-        console.log('全局响应拦截器', res)
         return res.data
       },
       (err: AxiosError) => err

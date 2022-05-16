@@ -1,7 +1,7 @@
 /*
  * @Date         : 2022-05-06 11:02:27
  * @LastEditors  : 庄鸿斌
- * @LastEditTime : 2022-05-16 14:44:44
+ * @LastEditTime : 2022-05-16 14:47:12
  */
 import Request from './request'
 import type { RequestConfig } from './types'
@@ -14,12 +14,10 @@ const request = new Request({
   interceptors: {
     // 请求拦截器
     requestInterceptors: config => {
-      console.log('实例请求拦截器')
       return config
     },
     // 响应拦截器
     responseInterceptors: <T>(result: MyResponse<T>): T => {
-      console.log('实例响应拦截器', result)
       if (result.code === 0) {
         return result.data
       } else {
