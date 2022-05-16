@@ -7,14 +7,14 @@
           {{ currentItem.label }}{{ state.billDetail.name ? `-${state.billDetail.name}` : '' }}
         </div>
         <div class="billdetail-header-mount">
-          {{ currentItem.isAdd ? '+' : '-' }}{{ state.billDetail.amount }}
+          {{ state.billDetail.category === 1 ? '+' : '-' }}{{ state.billDetail.amount }}
         </div>
       </div>
     </div>
     <div class="billdetail-main">
       <div class="billdetail-item" v-for="billItem in currentItem.detailList" :key="billItem.key">
         <div class="billdetail-item-left">
-          {{ billItem.label }}
+          {{ getLabel(billItem.label) }}
         </div>
         <div class="billdetail-item-right">
           {{ state.billDetail[billItem.key] }}
@@ -28,38 +28,42 @@
   import { onMounted, reactive, computed } from 'vue'
   import { useRoute } from 'vue-router'
   import { queryBillDetails } from '@/api/wallet'
-  import { billTypeEnum } from '@/enum/billStatement'
-  type billDetailType = {
-    type: keyof typeof billTypeEnum
-    [propName: string]: string
+  import { billTypeMapEnum, getBillItemList, billDetailType } from '@/enum/billStatement'
+  type billDetailQueryType = {
+    categoryType: string
+    transactionNo: string
+    transactionType: string
+    // orderType: any
+    // [propName: string]: string | number
   }
   const route = useRoute()
   const state = reactive({
-    billId: route.params.id,
-    billDetail: {} as billDetailType
+    queryData: route.query as billDetailQueryType,
+    billDetail: {}
   })
-  console.log(route.params, 'route')
+
   const getBillDetails = () => {
-    // MYTODO: 模拟数据
-    new Promise(res => {
-      setTimeout(() => res([]))
-    }).then(() => {
-      state.billDetail = {
-        type: 'refund',
-        rechargeTime: 'Date.now()',
-        amount: '23940.21',
-        name: '张三张三张三张三张三张三',
-        partnerRefundSerialNo: '12343 432435 54355436 867587',
-        refundSerialNumber: 'Date.now()',
-        remark: '测试长度测试长度测试长度测长度测试长度'
-      }
+    queryBillDetails(state.queryData).then(res => {
+      state.billDetail = res
     })
-    // queryBillDetails({ id: state.billId }).then(res => {
-    //   state.billDetail = res
-    // })
   }
-  const currentItem = computed(() => billTypeEnum[state.billDetail.type] || {})
-  console.log(currentItem, billTypeEnum, 'currentItem')
+
+  const getLabel = (label: (arg0: { [x: string]: string | number }) => string) => {
+    if (typeof label === 'function') {
+      return label(state.billDetail)
+    } else {
+      return label
+    }
+  }
+  const currentItem = computed(() => {
+    console.log(
+      billTypeMapEnum.get(Number(state.queryData.transactionType)),
+      state.queryData.transactionType,
+      '详情项'
+    )
+    getBillItemList(state.billDetail)
+    return billTypeMapEnum.get(Number(state.queryData.transactionType)) || {}
+  })
   onMounted(() => {
     getBillDetails()
   })
@@ -77,6 +81,7 @@
     padding: 40px;
     color: $font-color-1;
     background-color: #fff;
+    text-align: center;
     > img {
       width: 72px;
     }
@@ -104,11 +109,14 @@
     &-left {
       flex: 1 1 100px;
       text-align: left;
+      color: $font-color-3;
     }
     &-right {
       min-width: 200px;
       text-align: right;
       flex: 1 1 200px;
+      color: $font-color-1;
+      word-break: break-all;
     }
   }
 </style>

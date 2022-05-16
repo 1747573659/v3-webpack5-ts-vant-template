@@ -48,7 +48,7 @@ const myWalletRoutes: Array<RouteRecordRaw> = [
     component: () => import('@/views/BillStatement/BillStatement.vue')
   },
   {
-    path: '/billDetail/:id',
+    path: '/billDetail',
     name: 'billDetail',
     component: () => import('@/views/BillDetail/BillDetail.vue')
   }

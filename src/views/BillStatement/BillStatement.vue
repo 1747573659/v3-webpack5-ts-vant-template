@@ -1,21 +1,22 @@
 <script lang="ts" setup>
   import { reactive, ref } from 'vue'
   import { useRouter } from 'vue-router'
-  import { queryBillStatement } from '@/api/wallet'
-  import { billTypeEnum } from '@/enum/billStatement'
+  import { queryBillStatement, queryBillAmount } from '@/api/wallet'
+  import { billTypeMapEnum } from '@/enum/billStatement'
   import { BillAmountRep } from '@/api/types'
   type tableList = {
     id: number
-    type: string
+    transactionType: string
     amount: number
-    time: string
-    shopName: string
+    category: number // 收支类别 1-收入； 2-支出
+    transactionSuccessTime: string
+    shopAdminName: string
   }
   const router = useRouter()
 
   let totalAmount: BillAmountRep = reactive({
-    expend: null,
-    income: null
+    expenditureAmount: null,
+    incomeAmount: null
   })
   let tableLoading: ReturnType<typeof ref> = ref(false)
   let billList: { list: tableList[]; tableFinished: boolean } = reactive({
@@ -24,66 +25,37 @@
   })
   let pageConfig = reactive({
     page: 1,
-    size: false
+    rows: 20
   })
-  let loadBillStatement = (init?: boolean) => {
+  let loadBillStatement = async (init?: boolean) => {
+    console.log('加载数据', init)
     tableLoading.value = true
     if (init) {
       pageConfig.page = 1
       billList.list = []
       billList.tableFinished = false
     }
-    // MYTODO: 模拟数据
-    new Promise(res => {
-      setTimeout(() => {
-        res([])
-      }, 1000)
-    })
-      .then(() => {
-        const mockList: tableList[] = [
-          {
-            id: 1,
-            type: 'recharge',
-            amount: 5005437562,
-            time: '2022-01 12:00:00',
-            shopName: '商户名称商户名称商户名称商户名称商户名'
-          },
-          {
-            id: 2,
-            type: 'recharge',
-            amount: 8776548799943543,
-            time: '2022-01 12:00:00',
-            shopName: '商户名d的的称呼'
-          },
-          {
-            id: 2,
-            type: 'deposit',
-            amount: 500,
-            time: '2022-01 12:00:00',
-            shopName: '商户名称商户名称商户名称商户名称商户名称测试长度'
-          }
-        ]
-        billList.list = billList.list.concat(mockList)
-        billList.tableFinished = !!(mockList.length && mockList.length < 2)
-        pageConfig.page += 1
-      })
-      .finally(() => {
-        tableLoading.value = false
-      })
-
-    // loadBillStatement({ page: pageConfig.page, size: pageConfig.size }).then(res => {
-    //   totalAmount.expend = res.expend
-    //   totalAmount.income = res.income
-    //   billList.list = res.results
-    //   billList.tableFinished = !!(res.results.length && res.results.length > pageConfig.size)
-    //   pageConfig.page += 1
-    // }).finally(() => {
-    //   tableLoading.value = false
-    // })
+    const params = {
+      page: pageConfig.page,
+      rows: pageConfig.rows,
+      walletId: 'QB00065757000004'
+    }
+    try {
+      const res = await Promise.all([queryBillStatement(params), queryBillAmount(params)])
+      billList.list = billList.list.concat(res[0].results || [])
+      billList.tableFinished = !res[0].results || res[0].results.length < pageConfig.rows
+      totalAmount.expenditureAmount = res[1].expenditureAmount
+      totalAmount.incomeAmount = res[1].incomeAmount
+      console.log(res[1].expenditureAmount, billList.list, 'res[1].expenditureAmount')
+    } catch {
+      billList.tableFinished = true
+    } finally {
+      tableLoading.value = false
+    }
   }
 
   const showSelectTypeDialog = ref(false)
-  let activeBillType: ReturnType<typeof ref> = ref('all')
+  let activeBillType: ReturnType<typeof ref> = ref(-1)
   const handleChangeActiveType = (key: string) => {
     showSelectTypeDialog.value = false
     if (activeBillType.value !== key) {
@@ -97,14 +69,14 @@
     <div class="billstate-header">
       <div class="billstate-title-wrap">
         <div class="left" @click="showSelectTypeDialog = true">
-          <span>{{ billTypeEnum[activeBillType].label }}</span>
+          <span>{{ billTypeMapEnum.get(activeBillType).label }}</span>
           <img src="../../assets/img/vector.png" />
         </div>
         <!-- <div class="right">今日</div> -->
       </div>
       <div class="billstate-amount-wrap">
-        <div class="billstate-amount-item">支出：￥ {{ totalAmount.expend }}</div>
-        <div class="billstate-amount-item">收入：￥ {{ totalAmount.income }}</div>
+        <div class="billstate-amount-item">支出：￥ {{ totalAmount.expenditureAmount }}</div>
+        <div class="billstate-amount-item">收入：￥ {{ totalAmount.incomeAmount }}</div>
       </div>
     </div>
     <van-list
@@ -116,17 +88,27 @@
       <van-cell
         v-for="item in billList.list"
         :key="item.id"
-        @click="router.push(`/billDetail/${item.id}`)">
+        @click="
+          router.push({
+            name: 'billDetail',
+            query: {
+              transactionNo: item.transactionNo,
+              categoryType: item.category,
+              transactionType: item.transactionType
+            }
+          })
+        ">
         <div class="billstate-main-item">
-          <img :src="billTypeEnum[item.type].src" alt="" />
+          <img :src="billTypeMapEnum.get(item.transactionType).src" alt="" />
           <div class="detail">
             <div class="title">
-              {{ billTypeEnum[item.type].label }}{{ item.shopName ? `-${item.shopName}` : '' }}
+              {{ billTypeMapEnum.get(item.transactionType).label
+              }}{{ item.shopAdminName ? `-${item.shopAdminName}` : '' }}
             </div>
-            <div class="time">{{ item.time }}</div>
+            <div class="time">{{ item.transactionSuccessTime }}</div>
           </div>
-          <div :class="{ amount: true, isAdd: billTypeEnum[item.type].isAdd }">
-            {{ billTypeEnum[item.type].isAdd ? '+' : '-' }}{{ item.amount }}
+          <div :class="{ amount: true, isAdd: item.category === 1 }">
+            {{ item.category === 1 ? '+' : '-' }}{{ item.amount }}
           </div>
         </div>
       </van-cell>
@@ -135,11 +117,11 @@
   <van-action-sheet v-model:show="showSelectTypeDialog" title="选择账单类型">
     <div class="billstate-type-wrap">
       <div
-        :class="{ 'billstate-type-item': true, active: item.key === activeBillType }"
-        v-for="item in billTypeEnum"
-        :key="item.id"
-        @click="handleChangeActiveType(item.key)">
-        {{ item.label }}
+        :class="{ 'billstate-type-item': true, active: item[1].key === activeBillType }"
+        v-for="item in billTypeMapEnum"
+        :key="item[1].id"
+        @click="handleChangeActiveType(item[1].key)">
+        {{ item[1].label }}
       </div>
     </div>
   </van-action-sheet>
@@ -164,7 +146,9 @@
   }
   .billstate-title-wrap {
     padding: 32px 24px;
+    background-color: #fff;
     .left {
+      display: flex;
       height: 44px;
       line-height: 44px;
       vertical-align: middle;
@@ -209,6 +193,7 @@
     .detail {
       flex: 1 1 auto;
       overflow: hidden;
+      padding-right: 20px;
     }
     .title {
       width: 100%;
@@ -242,6 +227,7 @@
     flex-wrap: wrap;
     margin-bottom: 100px;
     padding: 0 24px;
+    font-size: 32px;
   }
   .billstate-type-item {
     width: 218px;
@@ -250,6 +236,7 @@
     line-height: 120px;
     background-color: $bg-light-color-1;
     color: $font-color-3;
+    text-align: center;
     &.active {
       background-color: $primaryColor;
       color: #fff;

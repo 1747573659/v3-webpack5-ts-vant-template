@@ -14,32 +14,55 @@ export interface RequestConfig extends AxiosRequestConfig {
 }
 
 export interface LoginReq {
-  loginItem: string,
-  loginItemType: number,
-  openId: string,
+  loginItem: string
+  loginItemType: number
+  openId: string
   shopAdminId: number
 }
 
 export interface LoginRep {
-  phone: string,
-  shopAdminId: string,
+  phone: string
+  shopAdminId: string
   loginItemType: string
 }
 export interface withdrawalInfoReq {
-  shopAdminId: number,
-  walletId:string
+  shopAdminId: number
+  walletId: string
 }
 export interface withdrawalInfoRep {
-  planType: number,
+  planType: number
   planTime?: string
 }
 export interface reviseConfigReq {
-  planType: number,
-  planTime?: string,
-  shopAdminId: number,
+  planType: number
+  planTime?: string
+  shopAdminId: number
   walletId: string
 }
+export interface BillAmountReq {
+  expend: number | null
+  income: number | null
+}
 export interface BillAmountRep {
-  expend: number|null,
-  income: number|null
+  expenditureAmount: number | null | undefined
+  incomeAmount: number | null | undefined
+}
+export interface walletInfoDetailReq {
+  shopAdminId: number
+  walletId: string
+}
+export interface walletInfoDetailRep {
+  accountName: string
+  availableAmount?: number
+  bankCard: string
+  businessLicense: string
+  legalName: string
+  legalNumber: string
+  legalPhone: string
+  openBank: string
+  shopName: string
+  shortShopName: string
+  tradeBalanceAmount?: number
+  tradeDepositAmount?: number
+  walletId: string
 }
