@@ -4,10 +4,16 @@
       <div class="billdetail-header-main">
         <img :src="currentItem.src" alt="" />
         <div class="billdetail-header-info">
-          {{ currentItem.label }}{{ state.billDetail.name ? `-${state.billDetail.name}` : '' }}
+          {{ currentItem.label
+          }}{{
+            state.billDetail.shortShopName && currentItem.shortShopName
+              ? `-${state.billDetail.shortShopName}`
+              : ''
+          }}
         </div>
         <div class="billdetail-header-mount">
-          {{ currentItem.isAdd ? '+' : '-' }}{{ state.billDetail.amount }}
+          {{ state.billDetail.category === 1 ? '+' : '-'
+          }}{{ formatYuanAmount(state.billDetail.amount || 0) }}
         </div>
       </div>
     </div>
@@ -17,7 +23,7 @@
           {{ billItem.label }}
         </div>
         <div class="billdetail-item-right">
-          {{ state.billDetail[billItem.key] }}
+          {{ billItem.value }}
         </div>
       </div>
     </div>
@@ -27,39 +33,34 @@
 <script lang="ts" setup>
   import { onMounted, reactive, computed } from 'vue'
   import { useRoute } from 'vue-router'
+  import { formatYuanAmount } from '@/utils/formateMoney'
   import { queryBillDetails } from '@/api/wallet'
-  import { billTypeEnum } from '@/enum/billStatement'
-  type billDetailType = {
-    type: keyof typeof billTypeEnum
-    [propName: string]: string
+  import { getBillItemList } from '@/enum/billStatement'
+  type billDetailQueryType = {
+    categoryType: string
+    transactionNo: string
+    transactionType: string
+    // orderType: any
+    // [propName: string]: string | number
   }
   const route = useRoute()
   const state = reactive({
-    billId: route.params.id,
-    billDetail: {} as billDetailType
+    queryData: route.query as billDetailQueryType,
+    billDetail: {
+      orderType: 0,
+      category: 0
+    }
   })
-  console.log(route.params, 'route')
+
   const getBillDetails = () => {
-    // MYTODO: 模拟数据
-    new Promise(res => {
-      setTimeout(() => res([]))
-    }).then(() => {
-      state.billDetail = {
-        type: 'refund',
-        rechargeTime: 'Date.now()',
-        amount: '23940.21',
-        name: '张三张三张三张三张三张三',
-        partnerRefundSerialNo: '12343 432435 54355436 867587',
-        refundSerialNumber: 'Date.now()',
-        remark: '测试长度测试长度测试长度测长度测试长度'
-      }
+    queryBillDetails(state.queryData).then(res => {
+      state.billDetail = res
     })
-    // queryBillDetails({ id: state.billId }).then(res => {
-    //   state.billDetail = res
-    // })
   }
-  const currentItem = computed(() => billTypeEnum[state.billDetail.type] || {})
-  console.log(currentItem, billTypeEnum, 'currentItem')
+
+  const currentItem = computed(() => {
+    return getBillItemList(state.billDetail)
+  })
   onMounted(() => {
     getBillDetails()
   })
@@ -77,6 +78,7 @@
     padding: 40px;
     color: $font-color-1;
     background-color: #fff;
+    text-align: center;
     > img {
       width: 72px;
     }
@@ -104,11 +106,14 @@
     &-left {
       flex: 1 1 100px;
       text-align: left;
+      color: $font-color-3;
     }
     &-right {
       min-width: 200px;
       text-align: right;
       flex: 1 1 200px;
+      color: $font-color-1;
+      word-break: break-all;
     }
   }
 </style>

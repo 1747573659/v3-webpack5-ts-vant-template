@@ -1,79 +1,83 @@
 <script lang="ts" setup>
-  import { reactive, onMounted } from 'vue'
+  import { ref, reactive, onMounted } from 'vue'
   import { useRouter } from 'vue-router'
+  import OverlayLoading from '@/components/OverlayLoading/OverlayLoading.vue'
+  import { queryMerchantInfo } from '@/api/wallet'
   const router = useRouter()
   const merchantEnum: object[] = [
     {
       title: '基本信息',
       children: [
         {
-          key: 'q',
+          key: 'shortShopName',
           label: '商户简称'
         },
         {
-          key: 'rr',
+          key: 'walletId',
           label: '钱包ID'
         }
       ]
     },
     {
-      title: '企业资料',
+      title: '公司资料',
       children: [
         {
-          key: 'qff',
-          label: '企业名称'
+          key: 'shopName',
+          label: '公司名称'
         },
         {
-          key: 'rrggfd',
+          key: 'businessLicense',
           label: '营业执照号'
+        },
+        {
+          key: 'legalName',
+          label: '法人姓名'
+        },
+        {
+          key: 'legalNumber',
+          label: '法人身份证'
+        },
+        {
+          key: 'legalPhone',
+          label: '法人手机号'
         }
       ]
     },
     {
-      title: '运营者信息',
+      title: '提现账户',
       children: [
         {
-          key: 'qhgfh',
-          label: '法人姓名'
-        },
-        {
-          key: 'rrhdgfhgf',
-          label: '法人身份证'
-        },
-        {
-          key: 'hdhgfh',
-          label: '法人手机号'
-        },
-        {
-          key: 'ytetr',
+          key: 'accountName',
           label: '账户名称'
         },
         {
-          key: 'rrhdgfhgdetyhgf',
+          key: 'bankCard',
           label: '银行卡号'
         },
         {
-          key: 'yrejyu',
+          key: 'openBank',
           label: '开户行'
         }
       ]
     }
   ]
-  const merchantInfo = reactive({
-    q: '测试测试',
-    rrggfd: '测试长度测试长度测试长度测试长度测试长度测试长度',
-    qff: 'ddddddddddddddddddbvfsddddddddddddddddddddddddddd',
-    hdhgfh: '电话号码电话号码电话号码'
-  })
+  const showOverlay = ref(false)
+  const merchantInfo = reactive({})
   const handleToTechPolicy = () => {
     router.push('/kmTechPolicy')
   }
   const handleBack = () => {
     router.push('/myWallet')
   }
-  onMounted(() => {
+  onMounted(async () => {
     // MYTODO: 请求接口
-    // merchantInfo =
+    showOverlay.value = true
+    try {
+      const res: any = await queryMerchantInfo({ shopAdminId: 70, walletId: 'QB00044964000001' })
+      Object.assign(merchantInfo, res)
+    } finally {
+      showOverlay.value = false
+    }
   })
 </script>
 
@@ -97,6 +101,7 @@
       <van-button type="default" @click="handleBack">返回</van-button>
     </div> -->
   </div>
+  <overlay-loading :show="showOverlay" content="加载中..."></overlay-loading>
 </template>
 <style lang="scss" scoped>
   .merchantInfo {

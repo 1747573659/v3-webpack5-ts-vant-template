@@ -26,11 +26,9 @@
       </div>
     </div>
     <div class="withdrawConfig-tips withdrawConfig-footer">
-      <div>
-        <img class="withdrawConfig-icon-info" src="../../assets/img/info-o.png" alt="" />
-        <span>温馨提示：</span>
-        <span>设置定时提现后，仍可手动提现</span>
-      </div>
+      <img class="withdrawConfig-icon-info" src="../../assets/img/info-o.png" alt="" />
+      <span>温馨提示：</span>
+      <span>设置定时提现后，仍可手动提现</span>
     </div>
     <!-- confirmTimePicker -->
     <TimePickerAction
@@ -151,9 +149,6 @@
       font-size: 28px;
       color: $primaryColor;
       font-weight: 500;
-    }
-    & > span {
-      margin-top: 20px;
     }
   }
   .withdrawConfig-edit {
