@@ -5,7 +5,7 @@
         可用余额（元）
       </div>
       <div class="wallet-card-content-money">
-        <div class="wallet-card-content-money-text">{{ walletDetailInfo.availableAmount }}</div>
+        <div class="wallet-card-content-money-text">{{ availableAmount }}</div>
         <div class="wallet-card-content-money-withdraw">
           <van-button size="small" type="primary" @click="gotoWithdraw">提现</van-button>
         </div>
@@ -26,6 +26,8 @@ import arrowRightS from '@/assets/icons/arrowRightS.svg'
 import { ref, toRefs } from '@vue/reactivity'
 import { useRouter } from 'vue-router'
 import { walletDetailRep } from '@/api/types'
+import { formatYuanAmount } from '@/utils/formateMoney'
+import { computed } from 'vue'
 
 const props = defineProps<{
   walletDetailInfo: walletDetailRep
@@ -33,6 +35,8 @@ const props = defineProps<{
 const { walletDetailInfo } = toRefs<{
   walletDetailInfo: walletDetailRep
 }>(props)
+
+const availableAmount = computed(() => formatYuanAmount(String(walletDetailInfo.value.availableAmount)))
 
 const arrowRightSSvg = ref(arrowRightS)
 
@@ -42,7 +46,7 @@ const gotoWithdraw = () => {
 }
 
 const gotoDetail = () => {
-  router.push('/merchantInfo')
+  router.push({path: '/merchantInfo', query: {walletId: walletDetailInfo.value.walletId}})
 }
 
 </script>

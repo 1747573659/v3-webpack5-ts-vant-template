@@ -19,7 +19,6 @@
 <script lang="ts" setup>
 import withdrawSucess from '@/assets/icons/withdrawSucess.png'
 import withdrawError from '@/assets/icons/withdrawError.png'
-import ErrorSvg from './ErrorSvg.vue'
 import { toRefs, ref } from 'vue';
 import BackBtn from '@/components/BackBtn/BackBtn.vue'
 

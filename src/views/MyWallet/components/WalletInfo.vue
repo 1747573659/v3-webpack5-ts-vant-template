@@ -1,8 +1,3 @@
-<!--
- * @Date         : 2022-05-12 11:22:45
- * @LastEditors  : 庄鸿斌
- * @LastEditTime : 2022-05-16 18:43:19
--->
 <template>
   <div class="wallet-info">
     <div class="shop-logo-wrap">

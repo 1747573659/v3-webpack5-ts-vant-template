@@ -10,6 +10,7 @@
     <div class="logout">
       <logout-btn></logout-btn>
     </div>
+    <overlay-loading :show="loading" content="加载中..."></overlay-loading>
   </div>
 </template>
 
@@ -19,8 +20,9 @@ import WalletCard from './components/WalletCard.vue'
 import HandleGroup from './components/HandleGroup.vue'
 import LogoutBtn from '@/components/LogoutBtn/LogoutBtn.vue'
 import useWalletDetail from '@/hooks/useWalletDetail'
+import OverlayLoading from '@/components/OverlayLoading/OverlayLoading.vue'
 
-const { walletDetailInfo } = useWalletDetail()
+const { walletDetailInfo, loading } = useWalletDetail()
 </script>
 
 <style lang="scss" scoped>

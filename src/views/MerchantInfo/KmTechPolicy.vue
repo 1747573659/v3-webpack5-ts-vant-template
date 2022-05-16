@@ -1,9 +1,9 @@
 <script lang="ts" setup>
   import { useRouter } from 'vue-router'
   const router = useRouter()
-  const handleBack = () => {
-    router.replace('/merchantInfo')
-  }
+  // const handleBack = () => {
+  //   router.replace('/merchantInfo')
+  // }
 </script>
 
 <template>

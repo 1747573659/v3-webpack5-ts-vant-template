@@ -1,10 +1,14 @@
 <script lang="ts" setup>
-  import { ref, reactive, onMounted } from 'vue'
+  import { ref, reactive } from 'vue'
   import { useRouter } from 'vue-router'
   import OverlayLoading from '@/components/OverlayLoading/OverlayLoading.vue'
-  import { queryMerchantInfo } from '@/api/wallet'
+
+  import useWalletDetail from '@/hooks/useWalletDetail'
+
+  const { walletDetailInfo } = useWalletDetail()
+
   const router = useRouter()
-  const merchantEnum: object[] = [
+  const merchantEnum = [
     {
       title: '基本信息',
       children: [
@@ -62,23 +66,12 @@
     }
   ]
   const showOverlay = ref(false)
-  const merchantInfo = reactive({})
   const handleToTechPolicy = () => {
     router.push('/kmTechPolicy')
   }
   const handleBack = () => {
     router.push('/myWallet')
   }
-  onMounted(async () => {
-    // MYTODO: 请求接口
-    showOverlay.value = true
-    try {
-      const res: any = await queryMerchantInfo({ shopAdminId: 70, walletId: 'QB00044964000001' })
-      Object.assign(merchantInfo, res)
-    } finally {
-      showOverlay.value = false
-    }
-  })
 </script>
 
 <template>
@@ -89,7 +82,7 @@
         <div class="merchantInfo-item" v-for="childItem in item.children" :key="childItem.key">
           <div class="merchantInfo-item-inner">
             <div class="left">{{ childItem.label }}</div>
-            <div class="right">{{ merchantInfo[childItem.key] }}</div>
+            <div class="right">{{ walletDetailInfo[childItem.key] }}</div>
           </div>
         </div>
       </div>
