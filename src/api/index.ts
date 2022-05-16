@@ -1,5 +1,11 @@
+/*
+ * @Date         : 2022-05-06 11:02:27
+ * @LastEditors  : 庄鸿斌
+ * @LastEditTime : 2022-05-16 14:44:44
+ */
 import Request from './request'
 import type { RequestConfig } from './types'
+import { Toast } from 'vant'
 
 const request = new Request({
   baseURL: process.env.VUE_APP_BASE_API,
@@ -9,14 +15,17 @@ const request = new Request({
     // 请求拦截器
     requestInterceptors: config => {
       console.log('实例请求拦截器')
-
       return config
     },
     // 响应拦截器
-    responseInterceptors: result => {
-      console.log('实例响应拦截器')
-      return result
-    },
+    responseInterceptors: <T>(result: MyResponse<T>): T => {
+      console.log('实例响应拦截器', result)
+      if (result.code === 0) {
+        return result.data
+      } else {
+        return Toast.fail(result.msg);
+      }
+    }
   },
 })
 
@@ -26,15 +35,13 @@ interface MyRequestConfig<T> extends RequestConfig {
 
 interface MyResponse<T> {
   code: number,
-  message: string,
-  data: T,
   msg: string,
+  data: T,
   resultCode: string,
   success: boolean
 }
 
 const myRequest = <D, T>(config: MyRequestConfig<D>) => {
-  console.log(config)
   return request.request<MyResponse<T>>(config)
 }
 

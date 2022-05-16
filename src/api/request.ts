@@ -9,9 +9,10 @@ class Request {
 
   constructor(config: RequestConfig) {
     this.instance = axios.create(config)
+    // 实例拦截器设置
     this.interceptorsObj = config.interceptors
 
-    // 实例请求拦截器 -> 全局请求拦截器 -> 实例响应拦截器 -> 全局响应拦截器
+    // 实例请求拦截器 -> 全局请求拦截器 -> 全局响应拦截器 -> 实例响应拦截器
 
     // 全局请求拦截器
     this.instance.interceptors.request.use(
@@ -27,24 +28,18 @@ class Request {
       this.interceptorsObj?.requestInterceptors,
       this.interceptorsObj?.requestInterceptorsCatch
     )
-    this.instance.interceptors.response.use(
-      this.interceptorsObj?.responseInterceptors,
-      this.interceptorsObj?.responseInterceptorsCatch
-    )
 
     // 全局响应拦截器
     this.instance.interceptors.response.use(
       (res: AxiosResponse) => {
-        console.log('全局响应拦截器')
-        const result:any = res.data
-        if (result.code === 0){
-          return res.data.data || res.data
-        } else {
-          return Promise.reject(res.data.data || res.data)
-        }
-        
+        console.log('全局响应拦截器', res)
+        return res.data
       },
       (err: AxiosError) => err
+    )
+    this.instance.interceptors.response.use(
+      this.interceptorsObj?.responseInterceptors,
+      this.interceptorsObj?.responseInterceptorsCatch
     )
   }
 

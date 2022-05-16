@@ -1,9 +1,9 @@
 <template>
-  <van-tabs v-model:active="loginType" color="#31353C" class="tabs" @change="change">
-    <van-tab v-for="item in loginNameTypeList" :key="item.title" :title="item.title"/>
+  <van-tabs v-model:active="loginItemType" color="#31353C" class="tabs" @change="loginItemTypeChange">
+    <van-tab v-for="item in loginItemTypeList" :key="item.title" :title="item.title"/>
   </van-tabs>
   <Field
-    v-if="[0].includes(loginType)"
+    v-if="[0].includes(loginItemType)"
     class="login"
     :class="{'active-border': loginNameShowBorder, error: !!errorMsg}"
     @focus="loginNameFocus"
@@ -13,7 +13,7 @@
     v-model="loginName"
   />
   <Field
-    v-if="[1, 2].includes(loginType)"
+    v-if="[1, 2].includes(loginItemType)"
     readonly
     clickable
     @touchstart.stop="loginNameShowBorder = true"
@@ -27,7 +27,7 @@
   />
   <div class="error-msg" v-if="errorMsg"><img class="warn-icon" :src="warnIcon" alt="警告">{{errorMsg}}</div>
   <van-number-keyboard
-    v-if="[1, 2].includes(loginType)"
+    v-if="[1, 2].includes(loginItemType)"
     v-model="loginName"
     :extra-key="extraKey"
     :show="loginNameShowBorder"
@@ -50,6 +50,7 @@ const props = defineProps<{
 const { errorMsg, modelValue } = toRefs(props)
 const emits = defineEmits<{
   (e: 'update:modelValue', modelValue: LoginName): void
+  (e: 'loginItemTypeChange', loginItemType: number): void
 }>()
 
 const loginName = computed<LoginName>({
@@ -59,7 +60,7 @@ const loginName = computed<LoginName>({
   }
 })
 
-const loginNameTypeList = [
+const loginItemTypeList = [
   {
     title: '钱包ID',
     placeHolder: '请输入钱包ID',
@@ -76,12 +77,12 @@ const loginNameTypeList = [
     extraKey: 'X'
   }
 ]
-const loginType = ref(0)
-const placeholder = computed(() => loginNameTypeList[loginType.value].placeHolder)
-const extraKey = computed(() => loginNameTypeList[loginType.value].extraKey)
-const change = () => {
-  console.log(loginType.value)
+const loginItemType = ref(0)
+const placeholder = computed(() => loginItemTypeList[loginItemType.value].placeHolder)
+const extraKey = computed(() => loginItemTypeList[loginItemType.value].extraKey)
+const loginItemTypeChange = () => {
   loginName.value = ''
+  emits('loginItemTypeChange', loginItemType.value)
 }
 
 const loginNameShowBorder = ref<boolean>(false)

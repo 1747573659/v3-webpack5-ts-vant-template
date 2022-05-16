@@ -1,11 +1,11 @@
 import request from './index'
 import { LoginReq, LoginRep,withdrawalInfoReq,withdrawalInfoRep, reviseConfigReq } from './types'
 
-export const Login = (data: LoginReq) => {
+export const LoginGetCode = (data: LoginReq) => {
   return request<LoginReq, LoginRep>({
-    url: '/login',
+    url: '/wallet/login/getCode',
     method: 'post',
-    params: data
+    data: data
   })
 }
 

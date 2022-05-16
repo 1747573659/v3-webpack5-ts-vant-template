@@ -1,6 +1,6 @@
 <template>
   <div class="login-name">
-    <login-box v-model="loginName" :errorMsg="errorMsg"></login-box>
+    <login-box v-model="loginName" @loginItemTypeChange="loginItemTypeChange" :errorMsg="errorMsg"></login-box>
   </div>
   <div class="login-btn">
     <large-button type="primary" loading-text="获取短信验证码" :loading="loginBtnLoading" :disabled="loginBtnDisabled" @click="handleLogin" size="large">获取短信验证码</large-button>
@@ -13,7 +13,14 @@ import LargeButton from '@/components/LargeButton/LargeButton.vue'
 import LoginBox from '../../components/LoginBox/LoginBox.vue'
 import { useStore } from 'vuex'
 
+import { LoginGetCode } from '@/api/wallet'
+
 const loginName = ref('')
+// 1：钱包ID 2：法人手机号 3：法人身份证
+const loginItemType = ref(1)
+const loginItemTypeChange = (type: number) => {
+  loginItemType.value = ++type
+}
 
 const errorMsg = ref('')
 
@@ -28,15 +35,31 @@ const emit = defineEmits<{
 const store = useStore()
 
 // 登录事件
-const handleLogin = () => {
+const handleLogin = async () => {
   loginBtnLoading.value = true
-  setTimeout(() => {
+  let data = {
+    loginItemType: loginItemType.value,
+    loginItem: loginName.value,
+    shopAdminId: 70,
+    openId: 'XSDFFG346TJHTRJ78O7OZDG'
+  }
+  try {
+    const res = await LoginGetCode(data)
+    console.log(res)
+    // store.dispatch('setUserInfo', {
+    //   loginName: res.data.phone
+    // })
+    // emit('loginSucess', true)
+  } catch (error) {} finally {
     loginBtnLoading.value = false
-    store.dispatch('setUserInfo', {
-      loginName: '13147157405'
-    })
-    emit('loginSucess', true)
-  }, 1000);
+  }
+  // setTimeout(() => {
+  //   loginBtnLoading.value = false
+  //   store.dispatch('setUserInfo', {
+  //     loginName: '13147157405'
+  //   })
+  //   emit('loginSucess', true)
+  // }, 1000);
   // errorMsg.value = '该号码尚未注册，请核实后重新输入'
 }
 
