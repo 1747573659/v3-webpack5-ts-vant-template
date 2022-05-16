@@ -1,8 +1,12 @@
 <template>
   <div class="my-wallet">
+    <!-- 基础信息 -->
     <wallet-info></wallet-info>
+    <!-- 余额 -->
     <wallet-card></wallet-card>
+    <!-- 跳转条目 -->
     <handle-group></handle-group>
+    <!-- 退出登录 -->
     <div class="logout">
       <logout-btn></logout-btn>
     </div>

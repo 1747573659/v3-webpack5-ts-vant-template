@@ -74,6 +74,7 @@ const gotoDetail = () => {
           height: 66px;
           background: $primaryColor;
           border-radius: 10px;
+          border: none;
         }
       }
     }

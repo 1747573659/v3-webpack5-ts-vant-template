@@ -11,7 +11,10 @@ import {
   Icon,
   CellGroup,
   Popup,
-  Dialog
+  Dialog,
+  Tabs,
+  Tab,
+  NumberKeyboard
 } from 'vant'
 import './reset.scss'
 type stringKey = Record<string, any>
@@ -27,7 +30,10 @@ const components:stringKey = {
   Icon,
   CellGroup,
   Popup,
-  Dialog
+  Dialog,
+  Tabs,
+  Tab,
+  NumberKeyboard
 }
 export default function (app: ReturnType<typeof createApp>) {
   for (const key in components) {

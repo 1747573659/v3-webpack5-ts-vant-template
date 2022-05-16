@@ -10,7 +10,6 @@
       </div>
       <div class="shop-content">
         <div class="shop-name">商户名</div>
-        <div class="shop-name">欢迎来到企业钱包</div>
       </div>
     </div>
     <!-- input phoneNum -->
@@ -42,8 +41,10 @@ const LoginSucess = (flag:boolean) => {
 
 <style lang="scss" scoped>
 .login-wrap {
+  height: 100%;
+  background-color: $white;
   .shop-info {
-    height: 300px;
+    height: 304px;
     display: flex;
     align-items: center;
     padding-left: 40px;

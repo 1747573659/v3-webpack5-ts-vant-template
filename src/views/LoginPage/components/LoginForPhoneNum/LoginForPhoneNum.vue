@@ -46,13 +46,10 @@ watch(loginName, (newValue:string, oldValue:string) => {
     errorMsg.value = ''
   }
 })
+
 </script>
 
 <style lang="scss" scoped>
-.login-name {
-  margin-top: 84px;
-  height: 111px;
-}
 .login-btn {
   margin-top: 176px;
   padding: 0 32px;
