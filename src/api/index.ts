@@ -1,7 +1,7 @@
 /*
  * @Date         : 2022-05-06 11:02:27
  * @LastEditors  : 庄鸿斌
- * @LastEditTime : 2022-05-16 14:47:12
+ * @LastEditTime : 2022-05-16 15:09:50
  */
 import Request from './request'
 import type { RequestConfig } from './types'
@@ -40,7 +40,7 @@ interface MyResponse<T> {
 }
 
 const myRequest = <D, T>(config: MyRequestConfig<D>) => {
-  return request.request<MyResponse<T>>(config)
+  return request.request<T>(config)
 }
 
 export default myRequest

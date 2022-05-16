@@ -46,21 +46,13 @@ const handleLogin = async () => {
   try {
     const res = await LoginGetCode(data)
     console.log(res)
-    // store.dispatch('setUserInfo', {
-    //   loginName: res.data.phone
-    // })
-    // emit('loginSucess', true)
+    store.dispatch('setUserInfo', {
+      loginName: res.phone
+    })
+    emit('loginSucess', true)
   } catch (error) {} finally {
     loginBtnLoading.value = false
   }
-  // setTimeout(() => {
-  //   loginBtnLoading.value = false
-  //   store.dispatch('setUserInfo', {
-  //     loginName: '13147157405'
-  //   })
-  //   emit('loginSucess', true)
-  // }, 1000);
-  // errorMsg.value = '该号码尚未注册，请核实后重新输入'
 }
 
 // 清空错误信息
