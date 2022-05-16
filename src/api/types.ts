@@ -66,3 +66,24 @@ export interface walletInfoDetailRep {
   tradeDepositAmount?: number
   walletId: string
 }
+export interface billDetailsReq {
+  categoryType: string | number
+  transactionNo: string | number
+  transactionType: string | number
+}
+export interface billDetailsRep {
+  orderType: number
+  category: number
+  [propName: string]: string | number | Array<{ counterpartWalletId: string }> | null | undefined
+}
+export interface billStatementReq {
+  page: number
+  rows: number
+  walletId: string
+  transactionType?: number
+}
+export interface billStatementRep {
+  orderType: number
+  category: number
+  [propName: string]: string | number
+}

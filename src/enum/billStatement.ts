@@ -12,7 +12,7 @@ type _detailItem = {
 export type billDetailType = {
   orderType: number
   category: number
-  counterpartInfoList?: counterpartInfoList
+  // counterpartInfoList?: counterpartInfoList
   [propName: string]: string | number | counterpartInfoList | null | undefined
 }
 type _billTypeItem = {
@@ -22,19 +22,29 @@ type _billTypeItem = {
   src?: string
   detailList: Array<_detailItem> | ((item: billDetailType) => Array<_detailItem>)
 }
-
+const bankMethodsMapEnum = new Map([
+  [1, '钱包余额'],
+  [2, '网商活期'],
+  [3, '非网商卡'],
+  [4, '支付宝余额'],
+  [5, '系统异常']
+])
 const detailListEnum = {
   refundTime: {
-    key: 'refundTime',
+    key: 'finishDate',
     label: '退款成功时间'
   },
   createTime: {
-    key: 'createTime',
+    key: 'createDate',
     label: '创建时间'
   },
   paymentTime: {
-    key: 'createTime',
+    key: 'finishDate',
     label: '支付成功时间'
+  },
+  payMethod: {
+    key: (info: { bankPayMethod: number }) => bankMethodsMapEnum.get(info.bankPayMethod),
+    label: '银行支付方式'
   },
   depositTime: {
     key: 'finishDate',
@@ -58,17 +68,18 @@ const detailListEnum = {
   },
   payeeId: {
     key: (list: { counterpartInfoList: counterpartInfoList }) => {
-      console.log(list.counterpartInfoList, 'list.counterpartInfoList')
-      return list.counterpartInfoList.map(item => item.counterpartWalletId).join(',')
+      return list.counterpartInfoList
+        ? list.counterpartInfoList.map(item => item.counterpartWalletId).join(',')
+        : ''
     },
     label: '对方钱包ID'
   },
   refundSerialNumber: {
-    key: 'refundSerialNumber',
+    key: 'sn',
     label: '平台退款流水号'
   },
   partnerRefundSerialNo: {
-    key: 'partnerRefundSerialNo',
+    key: 'refundThirdSn',
     label: '合作方退款流水号'
   },
   serialNumber: {
@@ -80,7 +91,7 @@ const detailListEnum = {
     label: '合作方流水号'
   },
   platformStateNumber: {
-    key: 'platformStateNumber',
+    key: 'detailSn',
     label: '平台明细单号'
   },
   remark: {
@@ -104,6 +115,7 @@ export const billTypeMapEnum = new Map([
       label: '转账',
       isAdd: false,
       src: transfer,
+      shortShopName: true,
       detailList: [
         detailListEnum.transferTime,
         detailListEnum.payeeId,
@@ -147,15 +159,60 @@ export const billTypeMapEnum = new Map([
       label: '小程序支付',
       isAdd: false,
       src: payment,
-      detailList: [
-        detailListEnum.createTime,
-        detailListEnum.paymentTime,
-        detailListEnum.payeeId,
-        detailListEnum.serialNumber,
-        detailListEnum.partnerSerialNumber,
-        detailListEnum.platformStateNumber,
-        detailListEnum.remark
-      ]
+      shortShopName: true,
+      detailList: (info: billDetailType) => {
+        if (info.orderFlag === 1) {
+          // 合并单
+          if (info.category === 1) {
+            // 收入
+            return [
+              detailListEnum.createTime,
+              detailListEnum.paymentTime,
+              detailListEnum.payeeId,
+              detailListEnum.serialNumber,
+              detailListEnum.partnerSerialNumber,
+              detailListEnum.platformStateNumber,
+              detailListEnum.remark
+            ]
+          } else {
+            // 支出
+            return [
+              detailListEnum.createTime,
+              detailListEnum.paymentTime,
+              detailListEnum.payMethod,
+              detailListEnum.payeeId,
+              detailListEnum.serialNumber,
+              detailListEnum.partnerSerialNumber,
+              detailListEnum.platformStateNumber,
+              detailListEnum.remark
+            ]
+          }
+        } else {
+          //  非合并
+          if (info.category === 1) {
+            // 收入
+            return [
+              detailListEnum.createTime,
+              detailListEnum.paymentTime,
+              detailListEnum.payeeId,
+              detailListEnum.serialNumber,
+              detailListEnum.partnerSerialNumber,
+              detailListEnum.remark
+            ]
+          } else {
+            // 支出
+            return [
+              detailListEnum.createTime,
+              detailListEnum.paymentTime,
+              detailListEnum.payMethod,
+              detailListEnum.payeeId,
+              detailListEnum.serialNumber,
+              detailListEnum.partnerSerialNumber,
+              detailListEnum.remark
+            ]
+          }
+        }
+      }
     }
   ],
   [
@@ -165,6 +222,7 @@ export const billTypeMapEnum = new Map([
       label: '小程序退款',
       isAdd: true,
       src: refund,
+      shortShopName: true,
       detailList: [
         detailListEnum.refundTime,
         detailListEnum.payeeId,
@@ -181,7 +239,6 @@ export function getBillItemList(info: billDetailType) {
   const currentItem: _billTypeItem = {
     ...(billTypeMapEnum.get(orderType) as unknown as _billTypeItem)
   }
-  //  如果是函数-》 调用
   if (typeof currentItem.detailList === 'function') {
     currentItem.detailList = currentItem.detailList(info)
   }
@@ -202,43 +259,5 @@ export function getBillItemList(info: billDetailType) {
       }) || []
   }
   console.log(currentItem, 'currentItem')
+  return currentItem
 }
-const text = {
-  amount: 600,
-  balance: 1708.7,
-  basicInfoId: 90000043,
-  billNo: '90678465802545061888',
-  category: 1,
-  channelCode: '19',
-  counterpartInfoList: [
-    {
-      counterpartWalletId: 'QB00065757000007',
-      counterpartMchId: '226801000000519485168',
-      counterpartShortShopName: '王一小卖部',
-      counterpartBasicInfoId: 90000046
-    }
-  ],
-  createDate: '2022-04-25 16:03:31',
-  finishDate: '2022-04-25 16:02:09',
-  mchId: '226801000000518110430',
-  operatorName: '罗',
-  orderType: 4,
-  partnerId: null,
-  partnerName: null,
-  payMethod: 4,
-  remark: '',
-  scenes: null,
-  shareFinishDate: '2022-04-25 15:07:39',
-  shareStatus: 2,
-  shopAdminId: 70,
-  shopAdminName: '深圳市蒸食膳餐饮有限公司55',
-  shortShopName: '许雄伯-商户简称',
-  sn: '76678465733305491456',
-  sourceType: null,
-  status: 2,
-  thirdSn: '7525898e-062b-4abb-abb4-50f2f0f97735',
-  tradeNo: '202204432508342740',
-  walletId: 'QB00065757000004',
-  walletType: 1
-}
-getBillItemList(text)

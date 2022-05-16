@@ -6,7 +6,11 @@ import {
   withdrawalInfoRep,
   reviseConfigReq,
   walletInfoDetailReq,
-  walletInfoDetailRep
+  walletInfoDetailRep,
+  billDetailsReq,
+  billDetailsRep,
+  billStatementReq,
+  billStatementRep
 } from './types'
 
 export const LoginGetCode = (data: LoginReq) => {
@@ -26,8 +30,8 @@ export const queryMerchantInfo = (data: walletInfoDetailReq) => {
   })
 }
 //  账单-获取账单流水列表
-export const queryBillStatement = (data: any) => {
-  return request({
+export const queryBillStatement = (data: billStatementReq) => {
+  return request<billStatementReq, billStatementRep>({
     url: '/wallet/accountBill/pageQuery',
     method: 'post',
     data
@@ -44,8 +48,8 @@ export const queryBillAmount = (data: any) => {
 }
 
 //  账单详情-获取详情
-export const queryBillDetails = (data: any) => {
-  return request({
+export const queryBillDetails = (data: billDetailsReq) => {
+  return request<billDetailsReq, billDetailsRep>({
     url: '/wallet/accountBill/detail',
     method: 'post',
     data

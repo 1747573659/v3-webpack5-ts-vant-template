@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-  import { reactive, ref } from 'vue'
+  import { reactive, ref, Ref } from 'vue'
   import { useRouter } from 'vue-router'
+  import { formatYuanAmount } from '@/utils/formateMoney'
   import { queryBillStatement, queryBillAmount } from '@/api/wallet'
   import { billTypeMapEnum } from '@/enum/billStatement'
-  import { BillAmountRep } from '@/api/types'
+  import { BillAmountRep, billStatementReq } from '@/api/types'
   type tableList = {
     id: number
     transactionType: string
@@ -35,10 +36,14 @@
       billList.list = []
       billList.tableFinished = false
     }
-    const params = {
+    const params: billStatementReq = {
       page: pageConfig.page,
       rows: pageConfig.rows,
-      walletId: 'QB00065757000004'
+      // walletId: 'QB00065757000004'
+      walletId: 'QB0065757391780'
+    }
+    if (activeBillType.value !== -1) {
+      params.transactionType = activeBillType.value
     }
     try {
       const res = await Promise.all([queryBillStatement(params), queryBillAmount(params)])
@@ -55,7 +60,7 @@
   }
 
   const showSelectTypeDialog = ref(false)
-  let activeBillType: ReturnType<typeof ref> = ref(-1)
+  let activeBillType: Ref<number> = ref(-1)
   const handleChangeActiveType = (key: string) => {
     showSelectTypeDialog.value = false
     if (activeBillType.value !== key) {
@@ -63,6 +68,7 @@
       loadBillStatement(true)
     }
   }
+  // formatYuanAmount
 </script>
 <template>
   <div class="billstate-wrap">
@@ -75,8 +81,12 @@
         <!-- <div class="right">今日</div> -->
       </div>
       <div class="billstate-amount-wrap">
-        <div class="billstate-amount-item">支出：￥ {{ totalAmount.expenditureAmount }}</div>
-        <div class="billstate-amount-item">收入：￥ {{ totalAmount.incomeAmount }}</div>
+        <div class="billstate-amount-item">
+          支出：￥ {{ formatYuanAmount(totalAmount.expenditureAmount || 0) }}
+        </div>
+        <div class="billstate-amount-item">
+          收入：￥ {{ formatYuanAmount(totalAmount.incomeAmount || 0) }}
+        </div>
       </div>
     </div>
     <van-list
@@ -108,7 +118,7 @@
             <div class="time">{{ item.transactionSuccessTime }}</div>
           </div>
           <div :class="{ amount: true, isAdd: item.category === 1 }">
-            {{ item.category === 1 ? '+' : '-' }}{{ item.amount }}
+            {{ item.category === 1 ? '+' : '-' }}{{ formatYuanAmount(item.amount || 0) }}
           </div>
         </div>
       </van-cell>

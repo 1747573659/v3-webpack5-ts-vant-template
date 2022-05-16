@@ -4,20 +4,26 @@
       <div class="billdetail-header-main">
         <img :src="currentItem.src" alt="" />
         <div class="billdetail-header-info">
-          {{ currentItem.label }}{{ state.billDetail.name ? `-${state.billDetail.name}` : '' }}
+          {{ currentItem.label
+          }}{{
+            state.billDetail.shortShopName && currentItem.shortShopName
+              ? `-${state.billDetail.shortShopName}`
+              : ''
+          }}
         </div>
         <div class="billdetail-header-mount">
-          {{ state.billDetail.category === 1 ? '+' : '-' }}{{ state.billDetail.amount }}
+          {{ state.billDetail.category === 1 ? '+' : '-'
+          }}{{ formatYuanAmount(state.billDetail.amount || 0) }}
         </div>
       </div>
     </div>
     <div class="billdetail-main">
       <div class="billdetail-item" v-for="billItem in currentItem.detailList" :key="billItem.key">
         <div class="billdetail-item-left">
-          {{ getLabel(billItem.label) }}
+          {{ billItem.label }}
         </div>
         <div class="billdetail-item-right">
-          {{ state.billDetail[billItem.key] }}
+          {{ billItem.value }}
         </div>
       </div>
     </div>
@@ -27,8 +33,9 @@
 <script lang="ts" setup>
   import { onMounted, reactive, computed } from 'vue'
   import { useRoute } from 'vue-router'
+  import { formatYuanAmount } from '@/utils/formateMoney'
   import { queryBillDetails } from '@/api/wallet'
-  import { billTypeMapEnum, getBillItemList, billDetailType } from '@/enum/billStatement'
+  import { getBillItemList } from '@/enum/billStatement'
   type billDetailQueryType = {
     categoryType: string
     transactionNo: string
@@ -39,7 +46,10 @@
   const route = useRoute()
   const state = reactive({
     queryData: route.query as billDetailQueryType,
-    billDetail: {}
+    billDetail: {
+      orderType: 0,
+      category: 0
+    }
   })
 
   const getBillDetails = () => {
@@ -48,21 +58,8 @@
     })
   }
 
-  const getLabel = (label: (arg0: { [x: string]: string | number }) => string) => {
-    if (typeof label === 'function') {
-      return label(state.billDetail)
-    } else {
-      return label
-    }
-  }
   const currentItem = computed(() => {
-    console.log(
-      billTypeMapEnum.get(Number(state.queryData.transactionType)),
-      state.queryData.transactionType,
-      '详情项'
-    )
-    getBillItemList(state.billDetail)
-    return billTypeMapEnum.get(Number(state.queryData.transactionType)) || {}
+    return getBillItemList(state.billDetail)
   })
   onMounted(() => {
     getBillDetails()
