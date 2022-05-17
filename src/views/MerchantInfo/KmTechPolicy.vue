@@ -1,37 +1,31 @@
-<script lang="ts" setup>
-  import { useRouter } from 'vue-router'
-  const router = useRouter()
-  // const handleBack = () => {
-  //   router.replace('/merchantInfo')
-  // }
-</script>
-
 <template>
-  <div class="kmtechPolicy-wrap">
-    <div class="kmtechPolicy-main-wrap">这是详情</div>
-    <!-- <div class="kmtechPolicy-back">
-      <van-button type="default" @click="handleBack">返回</van-button>
-    </div> -->
+  <div id="kmtechPolicy-wrap">
+    <iframe
+      id="bdIframe"
+      src="https://file-sso.oss-cn-hangzhou.aliyuncs.com/front/legalNotices/privacyPolicy.html?wework_cfm_code=MtG2IP6hCO1gNQncB%2F32p3JCSfV9M1saE1SYeOdKG%2FFOVJ4cicm7zFDkZplrJdc4Inkw7q0r2Najl%2FEQL8FIknrT7v%2B3hZsIOLElPmXomrCz5ebgtbHZ9%2BsxPcksouGdJyl%2B6UUoO6rN1AssTmqmt0Z0reon6tklwQ%3D%3D"
+      frameborder="0"
+      width="100%"
+      :height="iframeHeight"></iframe>
   </div>
 </template>
-<style lang="scss" scoped>
-  .kmtechPolicy-wrap {
-    height: 100%;
-    background-color: $bg-light-color-1;
-  }
-  .kmtechPolicy-main-wrap {
-    height: 100%;
-  }
-  .kmtechPolicy-back {
-    padding: 24px 32px;
-    box-sizing: border-box;
-    background-color: #fff;
-    position: fixed;
-    bottom: 0;
-    width: 100vw;
-    .van-button {
-      width: 100%;
-      background-color: $bg-light-color-1;
+<script lang="ts">
+  export default {
+    data() {
+      return {
+        iframeHeight: '400'
+      }
+    },
+    mounted() {
+      const oWrap = document.getElementById('kmtechPolicy-wrap')
+      if (oWrap) {
+        console.log(oWrap.offsetHeight + 'px')
+        this.iframeHeight = oWrap.offsetHeight - 10 + 'px'
+      }
     }
+  }
+</script>
+<style lang="scss" scoped>
+  #kmtechPolicy-wrap {
+    height: 100%;
   }
 </style>
