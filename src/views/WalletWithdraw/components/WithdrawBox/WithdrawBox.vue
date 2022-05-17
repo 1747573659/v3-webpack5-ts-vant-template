@@ -18,11 +18,11 @@
     </div>
     <div class="info">
       <div class="remain-amount">
-        <span>交易户余额 ¥{{amount}}</span>
+        <span>交易户余额 ¥{{withdrawDetailInfo?.tradeBalanceAmount}}</span>
         <tool-tip class="tooltip-wallet"></tool-tip>
       </div>
       <div class="tips">
-        温馨提示：微信仅支持交易户提现，<span class="special">充值户(余额 ¥10.00)</span>请登录支付宝网商小程序操作
+        温馨提示：微信仅支持交易户提现，<span class="special">充值户(余额 ¥{{withdrawDetailInfo?.tradeDepositAmount}})</span>请登录支付宝网商小程序操作
       </div>
     </div>
   </div>
@@ -33,6 +33,8 @@ import { computed, ref, toRefs } from 'vue'
 import { onMounted } from 'vue';
 import { Money } from '../../types'
 import ToolTip from '@/components/ToolTip/ToolTip.vue'
+import useInjectInfo from '../../hooks/useInjectInfo'
+const withdrawDetailInfo = useInjectInfo()
 
 onMounted(() => {
   input.value.focus()
@@ -42,7 +44,7 @@ const props = defineProps<{
   money: Money
 }>()
 const emits = defineEmits<{
-  (e: 'update:money', moneyInner): void
+  (e: 'update:money', moneyInner:Money): void
 }>()
 const { money } = toRefs(props)
 const moneyInner = computed<Money>({
@@ -56,7 +58,7 @@ const input = ref()
 
 const amount = ref(8000)
 
-const placeholder = computed(() => `最多可转出¥${amount.value}`)
+const placeholder = computed(() => `最多可转出¥${withdrawDetailInfo?.tradeBalanceAmount}`)
 
 const tagArr = [null, '个', '十', '百', '千', '万', '十万', '百万', '千万', '亿', '十亿', '百亿', '千亿'] 
 

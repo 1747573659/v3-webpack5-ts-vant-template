@@ -3,8 +3,10 @@ export type NumberOrNull = number | null
 export type UserInfo = {
   loginName: LoginName,
   token: string,
-  loginItemType: NumberOrNull,
-  shopAdminId: NumberOrNull
+  loginItemType: number,
+  shopAdminId: number,
+  walletId: string,
+  openId: string
 }
 type Wallet = {
   walletId: string,

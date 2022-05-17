@@ -11,7 +11,7 @@
     @blur="loginNameBlur"
     :placeholder="placeholder"
     :clearable="true"
-    v-model="loginName"
+    v-model.trim="loginName"
   />
   <Field
     v-if="[2].includes(loginItemType)"
@@ -24,9 +24,9 @@
     @blur="loginNameBlur"
     :placeholder="placeholder"
     :clearable="true"
-    v-model="loginName"
+    v-model.trim="loginName"
   />
-  <div class="error-msg" v-if="errorMsg"><img class="warn-icon" :src="warnIcon" alt="警告">{{errorMsg}}</div>
+  <div class="error-msg" v-if="errorMsg"><img class="warn-icon" :src="warnIcon" alt="警告"><div>{{errorMsg}}</div></div>
   <van-number-keyboard
     v-if="[2].includes(loginItemType)"
     v-model="loginName"
@@ -119,11 +119,16 @@ const warnIcon = ref(warn)
   }
 }
 .error-msg {
-  text-align: left;
   margin-top: 20px;
   padding-left: 40px;
   font-size: 32px;
   color: $errorColor;
+  display: flex;
+  align-items: center;
+  height: 45px;
+  div {
+    padding-left: 8px;
+  }
 }
 .warn-icon {
   width: 40px;

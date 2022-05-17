@@ -16,6 +16,8 @@
     <login-for-phone-num v-if="!hasInputedLoginName" @login-sucess="LoginSucess"></login-for-phone-num>
     <!-- input VerifyCode -->
     <login-for-verify v-if="hasInputedLoginName"></login-for-verify>
+    <!-- 返回 -->
+    <back-btn v-if="hasInputedLoginName" @click="back()"></back-btn>
   </div>
 </template>
 
@@ -27,6 +29,12 @@ import LoginForPhoneNum from './components/LoginForPhoneNum/LoginForPhoneNum.vue
 // input VerifyCode
 import LoginForVerify from './components/LoginForVerify/LoginForVerify.vue'
 
+import BackBtn from '@/components/BackBtn/BackBtn.vue'
+
+import { useStore } from 'vuex'
+
+const store = useStore()
+
 // 定义图片
 const shopImg = ref(shopImgDefault)
 
@@ -35,6 +43,11 @@ const hasInputedLoginName = ref(false)
 // 登录成功
 const LoginSucess = (flag:boolean) => {
   hasInputedLoginName.value = flag
+}
+
+const back = () => {
+  store.dispatch('resetUserInfo')
+  hasInputedLoginName.value = false
 }
 
 </script>

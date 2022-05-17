@@ -13,43 +13,56 @@ const myWalletRoutes: Array<RouteRecordRaw> = [
     path: '/myWallet',
     name: 'myWallet',
     meta: {
-      title: '企业钱包'
+      title: '钱包首页'
     },
     component: () => import('@/views/MyWallet/MyWallet.vue')
   },
   {
     path: '/merchantInfo',
     name: 'merchantInfo',
+    meta: {
+      title: '详情'
+    },
     component: () => import('@/views/MerchantInfo/MerchantInfo.vue')
   },
   {
     path: '/kmTechPolicy',
     name: 'kmTechPolicy',
+    meta: {
+      title: '科脉技术隐私政策'
+    },
     component: () => import('@/views/MerchantInfo/KmTechPolicy.vue')
-  },
-  {
-    path: '/walletDetail',
-    name: 'walletDetail',
-    component: () => import('@/views/WalletDetail/WalletDetail.vue')
   },
   {
     path: '/walletWithdraw',
     name: 'walletWithdraw',
+    meta: {
+      title: '提现'
+    },
     component: () => import('@/views/WalletWithdraw/WalletWithdraw.vue')
   },
   {
     path: '/withdrawConfig',
     name: 'withdrawConfig',
+    meta: {
+      title: '提现设置'
+    },
     component: () => import('@/views/WithdrawConfig/WithdrawConfig.vue')
   },
   {
     path: '/billStatement',
     name: 'billStatement',
+    meta: {
+      title: '账单明细'
+    },
     component: () => import('@/views/BillStatement/BillStatement.vue')
   },
   {
     path: '/billDetail',
     name: 'billDetail',
+    meta: {
+      title: '账单详情'
+    },
     component: () => import('@/views/BillDetail/BillDetail.vue')
   }
 ]

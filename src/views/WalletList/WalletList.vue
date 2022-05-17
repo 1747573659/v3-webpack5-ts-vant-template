@@ -28,7 +28,8 @@ const store = useStore()
 const walletList = computed<WalletList[]>(() => store.state.walletList.walletList)
 
 const cellClick = ({ walletId }: WalletList) => {
-  router.push({path: '/myWallet', query: {walletId}})
+  store.dispatch('setUserInfo', { walletId })
+  router.replace('/myWallet')
 }
 </script>
 

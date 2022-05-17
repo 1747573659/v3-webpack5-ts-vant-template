@@ -114,3 +114,39 @@ export interface billStatementRep {
   category: number
   [propName: string]: string | number
 }
+
+export interface withdrawDetailReq {
+  shopAdminId: number,
+  walletId: string
+}
+export interface withdrawDetailRep {
+  accountName: string,
+  availableAmount: number,
+  bankCard: string,
+  legalPhone: string,
+  openBank: string,
+  openBankCnap: string,
+  tradeBalanceAmount: string,
+  tradeDepositAmount: string
+}
+
+export interface withdrawApplyReq {
+	shopAdminId: number,
+	totalAmount: number,
+	walletId: string
+}
+export interface withdrawApplyRep {
+  sn: string,
+  thirdSn: string
+}
+
+export interface withdrawConfirmReq {
+  sn: string,
+	thirdSn: string,
+	walletId: string
+}
+
+export interface logoutReq {
+  openId: string,
+  walletId: string
+}

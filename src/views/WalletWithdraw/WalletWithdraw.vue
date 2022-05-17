@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, reactive, provide } from 'vue';
 import OverlayLoading from '@/components/OverlayLoading/OverlayLoading.vue'
 import AccountInfo from './components/AccountInfo/AccountInfo.vue'
 import WithdrawBox from './components/WithdrawBox/WithdrawBox.vue'
@@ -29,6 +29,44 @@ import { Money } from './types';
 import { VerifyCode } from '@/components/MsgVerify/types';
 import WithdrawConfirm from './components/WithdrawConfirm/WithdrawConfirm.vue'
 import ResultPage from './components/ResultPage/ResultPage.vue'
+
+import { withdrawDetail } from '@/api/wallet'
+
+import { useStore } from 'vuex'
+import { UserInfo } from '@/store/storeTypes';
+import { withdrawDetailRep } from '@/api/types';
+
+import { withdrawApplyApi, withdrawConfirmApi } from '@/api/wallet'
+
+const userInfo: UserInfo = useStore().state.userInfo
+
+const withdrawDetailInfo = reactive<withdrawDetailRep>({
+  accountName: '',
+  availableAmount: 0,
+  bankCard: '',
+  legalPhone: '',
+  openBank: '',
+  openBankCnap: '',
+  tradeBalanceAmount: '',
+  tradeDepositAmount: ''
+})
+
+provide('withdrawDetailInfo', withdrawDetailInfo)
+
+const getWithdrawDetail = async () => {
+  const { walletId, shopAdminId } = userInfo
+  try {
+    const res = await withdrawDetail({
+      walletId,
+      shopAdminId
+    })
+    Object.assign(withdrawDetailInfo, res)
+  } catch (e) {}
+}
+
+onMounted(() => {
+  getWithdrawDetail()
+})
 
 const showOverlay = ref(false)
 
@@ -40,6 +78,18 @@ const showVerifyPopur = ref(false)
 
 const withdrawApply = () => {
   showVerifyPopur.value = true
+}
+
+const handlewithdrawApply = async () => {
+  const { walletId, shopAdminId } = userInfo
+  let data = {
+    walletId,
+    shopAdminId,
+    totalAmount: Number(money.value)
+  }
+  try {
+    const res = await withdrawApplyApi(data)
+  } catch(e) {}
 }
 
 const handleVerifyCode = (verifyCode: VerifyCode) => {
@@ -68,7 +118,19 @@ const confirmWithdraw = () => {
     showResultPage.value = true
   }, 1000)
 }
-</script>
+
+const handleConfirm = async () => {
+  let data = {
+    sn: "",
+    thirdSn: "",
+    walletId: ""
+  }
+  try {
+    const res = await withdrawConfirmApi(data)
+  } catch(e) {}
+}
+
+</script> 
 
 <style lang="scss" scoped>
 .withdraw-btn {

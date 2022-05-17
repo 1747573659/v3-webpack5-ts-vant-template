@@ -1,8 +1,7 @@
 import { onMounted, ref } from 'vue'
 import { walletDetail } from '@/api/wallet'
-import { useRoute } from 'vue-router'
 import { walletDetailRep } from '@/api/types'
-
+import { useStore } from 'vuex'
 export default () => {
   const loading = ref(false)
   const walletDetailInfo = ref<walletDetailRep>({
@@ -12,13 +11,13 @@ export default () => {
     shortShopName: '',
     walletId: ''
   })
-  const route = useRoute()
+  const store = useStore()
   
   const getWalletDetail = async () => {
     loading.value = true
     try {
       const res = await walletDetail({
-        walletId: route.query.walletId as string,
+        walletId: store.state.userInfo.walletId,
         shopAdminId: 70
       })
       walletDetailInfo.value = res
