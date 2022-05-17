@@ -75,7 +75,7 @@ const detailListEnum = {
     label: '对方钱包ID'
   },
   refundSerialNumber: {
-    key: 'sn',
+    key: 'refundSn',
     label: '平台退款流水号'
   },
   partnerRefundSerialNo: {
