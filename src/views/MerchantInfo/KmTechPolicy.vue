@@ -9,8 +9,11 @@
   </div>
 </template>
 <script lang="ts">
-  export default {
-    data() {
+  import { defineComponent } from 'vue'
+
+  export default defineComponent({
+    // 已启用类型推断
+    data(): { iframeHeight: string } {
       return {
         iframeHeight: '400'
       }
@@ -22,7 +25,7 @@
         this.iframeHeight = oWrap.offsetHeight - 10 + 'px'
       }
     }
-  }
+  })
 </script>
 <style lang="scss" scoped>
   #kmtechPolicy-wrap {

@@ -100,11 +100,11 @@ const detailListEnum = {
   }
 }
 
-export const billTypeMapEnum = new Map([
+export const billTypeMapEnum = new Map<string | number, any>([
   [
-    -1,
+    '',
     {
-      key: -1,
+      key: '',
       label: '全部账单'
     }
   ],

@@ -26,30 +26,30 @@ export interface LoginRep {
 }
 
 export interface LoginPhoneCodeReq {
-  code: string,
-  openId: string,
-  phone: string,
+  code: string
+  openId: string
+  phone: string
   shopAdminId: number
 }
 export interface WalletList {
-  walletId: string,
+  walletId: string
   shortShopName: string
 }
 export interface LoginPhoneCodeRep {
-  phone: string,
-  shopAdminId: number,
-  token: string,
+  phone: string
+  shopAdminId: number
+  token: string
   walletList: WalletList
 }
 export interface walletDetailReq {
-  shopAdminId: number,
+  shopAdminId: number
   walletId: string
 }
 export interface walletDetailRep {
-  accountName: string,
-  availableAmount: number,
-  bankCard: string,
-  walletId: string,
+  accountName: string
+  availableAmount: number
+  bankCard: string
+  walletId: string
   shortShopName: string
 }
 export interface withdrawalInfoReq {
@@ -108,9 +108,15 @@ export interface billStatementReq {
   rows: number
   walletId: string
   transactionType?: number
+  startTime?: string
+  endTime?: string
 }
 export interface billStatementRep {
   orderType: number
   category: number
   [propName: string]: string | number
+}
+export interface billAmountRep {
+  expenditureAmount: number
+  incomeAmount: number
 }

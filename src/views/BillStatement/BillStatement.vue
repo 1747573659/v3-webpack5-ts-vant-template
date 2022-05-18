@@ -1,20 +1,26 @@
 <script lang="ts" setup>
   import { reactive, ref, Ref } from 'vue'
   import { useRouter } from 'vue-router'
+  import moment from 'moment'
+  import DatePickerAction from '@/components/DatePickerAction/DatePickerAction'
   import { formatYuanAmount } from '@/utils/formateMoney'
   import { queryBillStatement, queryBillAmount } from '@/api/wallet'
   import { billTypeMapEnum } from '@/enum/billStatement'
   import { BillAmountRep, billStatementReq } from '@/api/types'
   type tableList = {
     id: number
-    transactionType: string
+    transactionType: number | string
     amount: number
     category: number // 收支类别 1-收入； 2-支出
     transactionSuccessTime: string
     shopAdminName: string
   }
   const router = useRouter()
-
+  const dateRange: Ref<string[]> = ref([
+    moment().format('YYYY-MM-DD'),
+    moment().format('YYYY-MM-DD')
+  ])
+  const timeLabel = ref('今日')
   let totalAmount: BillAmountRep = reactive({
     expenditureAmount: null,
     incomeAmount: null
@@ -28,8 +34,8 @@
     page: 1,
     rows: 20
   })
-  let loadBillStatement = async (init?: boolean) => {
-    console.log('加载数据', init)
+  let loadBillStatement = async (init?: boolean, data?: any) => {
+    console.log('加载数据', init, data)
     tableLoading.value = true
     if (init) {
       pageConfig.page = 1
@@ -39,36 +45,52 @@
     const params: billStatementReq = {
       page: pageConfig.page,
       rows: pageConfig.rows,
-      // walletId: 'QB00065757000004'
-      walletId: 'QB0065757391780'
+      walletId: 'QB0065757391780',
+      transactionType: billTypeMapEnum.get(activeBillType.value).key,
+      startTime: moment(dateRange.value[0]).format('YYYY-MM-DD 00:00:00'),
+      endTime: moment(dateRange.value[1]).format('YYYY-MM-DD 23:59:59')
     }
-    if (activeBillType.value !== -1) {
-      params.transactionType = activeBillType.value
-    }
-    try {
-      const res = await Promise.all([queryBillStatement(params), queryBillAmount(params)])
-      billList.list = billList.list.concat(res[0].results || [])
-      billList.tableFinished = !res[0].results || res[0].results.length < pageConfig.rows
-      totalAmount.expenditureAmount = res[1].expenditureAmount
-      totalAmount.incomeAmount = res[1].incomeAmount
-      console.log(res[1].expenditureAmount, billList.list, 'res[1].expenditureAmount')
-    } catch {
-      billList.tableFinished = true
-    } finally {
-      tableLoading.value = false
-    }
+    data && Object.assign(params, { ...data })
+    return Promise.all([queryBillStatement(params), queryBillAmount(params)])
+      .then(res => {
+        billList.list = billList.list.concat(res[0].results || [])
+        billList.tableFinished = !res[0].results || res[0].results.length < pageConfig.rows
+        totalAmount.expenditureAmount = res[1].expenditureAmount
+        totalAmount.incomeAmount = res[1].incomeAmount
+        tableLoading.value = false
+      })
+      .catch(() => {
+        billList.tableFinished = true
+        tableLoading.value = false
+        return Promise.reject()
+      })
   }
 
   const showSelectTypeDialog = ref(false)
-  let activeBillType: Ref<number> = ref(-1)
-  const handleChangeActiveType = (key: string) => {
+  let activeBillType: Ref<string | number> = ref('')
+  // 账单类型变化
+  const handleChangeActiveType = (key: string | number) => {
+    console.log(key, 'key_value')
     showSelectTypeDialog.value = false
     if (activeBillType.value !== key) {
-      activeBillType.value = key
-      loadBillStatement(true)
+      loadBillStatement(true, {
+        transactionType: key
+      }).then(() => (activeBillType.value = key))
     }
   }
-  // formatYuanAmount
+  const handleTimeChange = (time: string[], label: string) => {
+    const startTime = moment(time[0]).format('YYYY-MM-DD 00:00:00')
+    const endTime = moment(time[1]).format('YYYY-MM-DD 23:59:59')
+    return loadBillStatement(true, {
+      startTime,
+      endTime
+    }).then(() => {
+      console.log('then')
+      dateRange.value = time
+      timeLabel.value = label
+    })
+  }
+  const dateVisible = ref(false)
 </script>
 <template>
   <div class="billstate-wrap">
@@ -78,7 +100,12 @@
           <span>{{ billTypeMapEnum.get(activeBillType).label }}</span>
           <img src="../../assets/img/vector.png" />
         </div>
-        <!-- <div class="right">今日</div> -->
+        <div>
+          <div class="billstate-date" @click="dateVisible = true">
+            <img src="../../assets/img/date.png" />
+            <span>{{ timeLabel }}</span>
+          </div>
+        </div>
       </div>
       <div class="billstate-amount-wrap">
         <div class="billstate-amount-item">
@@ -130,11 +157,16 @@
         :class="{ 'billstate-type-item': true, active: item[1].key === activeBillType }"
         v-for="item in billTypeMapEnum"
         :key="item[1].id"
-        @click="handleChangeActiveType(item[1].key)">
+        @click="handleChangeActiveType(item[0])">
         {{ item[1].label }}
       </div>
     </div>
   </van-action-sheet>
+  <DatePickerAction
+    v-model="dateRange"
+    v-model:visible="dateVisible"
+    @change="handleTimeChange"
+    :label="timeLabel" />
 </template>
 
 <style lang="scss" scoped>
@@ -146,9 +178,19 @@
     flex-direction: column;
     background-color: $bg-light-color-1;
   }
-  .billstate-header {
-    // display: flex;
-    // flex-direction: column;
+  .billstate-date {
+    font-size: 28px;
+    padding: 14px 18px;
+    color: $primaryColor;
+    background-color: $painColor;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    img {
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+    }
   }
   .billstate-main-wrap {
     flex: 1 1 200px;
@@ -157,6 +199,9 @@
   .billstate-title-wrap {
     padding: 32px 24px;
     background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     .left {
       display: flex;
       height: 44px;
@@ -171,6 +216,9 @@
         width: 44px;
         display: inline-block;
       }
+    }
+    .right {
+      float: right;
     }
   }
   .billstate-amount-wrap {
@@ -247,6 +295,7 @@
     background-color: $bg-light-color-1;
     color: $font-color-3;
     text-align: center;
+    border-radius: 8px;
     &.active {
       background-color: $primaryColor;
       color: #fff;

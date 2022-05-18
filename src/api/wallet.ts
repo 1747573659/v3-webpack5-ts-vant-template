@@ -1,5 +1,6 @@
 import request from './index'
-import { LoginReq,
+import {
+  LoginReq,
   LoginRep,
   LoginPhoneCodeReq,
   LoginPhoneCodeRep,
@@ -13,7 +14,8 @@ import { LoginReq,
   billDetailsReq,
   billDetailsRep,
   billStatementReq,
-  billStatementRep
+  billStatementRep,
+  billAmountRep
 } from './types'
 
 // 获取登录短信验证码
@@ -51,8 +53,8 @@ export const queryBillStatement = (data: billStatementReq) => {
 }
 
 //  账单-获取账单收支汇总
-export const queryBillAmount = (data: any) => {
-  return request({
+export const queryBillAmount = (data: billStatementReq) => {
+  return request<billStatementReq, billAmountRep>({
     url: '/wallet/accountBill/pageCount',
     method: 'post',
     data

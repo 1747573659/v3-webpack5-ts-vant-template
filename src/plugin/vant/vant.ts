@@ -14,11 +14,12 @@ import {
   Dialog,
   Tabs,
   Tab,
-  NumberKeyboard
+  NumberKeyboard,
+  Calendar
 } from 'vant'
 import './reset.scss'
 type stringKey = Record<string, any>
-const components:stringKey = {
+const components: stringKey = {
   Button,
   ActionSheet,
   Col,
@@ -33,7 +34,8 @@ const components:stringKey = {
   Dialog,
   Tabs,
   Tab,
-  NumberKeyboard
+  NumberKeyboard,
+  Calendar
 }
 export default function (app: ReturnType<typeof createApp>) {
   for (const key in components) {
