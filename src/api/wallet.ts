@@ -1,5 +1,6 @@
 import request from './index'
-import { LoginReq,
+import {
+  LoginReq,
   LoginRep,
   LoginPhoneCodeReq,
   LoginPhoneCodeRep,
@@ -14,6 +15,7 @@ import { LoginReq,
   billDetailsRep,
   billStatementReq,
   billStatementRep,
+  billAmountRep,
   withdrawDetailReq,
   withdrawDetailRep,
   withdrawApplyReq,
@@ -60,8 +62,8 @@ export const queryBillStatement = (data: billStatementReq) => {
 }
 
 //  账单-获取账单收支汇总
-export const queryBillAmount = (data: any) => {
-  return request({
+export const queryBillAmount = (data: billStatementReq) => {
+  return request<billStatementReq, billAmountRep>({
     url: '/wallet/accountBill/pageCount',
     method: 'post',
     data

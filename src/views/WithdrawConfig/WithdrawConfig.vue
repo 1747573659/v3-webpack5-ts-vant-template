@@ -30,12 +30,10 @@
       <span>温馨提示：</span>
       <span>设置定时提现后，仍可手动提现</span>
     </div>
-    <!-- confirmTimePicker -->
     <TimePickerAction
       title="选择提现时间"
       v-model="state.planTime"
       v-model:visible="timePickerVisible"
-      :recentChoose="recentTime"
       :submit="confirmTimePicker" />
   </div>
   <overlay-loading :show="showOverlay" content="加载中..."></overlay-loading>
@@ -46,6 +44,7 @@
   import TimePickerAction from '@/components/TimePickerAction/TimePickerAction.vue'
   import OverlayLoading from '@/components/OverlayLoading/OverlayLoading.vue'
   import { queryTimingWithdrawalInfo, reviseTimingWithdrawal } from '@/api/wallet'
+  import { Dialog } from 'vant'
   type stateType = {
     planType: number // 1--每天
     planTime?: string
@@ -67,13 +66,21 @@
   const handleSwitchChange = (val: number) => {
     console.log('switch')
     if (val) {
+      // 打开
       timePickerVisible.value = true
     } else {
-      // MYTODO: 增加关闭提示弹框
-      // state.planTime = '00:00'
-      state.planType = 0
-      // 关闭定时提现选项
-      submitTimePicker(val, '')
+      // 关闭
+      Dialog.confirm({
+        width: '351px',
+        confirmButtonColor: '#00A3FF',
+        cancelButtonColor: '#00A3FF',
+        className: 'wallet-dialog',
+        message: '确定要关闭定时提现吗？'
+      }).then(() => {
+        state.planType = 0
+        // 关闭定时提现选项
+        submitTimePicker(val, '')
+      })
     }
   }
   const submitTimePicker = (planType: number, planTime: string) => {
@@ -86,14 +93,12 @@
     params.planType === 1 && (params.planTime = planTime)
     return reviseTimingWithdrawal(params)
       .then(() => {
-        console.log('chengg')
         state.planType = planType
         planTime && (state.planTime = planTime)
         Object.assign(oldState, state)
         showOverlay.value = false
       })
       .catch(() => {
-        console.log('shibai')
         state.planType = oldState.planType
         // state.planTime = oldState.planTime
         planType && (state.planTime = planTime)
@@ -102,7 +107,6 @@
       })
   }
   const confirmTimePicker = (planTime: string) => {
-    console.log('确认')
     return submitTimePicker(1, planTime)
   }
   onMounted(async () => {
