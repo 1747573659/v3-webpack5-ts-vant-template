@@ -4,6 +4,7 @@
   type commonTimeEnumType = {
     key: number
     label: string
+    custom?: boolean
     value: () => string[]
   }
   const props = defineProps<{
@@ -16,7 +17,6 @@
     (e: 'update:visible', visible: boolean): void
     (e: 'change', selectDate: string[], label: string): void
   }>()
-
   const commonTimeListEnum = [
     {
       key: 1,
@@ -70,9 +70,10 @@
       return [start, end]
     }
   }
+  // 日期范围
   const dateRange = reactive({
     minDate: new Date(moment().subtract(20, 'years').format('YYYY-MM-DD')),
-    maxDate: new Date()
+    maxDate: new Date(moment(modelValue.value[0]).format('YYYY-12-31'))
   })
   const cusVisible = ref(false)
 
@@ -96,10 +97,12 @@
   }
   // 选择时间(常规)
   const handleChangeDate = (item: commonTimeEnumType) => {
-    console.log(item.value(), 'item')
     selectItem.value = { ...item }
+  }
+  const submitChangeData = () => {
+    if (selectItem.value.custom) return
     handleBack()
-    emit('change', item.value(), item.label)
+    emit('change', selectItem.value.value(), selectItem.value.label)
   }
   // 选择时间自定义
   const confirmCusTime = (time: string[]) => {
@@ -119,36 +122,38 @@
 <template>
   <van-action-sheet v-model:show="visible" :closeable="false">
     <div class="datepicker-action-header">
-      <span class="datepicker-action-back" v-show="cusVisible" @click="handleBack">取消</span>
+      <span class="datepicker-action-back" v-show="cusVisible" @click="cusVisible = false"
+        >取消</span
+      >
       <span class="datepicker-action-title">选择日期</span>
       <img src="../../assets/img/close.png" alt="" class="close-btn" @click="handleBack" />
     </div>
     <div class="datepicker-action-wrap" v-if="!cusVisible">
       <!-- 常用时间选择 -->
-      <div>
-        <div class="datepicker-action-content">
-          <div class="title">常用选择</div>
-          <div class="item-wrap">
-            <div
-              :class="{ item: true, active: selectItem.key === item.key }"
-              v-for="(item, index) in commonTimeListEnum"
-              :key="index"
-              @click="handleChangeDate(item)">
-              <div>{{ item.label }}</div>
-            </div>
-          </div>
-        </div>
-        <div class="datepicker-action-content">
-          <div class="title">其他选择</div>
-          <div class="item-wrap">
-            <div class="item" @click="handleShowCus">
-              <div>{{ customTimeEnum.label }}</div>
-            </div>
+      <div class="datepicker-action-content">
+        <div class="title">常用选择</div>
+        <div class="item-wrap">
+          <div
+            :class="{ item: true, active: selectItem.key === item.key }"
+            v-for="(item, index) in commonTimeListEnum"
+            :key="index"
+            @click="handleChangeDate(item)">
+            <div>{{ item.label }}</div>
           </div>
         </div>
       </div>
+      <div class="datepicker-action-content">
+        <div class="title">其他选择</div>
+        <div class="item-wrap">
+          <div class="item" @click="handleShowCus">
+            <div>{{ customTimeEnum.label }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="datepicker-action-footer">
+        <van-button type="primary" @click="submitChangeData">确认</van-button>
+      </div>
     </div>
-    <!-- 自定义时间选择 -->
     <van-calendar
       type="range"
       ref="dateRef"
@@ -157,7 +162,8 @@
       :poppable="false"
       :show-mark="false"
       color="#00A3FF"
-      :show-confirm="false"
+      first-day-of-week="1"
+      allow-same-day
       :row-height="60"
       :min-date="dateRange.minDate"
       :max-date="dateRange.maxDate"
@@ -172,17 +178,27 @@
     height: 900px !important;
     padding: 0 24px;
   }
+  :deep(.van-calendar__footer) {
+    .van-button {
+      border-radius: 8px;
+    }
+  }
   :deep(.van-calendar__header-title) {
     display: none;
   }
-  :deep(.van-calendar__month-title) {
-    text-align: left;
-    padding-left: 20px;
-    background-color: #f0f3f5;
-    border-radius: 8px;
-  }
   :deep(.van-calendar__header) {
     box-shadow: none;
+  }
+  .datepicker-action-footer {
+    width: calc(100% - 48px);
+    margin: 0 24px;
+    position: absolute;
+    bottom: 20px;
+    .van-button {
+      width: 100%;
+      height: 68px;
+      border-radius: 8px;
+    }
   }
   .data-range-current {
     font-size: 28px;
