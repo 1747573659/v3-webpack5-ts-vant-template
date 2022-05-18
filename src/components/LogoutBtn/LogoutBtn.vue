@@ -6,6 +6,14 @@
 import LargeButton from '@/components/LargeButton/LargeButton.vue'
 import { Dialog } from 'vant'
 import { Interceptor } from './types'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+import { logoutApi } from '@/api/wallet'
+import { UserInfo } from '@/store/storeTypes'
+
+const router = useRouter()
+const store =  useStore()
+const { walletId, openId }: UserInfo = store.state.userInfo
 
 const logout = () => {
   Dialog.confirm({
@@ -17,7 +25,10 @@ const logout = () => {
     beforeClose
   })
   .then(result => {
-    console.log(result)
+    // 清空
+    store.dispatch('resetUserInfo')
+    store.dispatch('resetWalletList')
+    result && router.replace('/login')
   })
   .catch(reason => {
     console.log(reason)
@@ -26,12 +37,25 @@ const logout = () => {
 const beforeClose:Interceptor = (action) =>
   new Promise((resolve) => {
     if (action === 'confirm') {
-      resolve(true);
+      handleLogout().then(() => resolve(true))
     } else {
       // 拦截取消操作
       resolve(true);
     }
   });
+
+const handleLogout = async () => {
+  let data = {
+    walletId,
+    openId
+  }
+  try {
+    await logoutApi(data)
+    return true
+  } catch (e) {
+    throw Error(e as string)
+  }
+}
 
 </script>
 

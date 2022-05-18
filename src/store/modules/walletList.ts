@@ -14,12 +14,18 @@ const getters: GetterTree<WalletListInfo, null> = {
 const mutations: MutationTree<WalletListInfo> = {
   SET_WALLETLIST: (state: WalletListInfo, walletList: WalletList): void => {
     state.walletList = walletList
+  },
+  RESET_WALLETLIST: (state: WalletListInfo): void => {
+    state.walletList.length = 0
   }
 }
 
 const actions: ActionTree<WalletListInfo, null> = {
   setWalletList({ commit }: { commit: Commit }, walletList: WalletList) {
     commit('SET_WALLETLIST', walletList)
+  },
+  resetWalletList({ commit }: { commit: Commit }) {
+    commit('RESET_WALLETLIST')
   }
 }
 

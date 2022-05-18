@@ -11,13 +11,14 @@ import { VerifyCode } from '@/components/MsgVerify/types';
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { loginPhoneCode } from '@/api/wallet'
+import { UserInfo } from '@/store/storeTypes';
 
 const showOverlay = ref(false)
 const router = useRouter()
 
 // 拿到vuex中存储的loginName
 const store = useStore()
-const { loginName }: { loginName: string } = store.state.userInfo
+const { loginName, loginItemType }: UserInfo = store.state.userInfo
 
 // 处理发送验证码
 const handleVerifyCode = async (verifyCode: VerifyCode) => {
@@ -34,9 +35,14 @@ const handleVerifyCode = async (verifyCode: VerifyCode) => {
     store.dispatch('setUserInfo', {
       token: res.token
     })
-    store.dispatch('setWalletList', res.walletList)
-    showOverlay.value = false
-    router.replace('/walletList')
+    // 如果使用钱包登录则直接replace path: myWallet
+    if (loginItemType === 1) {
+      router.replace('/myWallet')
+    } else {
+      store.dispatch('setWalletList', res.walletList)
+      showOverlay.value = false
+      router.replace('/walletList')
+    }
   } catch (e) {
     
   } finally {

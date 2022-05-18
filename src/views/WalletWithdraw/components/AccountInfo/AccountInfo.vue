@@ -2,13 +2,16 @@
   <div class="account-info">
     <div class="desc">到账银行卡</div>
     <div class="card-info">
-      <div class="card-num">张三（6000 0000 0000 0000 888）</div>
-      <div class="bank-location">中国农业银行股份有限公司电白电城支行</div>
+      <div class="card-num">{{withdrawDetailInfo?.accountName}}（{{withdrawDetailInfo?.bankCard}}）</div>
+      <div class="bank-location">{{withdrawDetailInfo?.openBankCnap}}</div>
     </div>
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import useInjectInfo from '../../hooks/useInjectInfo'
+const withdrawDetailInfo = useInjectInfo()
+</script>
 
 <style lang="scss" scoped>
 .account-info {

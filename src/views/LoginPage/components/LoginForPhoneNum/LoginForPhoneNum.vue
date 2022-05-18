@@ -8,18 +8,25 @@
 </template>
 
 <script lang="ts" setup>
-import { watch, ref, computed } from 'vue'
+import { watch, ref, computed, onMounted } from 'vue'
 import LargeButton from '@/components/LargeButton/LargeButton.vue'
 import LoginBox from '../../components/LoginBox/LoginBox.vue'
 import { useStore } from 'vuex'
 
 import { LoginGetCode } from '@/api/wallet'
 
+onMounted(() => {
+  store.dispatch('setUserInfo', {
+    openId: 'XSDFFG346TJHTRJ78O7OZDG'
+  })
+})
+
 const loginName = ref('')
 // 1：钱包ID 2：法人手机号 3：法人身份证
 const loginItemType = ref(1)
 const loginItemTypeChange = (type: number) => {
   loginItemType.value = ++type
+  errorMsg.value = ''
 }
 
 const errorMsg = ref('')
@@ -45,12 +52,18 @@ const handleLogin = async () => {
   }
   try {
     const res = await LoginGetCode(data)
-    store.dispatch('setUserInfo', {
-      loginName: res.phone,
-      loginItemType: res.loginItemType,
-      shopAdminId: res.shopAdminId
-    })
-    emit('loginSucess', true)
+    // 如果返回失败
+    if (typeof res === 'string') {
+      errorMsg.value = res
+    } else {
+      store.dispatch('setUserInfo', {
+        loginName: res.phone,
+        loginItemType: res.loginItemType,
+        shopAdminId: res.shopAdminId,
+        walletId: loginItemType.value === 1 ? loginName.value : ''
+      })
+      emit('loginSucess', true)
+    }
   } catch (error) {
   } finally {
     loginBtnLoading.value = false

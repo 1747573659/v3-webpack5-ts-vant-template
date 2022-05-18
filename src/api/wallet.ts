@@ -15,7 +15,13 @@ import {
   billDetailsRep,
   billStatementReq,
   billStatementRep,
-  billAmountRep
+  billAmountRep,
+  withdrawDetailReq,
+  withdrawDetailRep,
+  withdrawApplyReq,
+  withdrawApplyRep,
+  withdrawConfirmReq,
+  logoutReq
 } from './types'
 
 // 获取登录短信验证码
@@ -92,5 +98,50 @@ export const reviseTimingWithdrawal = (data: reviseConfigReq) => {
     url: '/wallet/withdraw/config/edit',
     method: 'post',
     data
+  })
+}
+
+//  提现详情页
+export const withdrawDetail = (data: withdrawDetailReq) => {
+  return request<withdrawDetailReq, withdrawDetailRep>({
+    url: '/wallet/withdraw/detail',
+    method: 'post',
+    data
+  })
+}
+
+//  提现详情页
+export const withdrawApplyApi = (data: withdrawApplyReq) => {
+  return request<withdrawApplyReq, withdrawApplyRep>({
+    url: '/wallet/withdraw/apply',
+    method: 'post',
+    data
+  })
+}
+
+//  提现详情页
+export const withdrawConfirmApi = (data: withdrawConfirmReq) => {
+  return request<withdrawConfirmReq, null>({
+    url: '/wallet/withdraw/confirm',
+    method: 'post',
+    data
+  })
+}
+
+// 退出登录
+export const logoutApi = (data: logoutReq) => {
+  return request<logoutReq, null>({
+    url: '/wallet/logout',
+    method: 'post',
+    data
+  })
+}
+
+// 是否需要弹短信验证滑块
+export const checkNeedVerifySliderApi = (params: { phone: string }) => {
+  return request<{ phone: string }, boolean>({
+    url: '/wallet/sms/checkNeedVerifySlider',
+    method: 'post',
+    params
   })
 }
