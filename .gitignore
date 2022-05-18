@@ -1,6 +1,7 @@
 .DS_Store
 node_modules
 /dist
+/xdd-wallet-h5
 
 
 # local env files

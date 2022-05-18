@@ -8,21 +8,17 @@
       :height="iframeHeight"></iframe>
   </div>
 </template>
-<script lang="ts">
-  export default {
-    data() {
-      return {
-        iframeHeight: '400'
-      }
-    },
-    mounted() {
-      const oWrap = document.getElementById('kmtechPolicy-wrap')
-      if (oWrap) {
-        console.log(oWrap.offsetHeight + 'px')
-        this.iframeHeight = oWrap.offsetHeight - 10 + 'px'
-      }
-    }
+<script lang="ts" setup>
+import { onMounted, ref } from 'vue';
+
+const iframeHeight = ref('400px')
+
+onMounted(() => {
+  const oWrap = document.getElementById('kmtechPolicy-wrap')
+  if (oWrap) {
+    iframeHeight.value = oWrap.offsetHeight - 10 + 'px'
   }
+})
 </script>
 <style lang="scss" scoped>
   #kmtechPolicy-wrap {

@@ -19,7 +19,10 @@ import { LoginReq,
   withdrawApplyReq,
   withdrawApplyRep,
   withdrawConfirmReq,
-  logoutReq
+  logoutReq,
+  checkNeedVerifySliderReq,
+  smsSendReq,
+  smsValidCodeReq
 } from './types'
 
 // 获取登录短信验证码
@@ -136,10 +139,28 @@ export const logoutApi = (data: logoutReq) => {
 }
 
 // 是否需要弹短信验证滑块
-export const checkNeedVerifySliderApi = (params: {phone: string}) => {
-  return request<{phone: string}, boolean>({
+export const checkNeedVerifySliderApi = (data: checkNeedVerifySliderReq) => {
+  return request<checkNeedVerifySliderReq, boolean>({
     url: '/wallet/sms/checkNeedVerifySlider',
     method: 'post',
-    params
+    data
+  })
+}
+
+// 发送短信验证码
+export const smsSend = (data: smsSendReq) => {
+  return request<smsSendReq, string>({
+    url: '/wallet/sms/send',
+    method: 'post',
+    data
+  })
+}
+
+// 发送短信验证码
+export const smsValidCode = (data: smsValidCodeReq) => {
+  return request<smsValidCodeReq, string>({
+    url: '/wallet/sms/validCode',
+    method: 'post',
+    data
   })
 }
