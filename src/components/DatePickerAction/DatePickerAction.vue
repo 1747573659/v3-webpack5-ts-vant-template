@@ -1,22 +1,22 @@
 <script lang="ts" setup>
-  import { ref, watch, toRefs, Ref, onMounted, nextTick, reactive } from 'vue'
+  import { ref, watch, toRefs, Ref, onMounted, nextTick, reactive, computed } from 'vue'
   import moment from 'moment'
   type commonTimeEnumType = {
     key: number
     label: string
-    custom?: boolean
     value: () => string[]
   }
+  type selectTimeType = {
+    commonType: boolean
+    index: Ref<number> | number
+    value: string[]
+    label: string
+  }
   const props = defineProps<{
-    modelValue: string[]
-    visible: boolean
+    confirm: (time: string[]) => Promise<any>
   }>()
-  const { visible, modelValue } = toRefs(props)
-  const emit = defineEmits<{
-    (e: 'update:modelValue', selectDate: string[]): void
-    (e: 'update:visible', visible: boolean): void
-    (e: 'change', selectDate: string[], label: string): void
-  }>()
+  const { confirm } = toRefs(props)
+  const visible = ref(false)
   const commonTimeListEnum = [
     {
       key: 1,
@@ -60,66 +60,76 @@
       }
     }
   ]
-  const customTimeEnum = {
-    key: 7,
-    label: '自定义日期',
-    custom: true,
-    value() {
-      let start = moment().subtract(1, 'months').format('YYYY-MM') + '-01'
-      let end = moment(start).subtract(-1, 'months').add(-1, 'days').format('YYYY-MM-DD')
-      return [start, end]
-    }
-  }
   // 日期范围
   const dateRange = reactive({
-    minDate: new Date(moment().subtract(20, 'years').format('YYYY-MM-DD')),
-    maxDate: new Date(moment(modelValue.value[0]).format('YYYY-12-31'))
+    minDate: new Date('2022-5-6'),
+    maxDate: new Date()
   })
   const cusVisible = ref(false)
 
-  const selectItem: Ref<commonTimeEnumType> = ref({
-    key: 0,
-    label: '',
-    value() {
-      return []
-    }
-  })
+  // 历史日期
+  let oldTimeData = {
+    commonType: true,
+    index: 0,
+    value: commonTimeListEnum[0].value(),
+    label: commonTimeListEnum[0].label
+  }
+  // 当前展示数据
+  const selectTimeData = reactive<selectTimeType>({ ...oldTimeData })
+  const dateRef = ref()
   const handleShowCus = () => {
     cusVisible.value = true
-    nextTick(() => {
-      if (dateRef.value) {
-        dateRef.value.reset([])
-      }
-    })
+    const _time = oldTimeData.commonType
+      ? []
+      : [new Date(oldTimeData.value[0]), new Date(oldTimeData.value[1])]
+    dateRef.value.reset(_time)
+    dateRef.value.scrollToDate(new Date(oldTimeData.value[0]))
   }
   const handleBack = () => {
-    emit('update:visible', false)
+    visible.value = false
+  }
+  // 确定保存常规时间成功后调用
+  const changeLabel = () => {
+    selectTimeData.label = selectTimeData.commonType
+      ? commonTimeListEnum[selectTimeData.index].label
+      : selectTimeData.value.join(' 至 ')
+    oldTimeData = { ...selectTimeData }
   }
   // 选择时间(常规)
-  const handleChangeDate = (item: commonTimeEnumType) => {
-    selectItem.value = { ...item }
+  const handleChangeDate = (index: number) => {
+    selectTimeData.index = index
+    selectTimeData.commonType = true
+    selectTimeData.value = commonTimeListEnum[index].value()
   }
-  const submitChangeData = () => {
-    if (selectItem.value.custom) return
-    handleBack()
-    emit('change', selectItem.value.value(), selectItem.value.label)
+  const submitCommonData = () => {
+    confirm.value(selectTimeData.value).then(() => {
+      changeLabel()
+      handleBack()
+    })
   }
-  // 选择时间自定义
+  // 选择时间自定义-确认
   const confirmCusTime = (time: string[]) => {
-    selectItem.value = { ...customTimeEnum }
-    handleBack()
-    const _time = [moment(time[0]).format('YYYY-MM-DD'), moment(time[1]).format('YYYY-MM-DD')]
-    emit('change', _time, _time.join(' 至 '))
+    selectTimeData.index = -1
+    selectTimeData.commonType = false
+    selectTimeData.value = [
+      moment(time[0]).format('YYYY-MM-DD'),
+      moment(time[1]).format('YYYY-MM-DD')
+    ]
+    submitCommonData()
   }
-  const dateRef = ref(null)
+
   watch(visible, (newVal: boolean) => {
     if (newVal) {
+      Object.assign(selectTimeData, oldTimeData)
       cusVisible.value = false
     }
   })
-  onMounted(() => (selectItem.value = { ...commonTimeListEnum[0] }))
 </script>
 <template>
+  <div class="billstate-date" @click="visible = true">
+    <img src="../../assets/img/date.png" />
+    <span>{{ selectTimeData.label }}</span>
+  </div>
   <van-action-sheet v-model:show="visible" :closeable="false">
     <div class="datepicker-action-header">
       <span class="datepicker-action-back" v-show="cusVisible" @click="cusVisible = false"
@@ -128,16 +138,19 @@
       <span class="datepicker-action-title">选择日期</span>
       <img src="../../assets/img/close.png" alt="" class="close-btn" @click="handleBack" />
     </div>
-    <div class="datepicker-action-wrap" v-if="!cusVisible">
+    <div class="datepicker-action-wrap" v-show="!cusVisible">
       <!-- 常用时间选择 -->
       <div class="datepicker-action-content">
         <div class="title">常用选择</div>
         <div class="item-wrap">
           <div
-            :class="{ item: true, active: selectItem.key === item.key }"
+            :class="{
+              item: true,
+              active: selectTimeData.commonType && selectTimeData.index === index
+            }"
             v-for="(item, index) in commonTimeListEnum"
             :key="index"
-            @click="handleChangeDate(item)">
+            @click="handleChangeDate(index)">
             <div>{{ item.label }}</div>
           </div>
         </div>
@@ -145,20 +158,20 @@
       <div class="datepicker-action-content">
         <div class="title">其他选择</div>
         <div class="item-wrap">
-          <div class="item" @click="handleShowCus">
-            <div>{{ customTimeEnum.label }}</div>
+          <div :class="{ item: true, active: !selectTimeData.commonType }" @click="handleShowCus">
+            <div>自定义日期</div>
           </div>
         </div>
       </div>
       <div class="datepicker-action-footer">
-        <van-button type="primary" @click="submitChangeData">确认</van-button>
+        <van-button type="primary" @click="submitCommonData">确认</van-button>
       </div>
     </div>
     <van-calendar
+      v-show="cusVisible"
       type="range"
       ref="dateRef"
       class="van-calendar-wrap"
-      v-else
       :poppable="false"
       :show-mark="false"
       color="#00A3FF"
@@ -172,8 +185,39 @@
       @confirm="confirmCusTime">
     </van-calendar>
   </van-action-sheet>
+  <!-- <van-calendar
+    v-model:show="cusVisible"
+    type="range"
+    ref="dateRef"
+    class="van-calendar-wrap"
+    :poppable="false"
+    :show-mark="false"
+    color="#00A3FF"
+    first-day-of-week="1"
+    allow-same-day
+    :row-height="60"
+    :min-date="dateRange.minDate"
+    :max-date="dateRange.maxDate"
+    :max-range="31"
+    range-prompt="最多选择31天"
+    @confirm="confirmCusTime">
+  </van-calendar> -->
 </template>
 <style lang="scss" scoped>
+  .billstate-date {
+    font-size: 28px;
+    padding: 14px 18px;
+    color: $primaryColor;
+    background-color: $painColor;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    img {
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+    }
+  }
   .van-calendar {
     height: 900px !important;
     padding: 0 24px;
