@@ -9,11 +9,11 @@
   import { BillAmountRep, billStatementReq, TableList } from '@/api/types'
 
   const router = useRouter()
+
   const dateRange: Ref<string[]> = ref([
     moment().format('YYYY-MM-DD'),
     moment().format('YYYY-MM-DD')
   ])
-  const timeLabel = ref('今日')
   let totalAmount: BillAmountRep = reactive({
     expenditureAmount: null,
     incomeAmount: null
@@ -35,7 +35,7 @@
       billList.list = []
       billList.tableFinished = false
     }
-    const params: billStatementReq = {
+    let params: billStatementReq = {
       page: pageConfig.page,
       rows: pageConfig.rows,
       walletId: 'QB0065757391780',
@@ -43,7 +43,8 @@
       startTime: moment(dateRange.value[0]).format('YYYY-MM-DD 00:00:00'),
       endTime: moment(dateRange.value[1]).format('YYYY-MM-DD 23:59:59')
     }
-    data && Object.assign(params, { ...data })
+    data && (params = Object.assign(params, { ...data }))
+    console.log(params, 'params')
     return Promise.all([queryBillStatement(params), queryBillAmount(params)])
       .then(res => {
         billList.list = billList.list.concat(res[0].results || [])
@@ -51,6 +52,7 @@
         totalAmount.expenditureAmount = res[1].expenditureAmount
         totalAmount.incomeAmount = res[1].incomeAmount
         tableLoading.value = false
+        pageConfig.page += 1
       })
       .catch(() => {
         billList.tableFinished = true
@@ -71,7 +73,7 @@
       }).then(() => (activeBillType.value = key))
     }
   }
-  const handleTimeChange = (time: string[], label: string) => {
+  const handleTimeChange = (time: string[]) => {
     const startTime = moment(time[0]).format('YYYY-MM-DD 00:00:00')
     const endTime = moment(time[1]).format('YYYY-MM-DD 23:59:59')
     return loadBillStatement(true, {
@@ -80,10 +82,8 @@
     }).then(() => {
       console.log('then')
       dateRange.value = time
-      timeLabel.value = label
     })
   }
-  const dateVisible = ref(false)
 </script>
 <template>
   <div class="billstate-wrap">
@@ -93,12 +93,7 @@
           <span>{{ billTypeMapEnum.get(activeBillType).label }}</span>
           <img src="../../assets/img/vector.png" />
         </div>
-        <div>
-          <div class="billstate-date" @click="dateVisible = true">
-            <img src="../../assets/img/date.png" />
-            <span>{{ timeLabel }}</span>
-          </div>
-        </div>
+        <DatePickerAction :confirm="handleTimeChange" />
       </div>
       <div class="billstate-amount-wrap">
         <div class="billstate-amount-item">
@@ -155,11 +150,6 @@
       </div>
     </div>
   </van-action-sheet>
-  <DatePickerAction
-    v-model="dateRange"
-    v-model:visible="dateVisible"
-    @change="handleTimeChange"
-    :label="timeLabel" />
 </template>
 
 <style lang="scss" scoped>
@@ -171,20 +161,7 @@
     flex-direction: column;
     background-color: $bg-light-color-1;
   }
-  .billstate-date {
-    font-size: 28px;
-    padding: 14px 18px;
-    color: $primaryColor;
-    background-color: $painColor;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    img {
-      width: 40px;
-      height: 40px;
-      margin-right: 10px;
-    }
-  }
+
   .billstate-main-wrap {
     flex: 1 1 200px;
     overflow-y: auto;
