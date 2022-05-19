@@ -1,39 +1,41 @@
 <template>
-  <van-tabs v-model:active="loginItemType" color="#31353C" class="tabs" @change="loginItemTypeChange">
-    <van-tab v-for="item in loginItemTypeList" :key="item.title" :title="item.title"/>
-  </van-tabs>
-  <Field
-    v-if="[0, 1].includes(loginItemType)"
-    class="login"
-    :class="{'active-border': loginNameShowBorder, error: !!errorMsg}"
-    @focus="loginNameFocus"
-    :type="loginItemType ? 'tel' : 'text'"
-    @blur="loginNameBlur"
-    :placeholder="placeholder"
-    :clearable="true"
-    v-model.trim="loginName"
-  />
-  <Field
-    v-if="[2].includes(loginItemType)"
-    readonly
-    clickable
-    @touchstart.stop="loginNameShowBorder = true"
-    class="login"
-    :class="{'active-border': loginNameShowBorder, error: !!errorMsg}"
-    @focus="loginNameFocus"
-    @blur="loginNameBlur"
-    :placeholder="placeholder"
-    :clearable="true"
-    v-model.trim="loginName"
-  />
-  <div class="error-msg" v-if="errorMsg"><img class="warn-icon" :src="warnIcon" alt="警告"><div>{{errorMsg}}</div></div>
-  <van-number-keyboard
-    v-if="[2].includes(loginItemType)"
-    v-model="loginName"
-    extra-key="x"
-    :show="loginNameShowBorder"
-    @blur="loginNameShowBorder = false"
-  />
+  <div class="login-box">
+    <van-tabs v-model:active="loginItemType" color="#31353C" class="tabs" @change="loginItemTypeChange">
+      <van-tab v-for="item in loginItemTypeList" :key="item.title" :title="item.title"/>
+    </van-tabs>
+    <Field
+      v-if="[0, 1].includes(loginItemType)"
+      class="login"
+      :class="{'active-border': loginNameShowBorder, error: !!errorMsg}"
+      @focus="loginNameFocus"
+      :type="loginItemType ? 'tel' : 'text'"
+      @blur="loginNameBlur"
+      :placeholder="placeholder"
+      :clearable="true"
+      v-model.trim="loginName"
+    />
+    <Field
+      v-if="[2].includes(loginItemType)"
+      readonly
+      clickable
+      @touchstart.stop="loginNameShowBorder = true"
+      class="login"
+      :class="{'active-border': loginNameShowBorder, error: !!errorMsg}"
+      @focus="loginNameFocus"
+      @blur="loginNameBlur"
+      :placeholder="placeholder"
+      :clearable="true"
+      v-model.trim="loginName"
+    />
+    <div class="error-msg" v-if="errorMsg"><img class="warn-icon" :src="warnIcon" alt="警告"><div>{{errorMsg}}</div></div>
+    <van-number-keyboard
+      v-if="[2].includes(loginItemType)"
+      v-model="loginName"
+      extra-key="x"
+      :show="loginNameShowBorder"
+      @blur="loginNameShowBorder = false"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -94,6 +96,9 @@ const warnIcon = ref(warn)
 </script>
 
 <style lang="scss" scoped>
+.login-box {
+  position: relative;
+}
 .login {
   padding: 0 40px;
   &:deep(.van-field__control) {
@@ -119,7 +124,8 @@ const warnIcon = ref(warn)
   }
 }
 .error-msg {
-  margin-top: 20px;
+  position: absolute;
+  margin-top: 24px;
   padding-left: 40px;
   font-size: 32px;
   color: $errorColor;

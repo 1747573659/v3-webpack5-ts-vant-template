@@ -45,9 +45,13 @@
   import OverlayLoading from '@/components/OverlayLoading/OverlayLoading.vue'
   import { queryTimingWithdrawalInfo, reviseTimingWithdrawal } from '@/api/wallet'
   import { Dialog } from 'vant'
+  import { useStore } from 'vuex'
+import { UserInfo } from '@/store/storeTypes'
+  const store =  useStore()
+  const { shopAdminId, walletId }: UserInfo = store.state.userInfo
   type stateType = {
     planType: number // 1--每天
-    planTime?: string
+    planTime: string
   }
   interface editInfoType extends stateType {
     shopAdminId: number
@@ -87,8 +91,9 @@
     showOverlay.value = true
     const params: editInfoType = {
       planType,
-      shopAdminId: 70,
-      walletId: 'QB00044964000001'
+      shopAdminId,
+      walletId,
+      planTime: ''
     }
     params.planType === 1 && (params.planTime = planTime)
     return reviseTimingWithdrawal(params)
@@ -111,8 +116,8 @@
   }
   onMounted(async () => {
     const res: any = await queryTimingWithdrawalInfo({
-      shopAdminId: 70,
-      walletId: 'QB00044964000001'
+      shopAdminId,
+      walletId
     })
     state.planTime = res.planTime || ''
     state.planType = res.planType

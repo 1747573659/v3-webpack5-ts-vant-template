@@ -13,9 +13,10 @@ const color = ref('')
 <style lang="scss" scoped>
 .back-btn-wrap {
   width: calc(100% - 48px);
-  margin: 0 24px;
+  padding: 32px 24px;
   position: fixed;
-  bottom: 24px;
+  bottom: 0;
+  background-color: white;
   .back-btn {
     background: #f0f3f5;
     border-radius: 10px;

@@ -2,28 +2,40 @@
   <van-popup v-model:show="showInner" position="bottom" :style="{ height: '100%' }" closeable >
     <div class="title">短信验证</div>
     <div class="operation-type">提现</div>
-    <div class="amout">¥8,000.00</div>
-    <msg-verify @handleVerifyCode="handleVerifyCode" :error-msg="errorMsg"></msg-verify>
+    <div class="amout">¥{{moneyForShow}}</div>
+    <msg-verify ref="msgVerifyComp" @handleVerifyCode="handleVerifyCode" :error-msg="errorMsg"></msg-verify>
   </van-popup>
 </template>
 
 <script lang="ts" setup>
-import { computed, toRefs } from 'vue'
+import { computed, toRefs, ref } from 'vue'
 
 import MsgVerify from '@/components/MsgVerify/MsgVerify.vue'
 import { VerifyCode } from '@/components/MsgVerify/types';
+import { Money } from '../../types';
+import { formatYuanAmount } from '@/utils/formateMoney'
 
 const props = defineProps<{
   show: boolean,
-  errorMsg: string
+  errorMsg: string,
+  money: Money
 }>()
-const { show, errorMsg } = toRefs(props)
+const { show, errorMsg, money } = toRefs(props)
+
+const moneyForShow = computed(() => formatYuanAmount(money.value))
+
+
 const emits = defineEmits<{
   (e: 'update:show', show:boolean): void,
   (e: 'handleVerifyCode', verifyCode: VerifyCode): void
 }>()
+
+const msgVerifyComp = ref()
 const showInner = computed({
-  get: () => show.value,
+  get: () => {
+    msgVerifyComp.value && msgVerifyComp.value.passwordInputFocus()
+    return show.value
+  },
   set: (value) => {
     emits('update:show', value)
   }
@@ -32,6 +44,7 @@ const showInner = computed({
 const handleVerifyCode = (verifyCode: VerifyCode) => {
   emits('handleVerifyCode', verifyCode)
 }
+
 
 </script>
 

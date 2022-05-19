@@ -26,7 +26,7 @@ const router = useRouter()
 
 // 拿到vuex中存储的loginName
 const store = useStore()
-const { loginName, loginItemType }: UserInfo = store.state.userInfo
+const { loginName, loginItemType, openId, shopAdminId }: UserInfo = store.state.userInfo
 
 const resetVerifyFunc = ref()
 // 登录得重新发送接口
@@ -64,9 +64,9 @@ const handleVerifyCode = async (verifyCode: VerifyCode) => {
   console.log(verifyCode)
   let data = {
     code: verifyCode,
-    openId: 'XSDFFG346TJHTRJ78O7OZDG',
+    openId: openId,
     phone: loginName,
-    shopAdminId: 70
+    shopAdminId: shopAdminId
   }
   try {
     const res = await loginPhoneCode(data)

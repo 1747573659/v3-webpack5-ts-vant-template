@@ -46,11 +46,12 @@ export interface walletDetailReq {
   walletId: string
 }
 export interface walletDetailRep {
-  accountName: string
-  availableAmount: number
-  bankCard: string
-  walletId: string
-  shortShopName: string
+  accountName: string,
+  availableAmount: number,
+  bankCard: string,
+  walletId: string,
+  shortShopName: string,
+  [key: string]: string | number
 }
 export interface withdrawalInfoReq {
   shopAdminId: number
@@ -111,10 +112,20 @@ export interface billStatementReq {
   startTime?: string
   endTime?: string
 }
+export type TableList = {
+  id: number
+  transactionType: number | string
+  amount: number
+  category: number // 收支类别 1-收入； 2-支出
+  transactionSuccessTime: string
+  shopAdminName: string,
+  transactionNo: string
+}
 export interface billStatementRep {
   orderType: number
   category: number
-  [propName: string]: string | number
+  results: TableList[]
+  // [propName: string]: string | number
 }
 export interface billAmountRep {
   expenditureAmount: number
@@ -132,8 +143,8 @@ export interface withdrawDetailRep {
   legalPhone: string
   openBank: string
   openBankCnap: string
-  tradeBalanceAmount: string
-  tradeDepositAmount: string
+  tradeBalanceAmount: number
+  tradeDepositAmount: number
 }
 
 export interface withdrawApplyReq {

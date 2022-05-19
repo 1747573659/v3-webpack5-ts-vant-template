@@ -245,7 +245,7 @@
     padding: 0 24px;
     margin-top: 60px;
     &:first-child {
-      margin-top: 0px;
+      margin-top: 0;
     }
     .title {
       font-size: 28px;

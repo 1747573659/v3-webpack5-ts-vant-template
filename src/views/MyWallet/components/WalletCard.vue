@@ -46,7 +46,7 @@ const gotoWithdraw = () => {
 }
 
 const gotoDetail = () => {
-  router.push({path: '/merchantInfo', query: {walletId: walletDetailInfo.value.walletId}})
+  router.push({path: '/merchantInfo'})
 }
 
 </script>

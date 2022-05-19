@@ -1,24 +1,26 @@
 <template>
-  <div class="phone-mention">
-    验证码将发送至<span class="phone-mention-num">{{getLoginNameForDisplay}}</span>
+  <div>
+    <div class="phone-mention">
+      验证码将发送至<span class="phone-mention-num">{{getLoginNameForDisplay}}</span>
+    </div>
+    <password-input
+      class="password-input"
+      gutter="13px"
+      :value="verifyCode"
+      :mask="false"
+      :focused="showKeyboard"
+      @focus="passwordInputFocus"
+    />
+    <div class="password-input-footer">
+      <resend-verify-code class="password-resend" :showResend="showResend" @resend="resend"></resend-verify-code>
+      <div class="error-msg" v-if="errorMsg"><img class="warn-icon" :src="warnIcon" alt="警告"><div>{{errorMsg}}</div></div>
+    </div>
+    <number-keyboard
+      v-model="verifyCode"
+      :show="showKeyboard"
+      @blur="showKeyboard = false"
+    />
   </div>
-  <password-input
-    class="password-input"
-    gutter="13px"
-    :value="verifyCode"
-    :mask="false"
-    :focused="showKeyboard"
-    @focus="passwordInputFocus"
-  />
-  <div class="password-input-footer">
-    <resend-verify-code class="password-resend" :showResend="showResend" @resend="resend"></resend-verify-code>
-    <div class="error-msg" v-if="errorMsg"><img class="warn-icon" :src="warnIcon" alt="警告"><div>{{errorMsg}}</div></div>
-  </div>
-  <number-keyboard
-    v-model="verifyCode"
-    :show="showKeyboard"
-    @blur="showKeyboard = false"
-  />
 </template>
 
 <script setup lang="ts">
@@ -57,6 +59,10 @@ const passwordInputFocus = () => {
   showKeyboard.value = true
   verifyCode.value = ''
 }
+// 将方法抛出  否则无法父组件无法通过ref调用
+defineExpose({
+  passwordInputFocus
+})
 
 // 定义emit事件
 const emit = defineEmits<{

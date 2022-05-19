@@ -2,7 +2,11 @@
   <div class="account-info">
     <div class="desc">到账银行卡</div>
     <div class="card-info">
-      <div class="card-num">{{withdrawDetailInfo?.accountName}}（{{withdrawDetailInfo?.bankCard}}）</div>
+      <div class="card-num">
+        <template v-if="withdrawDetailInfo?.bankCard">
+          {{withdrawDetailInfo?.accountName}}（{{withdrawDetailInfo?.bankCard}}）
+        </template>
+      </div>
       <div class="bank-location">{{withdrawDetailInfo?.openBankCnap}}</div>
     </div>
   </div>
@@ -29,13 +33,13 @@ const withdrawDetailInfo = useInjectInfo()
       font-size: 36px;
       color: $font-color-1;
       padding-bottom: 10px;
-      line-height: 48px;
+      min-height: 48px;
     }
     .bank-location {
       font-weight: 400;
       font-size: 24px;
       color: $font-color-2;
-      line-height: 34px;
+      min-height: 34px;
     }
   }
 }

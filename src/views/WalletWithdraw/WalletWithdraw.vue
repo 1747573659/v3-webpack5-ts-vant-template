@@ -8,13 +8,13 @@
       <large-button :loading="withdrawLoading" :disabled="withdrawDisabled" @click="withdrawApply">提现</large-button>
     </div>
     <!-- 验证码 -->
-    <popur-verify-code v-model:show="showVerifyPopur" :error-msg="verifyErrorMsg" @handle-verify-code="handleVerifyCode"></popur-verify-code>
+    <popur-verify-code :money="money" v-model:show="showVerifyPopur" :error-msg="verifyErrorMsg" @handle-verify-code="handleVerifyCode"></popur-verify-code>
     <!-- 接口loading -->
-    <overlay-loading :show="showOverlay" content="请稍候..."></overlay-loading>
+    <overlay-loading :show="showOverlay" :content="overLayContent"></overlay-loading>
     <!-- 确认提现弹窗 -->
     <withdraw-confirm v-model:show="showWithdrawConfirm" @confirmWithdraw="confirmWithdraw"></withdraw-confirm>
     <!-- 结果页 -->
-    <result-page v-model:show="showResultPage"></result-page> 
+    <result-page :money="money" :errorMsg="resultPageErrorMsg" v-model:show="showResultPage"></result-page> 
   </div>
 </template>
 
@@ -29,13 +29,10 @@ import { Money } from './types';
 import { VerifyCode } from '@/components/MsgVerify/types';
 import WithdrawConfirm from './components/WithdrawConfirm/WithdrawConfirm.vue'
 import ResultPage from './components/ResultPage/ResultPage.vue'
-
-import { withdrawDetail } from '@/api/wallet'
-
 import { useStore } from 'vuex'
 import { UserInfo } from '@/store/storeTypes';
-import { withdrawDetailRep } from '@/api/types';
-import { withdrawApplyApi, withdrawConfirmApi, smsSend, smsValidCode } from '@/api/wallet'
+import { withdrawDetailRep, withdrawConfirmReq } from '@/api/types';
+import { withdrawApplyApi, withdrawDetail, withdrawConfirmApi, smsSend, smsValidCode } from '@/api/wallet'
 import useCheckNeedVerify from '@/hooks/useCheckNeedVerify'
 
 const userInfo: UserInfo = useStore().state.userInfo
@@ -47,16 +44,19 @@ const withdrawDetailInfo = reactive<withdrawDetailRep>({
   legalPhone: '',
   openBank: '',
   openBankCnap: '',
-  tradeBalanceAmount: '',
-  tradeDepositAmount: ''
+  tradeBalanceAmount: 0,
+  tradeDepositAmount: 0
 })
 
 provide('withdrawDetailInfo', withdrawDetailInfo)
 
 const withdrawErrorMsg = ref('')
 const verifyErrorMsg = ref('')
+const overLayContent = ref('加载中')
 
 const getWithdrawDetail = async () => {
+  showOverlay.value = true
+  overLayContent.value = '加载中'
   const { walletId, shopAdminId } = userInfo
   try {
     const res = await withdrawDetail({
@@ -64,7 +64,9 @@ const getWithdrawDetail = async () => {
       shopAdminId
     })
     Object.assign(withdrawDetailInfo, res)
-  } catch (e) {}
+  } catch (e) {} finally {
+    showOverlay.value = false
+  }
 }
 
 onMounted(() => {
@@ -81,6 +83,12 @@ const withdrawLoading = ref(false)
 
 const showVerifyPopur = ref(false)
 
+const confirmRequestData = ref<withdrawConfirmReq>({
+  sn: "",
+  thirdSn: "",
+  walletId: ""
+})
+
 // 提现短信验证
 const handledMsgSend = async () => {
   let data = {
@@ -95,9 +103,11 @@ const handledMsgSend = async () => {
       showVerifyPopur.value = true
     } else {
       withdrawErrorMsg.value = res
+      withdrawLoading.value = false
     }
-  } catch (e) {} finally {
+  } catch (e) {
     withdrawLoading.value = false
+  } finally {
   }
 }
 
@@ -105,9 +115,11 @@ const sendMsg = useCheckNeedVerify(handledMsgSend)
 
 const withdrawApply = async () => {
   withdrawLoading.value = true
+  withdrawErrorMsg.value = ''
   try {
-    const res = await sendMsg()
-  } catch(e) {} finally {
+    await sendMsg()
+  } catch(e) {
+  } finally {
   }
 }
 
@@ -124,14 +136,24 @@ const handlewithdrawApply = async () => {
     // 如果成功就调用确认弹窗
     if(typeof res === 'string') {
       withdrawErrorMsg.value = res
+      withdrawLoading.value = false
     } else {
+      confirmRequestData.value = {
+        sn: res.sn,
+        thirdSn: res.thirdSn,
+        walletId: walletId
+      }
       dialogConfirm()
     }
-  } catch(e) {}
+  } catch(e) {
+    dialogConfirm()
+    withdrawLoading.value = false
+  }
 }
 
 const handleVerifyCode = async (verifyCode: VerifyCode) => {
   showOverlay.value = true
+  overLayContent.value = '请稍候...'
   let data = {
     code: verifyCode,
     phone: userInfo.loginName
@@ -162,21 +184,23 @@ const dialogConfirm = () => {
 const showResultPage = ref(false)
 
 // 已确认
-const confirmWithdraw = () => {
-  showWithdrawConfirm.value = false
-  setTimeout(() => {
+const resultPageErrorMsg = ref('')
+const confirmWithdraw = async () => {
+  resultPageErrorMsg.value = ''
+  try {
+    const res = await handleConfirm()
+    if (typeof res === 'string') {
+      resultPageErrorMsg.value = res
+    }
+    showWithdrawConfirm.value = false
     showResultPage.value = true
-  }, 1000)
+  } catch(e) {}
 }
 
 const handleConfirm = async () => {
-  let data = {
-    sn: "",
-    thirdSn: "",
-    walletId: ""
-  }
   try {
-    const res = await withdrawConfirmApi(data)
+    const res = await withdrawConfirmApi(confirmRequestData.value)
+    return res
   } catch(e) {}
 }
 

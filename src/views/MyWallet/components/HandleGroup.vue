@@ -1,7 +1,7 @@
 <template>
   <div class="handle-item-group">
     <div class="handle-item-wrap">
-      <div class="handle-item" v-for="item in handleList" :key="item.title">
+      <div class="handle-item" v-for="item in handleList" :key="item.title" @click="item.goTo">
         <div class="handle-item-icon">
           <img class="icons" :src="item.icon.value" :alt="item.icon.value">
         </div>
@@ -25,20 +25,29 @@ import withdrawConfig from '@/assets/icons/withdrawConfig.svg'
 import requestion from '@/assets/icons/requestion.svg'
 import billDetail from '@/assets/icons/billDetail.svg'
 import type { HandleItem } from '../types'
+import { useRouter } from 'vue-router'
 const arrowRightGreySvg = ref(arrowRightGrey)
 const feedBackSvg = ref<string>(feedBack)
 const withdrawConfigSvg = ref<string>(withdrawConfig)
 const requestionSvg = ref<string>(requestion)
 const billDetailSvg = ref<string>(billDetail)
 
+const router = useRouter()
+
 const handleList: Array<HandleItem> = [
   {
     icon: billDetailSvg,
-    title: '账单明细'
+    title: '账单明细',
+    goTo: () => {
+      router.push('/billStatement')
+    }
   },
   {
     icon: withdrawConfigSvg,
-    title: '提现设置'
+    title: '提现设置',
+    goTo: () => {
+      router.push('/withdrawConfig')
+    }
   },
   {
     icon: feedBackSvg,
@@ -46,7 +55,7 @@ const handleList: Array<HandleItem> = [
   },
   {
     icon: requestionSvg,
-    title: '账单明细'
+    title: '常见问题'
   }
 ]
 </script>

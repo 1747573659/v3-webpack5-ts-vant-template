@@ -36,10 +36,11 @@ import { Money } from '../../types'
 import ToolTip from '@/components/ToolTip/ToolTip.vue'
 import useInjectInfo from '../../hooks/useInjectInfo'
 import warn from '@/assets/icons/warn.png';
+import { withdrawDetailRep } from '@/api/types';
 
 const warnIcon = ref(warn)
 
-const withdrawDetailInfo = useInjectInfo()
+const withdrawDetailInfo = useInjectInfo() as withdrawDetailRep
 
 onMounted(() => {
   input.value.focus()
@@ -62,7 +63,7 @@ const moneyInner = computed<Money>({
 
 const input = ref()
 
-const amount = ref(8000)
+const amount = ref()
 
 const placeholder = computed(() => `最多可转出¥${withdrawDetailInfo?.tradeBalanceAmount}`)
 
@@ -71,7 +72,8 @@ const tagArr = [null, '个', '十', '百', '千', '万', '十万', '百万', '�
 const tag = computed(() => tagArr[String(moneyInner.value).split('.')[0].length])
 
 const moneyBlur = () => {
-  moneyInner.value = Math.min(Number(moneyInner.value), amount.value) || ''
+  moneyInner.value = Math.min(Number(moneyInner.value), 100000) || ''
+  // moneyInner.value = Math.min(Number(moneyInner.value), withdrawDetailInfo?.tradeBalanceAmount) || ''
 }
 
 const allinWithdraw = () => {

@@ -1,16 +1,16 @@
 <template>
   <van-popup v-model:show="show" position="right" :style="{ height: '100%', width: '100%' }" >
     <div class="content">
-      <template v-if="status === Status.Sucess">
+      <template v-if="errorMsg">
         <img class="png" :src="withdrawSucessPng" alt="withdrawSucess">
         <div class="title">提现成功</div>
       </template>
-      <template v-if="status === Status.Error">
+      <template v-else>
         <img class="png" :src="withdrawErrorPng" alt="withdrawError">
         <div class="title">提现失败</div>
-        <div class="desc">原因描述</div>
+        <div class="desc">{{errorMsg}}</div>
       </template>
-      <div class="money">-500.00</div>
+      <div class="money">-{{moneyForShow}}</div>
     </div>
     <back-btn @click="emits('update:show', false)"></back-btn>
   </van-popup>
@@ -19,26 +19,25 @@
 <script lang="ts" setup>
 import withdrawSucess from '@/assets/icons/withdrawSucess.png'
 import withdrawError from '@/assets/icons/withdrawError.png'
-import { toRefs, ref } from 'vue';
+import { toRefs, ref, computed } from 'vue';
 import BackBtn from '@/components/BackBtn/BackBtn.vue'
+import { Money } from '../../types';
+import { formatYuanAmount } from '@/utils/formateMoney';
 
 const withdrawSucessPng = ref(withdrawSucess)
 const withdrawErrorPng = ref(withdrawError)
 
 const props = defineProps<{
-  show: boolean
+  show: boolean,
+  money: Money,
+  errorMsg: string
 }>()
 const emits = defineEmits<{
   (e: 'update:show', show:boolean): void
 }>()
-const { show } = toRefs(props)
+const { show, money } = toRefs(props)
 
-enum Status {
-  Sucess = 1,
-  Error
-}
-
-const status = ref<Status>(Status.Sucess)
+const moneyForShow = computed(() => formatYuanAmount(money.value))
 
 </script>
 

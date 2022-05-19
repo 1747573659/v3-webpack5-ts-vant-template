@@ -15,7 +15,8 @@ import {
   Tabs,
   Tab,
   NumberKeyboard,
-  Calendar
+  Calendar,
+  Loading
 } from 'vant'
 import './reset.scss'
 type stringKey = Record<string, any>
@@ -35,7 +36,8 @@ const components: stringKey = {
   Tabs,
   Tab,
   NumberKeyboard,
-  Calendar
+  Calendar,
+  Loading
 }
 export default function (app: ReturnType<typeof createApp>) {
   for (const key in components) {

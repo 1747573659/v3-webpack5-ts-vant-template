@@ -15,10 +15,11 @@ export default () => {
   
   const getWalletDetail = async () => {
     loading.value = true
+    const { walletId, shopAdminId } = store.state.userInfo
     try {
       const res = await walletDetail({
-        walletId: store.state.userInfo.walletId,
-        shopAdminId: 70
+        walletId,
+        shopAdminId
       })
       walletDetailInfo.value = res
     } catch (e) {} finally {

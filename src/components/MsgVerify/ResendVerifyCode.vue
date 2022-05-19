@@ -23,9 +23,9 @@ onBeforeUnmount(() => {
 })
 const current = countDown.current
 
-const props = defineProps<{
-  showResend: boolean
-}>()
+// const props = defineProps<{
+//   showResend: boolean
+// }>()
 
 // 定义emit事件
 const emit = defineEmits<{

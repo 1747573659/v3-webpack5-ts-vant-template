@@ -50,8 +50,8 @@ const handleLogin = async () => {
   let data = {
     loginItemType: loginItemType.value,
     loginItem: loginName.value,
-    shopAdminId: 70,
-    openId: 'XSDFFG346TJHTRJ78O7OZDG'
+    shopAdminId: store.state.userInfo.shopAdminId,
+    openId: store.state.userInfo.openId
   }
   try {
     const res = await LoginGetCode(data)
@@ -86,7 +86,7 @@ watch(loginName, (newValue:string, oldValue:string) => {
 
 <style lang="scss" scoped>
 .login-btn {
-  margin-top: 176px;
+  margin-top: 114px;
   padding: 0 32px;
 }
 </style>

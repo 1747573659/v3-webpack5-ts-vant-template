@@ -1,11 +1,10 @@
 <script lang="ts" setup>
-  import { ref, reactive } from 'vue'
   import { useRouter } from 'vue-router'
   import OverlayLoading from '@/components/OverlayLoading/OverlayLoading.vue'
 
   import useWalletDetail from '@/hooks/useWalletDetail'
 
-  const { walletDetailInfo } = useWalletDetail()
+  const { walletDetailInfo, loading } = useWalletDetail()
 
   const router = useRouter()
   const merchantEnum = [
@@ -65,12 +64,8 @@
       ]
     }
   ]
-  const showOverlay = ref(false)
   const handleToTechPolicy = () => {
     router.push('/kmTechPolicy')
-  }
-  const handleBack = () => {
-    router.push('/myWallet')
   }
 </script>
 
@@ -90,17 +85,15 @@
     <div class="merchantInfo-policy">
       <span @click="handleToTechPolicy">《科脉技术隐私政策》</span>
     </div>
-    <!-- <div class="merchantInfo-back">
-      <van-button type="default" @click="handleBack">返回</van-button>
-    </div> -->
   </div>
-  <overlay-loading :show="showOverlay" content="加载中..."></overlay-loading>
+  <overlay-loading :show="loading" content="加载中..."></overlay-loading>
 </template>
 <style lang="scss" scoped>
   .merchantInfo {
     &-wrap {
       text-align: left;
       background-color: #fff;
+      padding-bottom: 160px;
     }
     &-title {
       padding: 0 24px;

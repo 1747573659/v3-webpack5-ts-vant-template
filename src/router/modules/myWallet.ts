@@ -21,7 +21,8 @@ const myWalletRoutes: Array<RouteRecordRaw> = [
     path: '/merchantInfo',
     name: 'merchantInfo',
     meta: {
-      title: '详情'
+      title: '详情',
+      showBackBtn: true
     },
     component: () => import('@/views/MerchantInfo/MerchantInfo.vue')
   },
@@ -29,7 +30,8 @@ const myWalletRoutes: Array<RouteRecordRaw> = [
     path: '/kmTechPolicy',
     name: 'kmTechPolicy',
     meta: {
-      title: '科脉技术隐私政策'
+      title: '科脉技术隐私政策',
+      showBackBtn: true
     },
     component: () => import('@/views/MerchantInfo/KmTechPolicy.vue')
   },
@@ -45,7 +47,8 @@ const myWalletRoutes: Array<RouteRecordRaw> = [
     path: '/withdrawConfig',
     name: 'withdrawConfig',
     meta: {
-      title: '提现设置'
+      title: '提现设置',
+      showBackBtn: true
     },
     component: () => import('@/views/WithdrawConfig/WithdrawConfig.vue')
   },
@@ -53,7 +56,8 @@ const myWalletRoutes: Array<RouteRecordRaw> = [
     path: '/billStatement',
     name: 'billStatement',
     meta: {
-      title: '账单明细'
+      title: '账单明细',
+      showBackBtn: true
     },
     component: () => import('@/views/BillStatement/BillStatement.vue')
   },
@@ -61,7 +65,8 @@ const myWalletRoutes: Array<RouteRecordRaw> = [
     path: '/billDetail',
     name: 'billDetail',
     meta: {
-      title: '账单详情'
+      title: '账单详情',
+      showBackBtn: true
     },
     component: () => import('@/views/BillDetail/BillDetail.vue')
   }

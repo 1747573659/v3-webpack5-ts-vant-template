@@ -2,19 +2,12 @@
   import { reactive, ref, Ref } from 'vue'
   import { useRouter } from 'vue-router'
   import moment from 'moment'
-  import DatePickerAction from '@/components/DatePickerAction/DatePickerAction'
+  import DatePickerAction from '@/components/DatePickerAction/DatePickerAction.vue'
   import { formatYuanAmount } from '@/utils/formateMoney'
   import { queryBillStatement, queryBillAmount } from '@/api/wallet'
   import { billTypeMapEnum } from '@/enum/billStatement'
-  import { BillAmountRep, billStatementReq } from '@/api/types'
-  type tableList = {
-    id: number
-    transactionType: number | string
-    amount: number
-    category: number // 收支类别 1-收入； 2-支出
-    transactionSuccessTime: string
-    shopAdminName: string
-  }
+  import { BillAmountRep, billStatementReq, TableList } from '@/api/types'
+
   const router = useRouter()
   const dateRange: Ref<string[]> = ref([
     moment().format('YYYY-MM-DD'),
@@ -25,8 +18,8 @@
     expenditureAmount: null,
     incomeAmount: null
   })
-  let tableLoading: ReturnType<typeof ref> = ref(false)
-  let billList: { list: tableList[]; tableFinished: boolean } = reactive({
+  let tableLoading = ref(false)
+  let billList: { list: TableList[]; tableFinished: boolean } = reactive({
     list: [],
     tableFinished: false
   })
@@ -234,7 +227,6 @@
   .billstate-amount-item {
     min-width: 200px;
   }
-
   .billstate-main-item {
     display: flex;
     align-items: center;

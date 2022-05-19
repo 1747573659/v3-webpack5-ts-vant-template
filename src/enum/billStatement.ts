@@ -235,9 +235,9 @@ export const billTypeMapEnum = new Map<string | number, any>([
 ])
 //  MYTODO: 转账、小程序支付类型需区分收款方、付款方、是否合并详情
 export function getBillItemList(info: billDetailType) {
-  const { orderType, category } = info
+  const { orderType } = info
   const currentItem: _billTypeItem = {
-    ...(billTypeMapEnum.get(orderType) as unknown as _billTypeItem)
+    ...(billTypeMapEnum.get(orderType))
   }
   if (typeof currentItem.detailList === 'function') {
     currentItem.detailList = currentItem.detailList(info)
