@@ -3,7 +3,7 @@
     <div class="title">短信验证</div>
     <div class="operation-type">提现</div>
     <div class="amout">¥8,000.00</div>
-    <msg-verify @handleVerifyCode="handleVerifyCode"></msg-verify>
+    <msg-verify @handleVerifyCode="handleVerifyCode" :error-msg="errorMsg"></msg-verify>
   </van-popup>
 </template>
 
@@ -14,9 +14,10 @@ import MsgVerify from '@/components/MsgVerify/MsgVerify.vue'
 import { VerifyCode } from '@/components/MsgVerify/types';
 
 const props = defineProps<{
-  show: boolean
+  show: boolean,
+  errorMsg: string
 }>()
-const { show } = toRefs(props)
+const { show, errorMsg } = toRefs(props)
 const emits = defineEmits<{
   (e: 'update:show', show:boolean): void,
   (e: 'handleVerifyCode', verifyCode: VerifyCode): void

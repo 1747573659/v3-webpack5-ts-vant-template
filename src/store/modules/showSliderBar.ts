@@ -17,7 +17,7 @@ const mutations: MutationTree<State> = {
 }
 
 const actions: ActionTree<State, null> = {
-  setWalletList({ commit }: { commit: Commit }, showSliderBar: boolean) {
+  setShowSliderBar({ commit }: { commit: Commit }, showSliderBar: boolean) {
     commit('SET_SLIDERBAR', showSliderBar)
   }
 }

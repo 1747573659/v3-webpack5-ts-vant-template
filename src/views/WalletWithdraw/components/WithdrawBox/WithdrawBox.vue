@@ -17,10 +17,11 @@
       </div>
     </div>
     <div class="info">
-      <div class="remain-amount">
+      <div class="remain-amount" v-if="!errorMsg">
         <span>交易户余额 ¥{{withdrawDetailInfo?.tradeBalanceAmount}}</span>
         <tool-tip class="tooltip-wallet"></tool-tip>
       </div>
+      <div class="error-msg" v-if="errorMsg"><img class="warn-icon" :src="warnIcon" alt="警告"><div>{{errorMsg}}</div></div>
       <div class="tips">
         温馨提示：微信仅支持交易户提现，<span class="special">充值户(余额 ¥{{withdrawDetailInfo?.tradeDepositAmount}})</span>请登录支付宝网商小程序操作
       </div>
@@ -34,6 +35,10 @@ import { onMounted } from 'vue';
 import { Money } from '../../types'
 import ToolTip from '@/components/ToolTip/ToolTip.vue'
 import useInjectInfo from '../../hooks/useInjectInfo'
+import warn from '@/assets/icons/warn.png';
+
+const warnIcon = ref(warn)
+
 const withdrawDetailInfo = useInjectInfo()
 
 onMounted(() => {
@@ -41,6 +46,7 @@ onMounted(() => {
 })
 
 const props = defineProps<{
+  errorMsg: string,
   money: Money
 }>()
 const emits = defineEmits<{
@@ -214,5 +220,19 @@ const allinWithdraw = () => {
       }
     }
   }
+}
+.error-msg {
+  font-size: 28px;
+  color: $errorColor;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  div {
+    padding-left: 8px;
+  }
+}
+.warn-icon {
+  width: 40px;
+  height: 40px;
 }
 </style>

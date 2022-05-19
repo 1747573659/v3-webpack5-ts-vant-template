@@ -1,39 +1,38 @@
 <template>
   <div class="resend-verifycode">
     <div class="countdown-text" v-if="current.seconds">{{ current.seconds }}秒后可重新发送</div>
-    <div class="resend-text" @click="showResendConfirm = true" v-else>重新发送</div>
-    <resend-confirm :show="showResendConfirm" @sucess="confirmSucess"></resend-confirm> 
+    <div class="resend-text" @click="resend" v-else>重新发送</div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { useCountDown } from '@vant/use';
-import { onMounted, onBeforeUnmount, ref } from 'vue'
+import { onMounted, onBeforeUnmount } from 'vue'
 import { CountDown } from './types'
-import ResendConfirm from './ResendConfirm.vue'
 
 // 倒计时逻辑
 const countDown = useCountDown({
   // 倒计时 60s
-  time: 6 * 1000,
+  time: 60 * 1000,
 });
 onMounted(() => {
   countDown.start()
-})
+})  
 onBeforeUnmount(() => {
   countDown.pause()
 })
 const current = countDown.current
 
-const showResendConfirm = ref(false)
+const props = defineProps<{
+  showResend: boolean
+}>()
 
 // 定义emit事件
 const emit = defineEmits<{
   (e: 'resend', countDown: CountDown): void
 }>()
 
-const confirmSucess = () => {
-  showResendConfirm.value = false
+const resend = () => {
   emit('resend', countDown)
 }
 

@@ -3,7 +3,7 @@
     <login-box v-model="loginName" @loginItemTypeChange="loginItemTypeChange" :errorMsg="errorMsg"></login-box>
   </div>
   <div class="login-btn">
-    <large-button type="primary" loading-text="获取短信验证码" :loading="loginBtnLoading" :disabled="loginBtnDisabled" @click="handleLogin" size="large">获取短信验证码</large-button>
+    <large-button type="primary" loading-text="获取短信验证码" :loading="loginBtnLoading" :disabled="loginBtnDisabled" @click="checkNeedVerify" size="large">获取短信验证码</large-button>
   </div>
 </template>
 
@@ -12,12 +12,15 @@ import { watch, ref, computed, onMounted } from 'vue'
 import LargeButton from '@/components/LargeButton/LargeButton.vue'
 import LoginBox from '../../components/LoginBox/LoginBox.vue'
 import { useStore } from 'vuex'
-
 import { LoginGetCode } from '@/api/wallet'
+
+import useCheckNeedVerify from '@/hooks/useCheckNeedVerify'
+import { LoginReq } from '@/api/types'
 
 onMounted(() => {
   store.dispatch('setUserInfo', {
-    openId: 'XSDFFG346TJHTRJ78O7OZDG'
+    openId: 'XSDFFG346TJHTRJ78O7OZDG',
+    shopAdminId: 70
   })
 })
 
@@ -36,7 +39,7 @@ const loginBtnDisabled = computed(() => !loginName.value.length || !!errorMsg.va
 const loginBtnLoading = ref(false)
 
 const emit = defineEmits<{
-  (e: 'loginSucess', flag: boolean): void
+  (e: 'loginSucess', data: LoginReq): void
 }>()
 
 const store = useStore()
@@ -62,13 +65,15 @@ const handleLogin = async () => {
         shopAdminId: res.shopAdminId,
         walletId: loginItemType.value === 1 ? loginName.value : ''
       })
-      emit('loginSucess', true)
+      emit('loginSucess', data)
     }
   } catch (error) {
   } finally {
     loginBtnLoading.value = false
   }
 }
+
+const checkNeedVerify = useCheckNeedVerify(handleLogin, loginName)
 
 // 清空错误信息
 watch(loginName, (newValue:string, oldValue:string) => {

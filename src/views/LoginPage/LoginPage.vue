@@ -15,7 +15,7 @@
     <!-- input phoneNum -->
     <login-for-phone-num v-if="!hasInputedLoginName" @login-sucess="LoginSucess"></login-for-phone-num>
     <!-- input VerifyCode -->
-    <login-for-verify v-if="hasInputedLoginName"></login-for-verify>
+    <login-for-verify :loginData="LoginData" v-if="hasInputedLoginName"></login-for-verify>
     <!-- 返回 -->
     <back-btn v-if="hasInputedLoginName" @click="back()"></back-btn>
   </div>
@@ -23,7 +23,7 @@
 
 <script lang="ts" setup>
 import shopImgDefault from '../../assets/img/shopImgDefault.png'
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 // input phoneNum
 import LoginForPhoneNum from './components/LoginForPhoneNum/LoginForPhoneNum.vue'
 // input VerifyCode
@@ -32,17 +32,26 @@ import LoginForVerify from './components/LoginForVerify/LoginForVerify.vue'
 import BackBtn from '@/components/BackBtn/BackBtn.vue'
 
 import { useStore } from 'vuex'
+import { LoginReq } from '@/api/types'
 
 const store = useStore()
 
 // 定义图片
 const shopImg = ref(shopImgDefault)
 
+const LoginData = reactive<LoginReq>({
+  loginItem: '',
+  loginItemType: 0,
+  openId: '',
+  shopAdminId: 0
+})
+
 // 是否已输入phoneNum
 const hasInputedLoginName = ref(false)
 // 登录成功
-const LoginSucess = (flag:boolean) => {
-  hasInputedLoginName.value = flag
+const LoginSucess = (data: LoginReq) => {
+  hasInputedLoginName.value = true
+  Object.assign(LoginData, data)
 }
 
 const back = () => {

@@ -1,13 +1,30 @@
 import { checkNeedVerifySliderApi } from '@/api/wallet'
+import { computed, Ref, watch } from 'vue'
 import { useStore } from 'vuex'
-export default () => {
+
+type SendMsgFunc = () => any 
+
+export default (func: SendMsgFunc, loginName?: Ref<string>) => {
   const store = useStore()
+  const showSliderBar = computed(() => store.state.showSliderBar.showSliderBar)
+
+  watch(showSliderBar, () => {
+    if (!showSliderBar.value) {
+      func()
+    }
+  })
+
   const checkNeedVerifySlider = async () => {
     try {
       const res = await checkNeedVerifySliderApi({
-        phone: store.state.userInfo.loginName as string
+        sendItem: loginName?.value || store.state.userInfo.loginName as string,
+        shopAdminId: store.state.userInfo.shopAdminId
       })
-      return res
+      if (!res) {
+        return func()
+      } else {
+        store.dispatch('setShowSliderBar', true)
+      }
     } catch (e) {
       throw Error(String(e))
     }

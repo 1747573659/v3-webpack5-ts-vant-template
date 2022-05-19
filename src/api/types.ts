@@ -156,3 +156,18 @@ export interface logoutReq {
   openId: string
   walletId: string
 }
+
+export interface checkNeedVerifySliderReq {
+  sendItem: string,
+  shopAdminId: number
+}
+
+export interface smsSendReq {
+  phone: string,
+  smsBusinessType: number
+}
+
+export interface smsValidCodeReq {
+  code: string,
+  phone: string
+}
