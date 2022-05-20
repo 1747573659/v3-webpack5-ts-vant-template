@@ -9,7 +9,7 @@
         />
       </div>
       <div class="shop-content">
-        <div class="shop-name">商户名</div>
+        <div class="shop-name">{{shopShortNameRef}}</div>
       </div>
     </div>
     <!-- input phoneNum -->
@@ -36,8 +36,12 @@ import { LoginReq } from '@/api/types'
 
 const store = useStore()
 
+const { shopShortName, loginLogoUrl } = store.state.userInfo
+
+const shopShortNameRef = ref(shopShortName)
+
 // 定义图片
-const shopImg = ref(shopImgDefault)
+const shopImg = ref(loginLogoUrl || shopImgDefault)
 
 const LoginData = reactive<LoginReq>({
   loginItem: '',

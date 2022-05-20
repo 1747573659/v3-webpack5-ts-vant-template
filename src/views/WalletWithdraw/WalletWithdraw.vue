@@ -34,6 +34,7 @@ import { UserInfo } from '@/store/storeTypes';
 import { withdrawDetailRep, withdrawConfirmReq } from '@/api/types';
 import { withdrawApplyApi, withdrawDetail, withdrawConfirmApi, smsSend, smsValidCode } from '@/api/wallet'
 import useCheckNeedVerify from '@/hooks/useCheckNeedVerify'
+import store from '@/store';
 
 const userInfo: UserInfo = useStore().state.userInfo
 
@@ -62,6 +63,9 @@ const getWithdrawDetail = async () => {
     const res = await withdrawDetail({
       walletId,
       shopAdminId
+    })
+    store.dispatch('setUserInfo', {
+      loginName: res.legalPhone
     })
     Object.assign(withdrawDetailInfo, res)
   } catch (e) {} finally {

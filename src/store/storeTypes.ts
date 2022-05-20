@@ -6,7 +6,10 @@ export type UserInfo = {
   loginItemType: number,
   shopAdminId: number,
   walletId: string,
-  openId: string
+  openId: string,
+  loginLogoUrl: string,
+  shopShortName: string,
+  walletShopLogoUrl: string
 }
 type Wallet = {
   walletId: string,

@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts" setup>
-import { watch, ref, computed, onMounted } from 'vue'
+import { watch, ref, computed } from 'vue'
 import LargeButton from '@/components/LargeButton/LargeButton.vue'
 import LoginBox from '../../components/LoginBox/LoginBox.vue'
 import { useStore } from 'vuex'
@@ -16,13 +16,6 @@ import { LoginGetCode } from '@/api/wallet'
 
 import useCheckNeedVerify from '@/hooks/useCheckNeedVerify'
 import { LoginReq } from '@/api/types'
-
-onMounted(() => {
-  store.dispatch('setUserInfo', {
-    openId: 'XSDFFG346TJHTRJ78O7OZDG',
-    shopAdminId: 70
-  })
-})
 
 const loginName = ref('')
 // 1：钱包ID 2：法人手机号 3：法人身份证

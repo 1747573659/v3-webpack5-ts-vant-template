@@ -44,6 +44,7 @@ export interface LoginPhoneCodeRep {
 export interface walletDetailReq {
   shopAdminId: number
   walletId: string
+  openId: string
 }
 export interface walletDetailRep {
   accountName: string,

@@ -18,8 +18,13 @@
 <script lang="ts" setup>
 import { ref, toRefs } from '@vue/reactivity'
 import shopImgDefault from '@/assets/img/shopImgDefault.png'
+import { useStore } from 'vuex'
 import { walletDetailRep } from '@/api/types'
 import CopyBtn from '@/components/CopyBtn/CopyBtn.vue'
+
+const store = useStore()
+
+const {walletShopLogoUrl} = store.state.userInfo
 
 const props = defineProps<{
   walletDetailInfo: walletDetailRep
@@ -28,7 +33,7 @@ const { walletDetailInfo } = toRefs<{
   walletDetailInfo: walletDetailRep
 }>(props)
 
-const shopImg = ref(shopImgDefault)
+const shopImg = ref(walletShopLogoUrl || shopImgDefault)
 const copyText = ref('copyText')
 </script>
 

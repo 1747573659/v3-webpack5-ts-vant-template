@@ -7,7 +7,10 @@ const state: UserInfo = {
   loginItemType: 0,
   shopAdminId: 0,
   walletId: '',
-  openId: ''
+  openId: '',
+  loginLogoUrl: '',
+  shopShortName: '',
+  walletShopLogoUrl: ''
 }
 
 const getters: GetterTree<UserInfo, null> = {
@@ -17,6 +20,9 @@ const getters: GetterTree<UserInfo, null> = {
   shopAdminId: (state: UserInfo): NumberOrNull => state.shopAdminId,
   walletId: (state: UserInfo): string => state.walletId,
   openId: (state: UserInfo): string => state.openId,
+  loginLogoUrl: (state: UserInfo): string => state.loginLogoUrl,
+  shopShortName: (state: UserInfo): string => state.shopShortName,
+  walletShopLogoUrl: (state: UserInfo): string => state.walletShopLogoUrl,
 }
 
 const mutations: MutationTree<UserInfo> = {
@@ -38,24 +44,34 @@ const mutations: MutationTree<UserInfo> = {
   SET_OPENID: (state: UserInfo, openId: string): void => {
     state.openId = openId
   },
+  SET_lOGINLOGOURL: (state: UserInfo, loginLogoUrl: string): void => {
+    state.loginLogoUrl = loginLogoUrl
+  },
+  SET_SHOPShORTNAME: (state: UserInfo, shopShortName: string): void => {
+    state.shopShortName = shopShortName
+  },
+  SET_WALLETSHOPLOGOURL: (state: UserInfo, walletShopLogoUrl: string): void => {
+    state.walletShopLogoUrl = walletShopLogoUrl
+  },
   RESET_USERINFO: (state: UserInfo): void => {
     state.loginName = ''
     state.token = ''
     state.loginItemType = 0
-    state.shopAdminId = 0
     state.walletId = ''
-    state.openId = ''
   }
 }
 
 const actions: ActionTree<UserInfo, null> = {
-  setUserInfo({ commit }: { commit: Commit }, { loginName, token, loginItemType, shopAdminId, walletId, openId }: UserInfo) {
+  setUserInfo({ commit }: { commit: Commit }, { loginName, token, loginItemType, shopAdminId, walletId, openId, loginLogoUrl, shopShortName, walletShopLogoUrl }: UserInfo) {
     loginName && commit('SET_LOGIN_NAME', loginName)
     token && commit('SET_TOKEN', token)
     loginItemType && commit('SET_LOGIN_ITEM_TYPE', loginItemType)
     shopAdminId && commit('SET_SHOPADMINID', shopAdminId)
     walletId && commit('SET_WALLETID', walletId)
     openId && commit('SET_OPENID', openId)
+    loginLogoUrl && commit('SET_lOGINLOGOURL', loginLogoUrl)
+    shopShortName && commit('SET_SHOPShORTNAME', shopShortName)
+    walletShopLogoUrl && commit('SET_WALLETSHOPLOGOURL', walletShopLogoUrl)
   },
   resetUserInfo({ commit }: { commit: Commit }) {
     commit('RESET_USERINFO')

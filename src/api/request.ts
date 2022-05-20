@@ -33,7 +33,7 @@ class Request {
       (res: AxiosResponse) => {
         return res.data
       },
-      (err: AxiosError) => err
+      (err: AxiosError) => err.response?.data
     )
     this.instance.interceptors.response.use(
       this.interceptorsObj?.responseInterceptors,
