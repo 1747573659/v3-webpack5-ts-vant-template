@@ -37,7 +37,7 @@ const logout = () => {
 const beforeClose:Interceptor = (action) =>
   new Promise((resolve) => {
     if (action === 'confirm') {
-      handleLogout().then(() => resolve(true))
+      handleLogout().then(() => resolve(true), () => resolve(false))
     } else {
       // 拦截取消操作
       resolve(true);
