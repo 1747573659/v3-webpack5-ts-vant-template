@@ -65,6 +65,7 @@ const verifyCode = ref<VerifyCode>('')
 // 是否展示键盘
 // 当选中输入框时调起键盘并且清空输入框
 const passwordInputFocus = () => {
+  hiddenField.value.focus()
   verifyCode.value = ''
 }
 // 将方法抛出  否则无法父组件无法通过ref调用
@@ -86,6 +87,7 @@ watch(verifyCode, () => {
 })
 // 验证验证码
 const handleVerifyCode = () => {
+  hiddenField.value.blur()
   emit('handleVerifyCode', verifyCode.value)
 }
 
