@@ -70,6 +70,24 @@ const myWalletRoutes: Array<RouteRecordRaw> = [
       showBackBtn: true
     },
     component: () => import('@/views/BillDetail/BillDetail.vue')
+  },
+  {
+    path: '/ideaFeedback',
+    name: 'ideaFeedback',
+    meta: {
+      title: '意见反馈',
+      showBackBtn: true
+    },
+    component: () => import('@/views/ideaFeedback/ideaFeedback.vue')
+  },
+  {
+    path: '/commonProblem',
+    name: 'commonProblem',
+    meta: {
+      title: '常见问题',
+      showBackBtn: true
+    },
+    component: () => import('@/views/commonProblem/commonProblem.vue')
   }
 ]
 
