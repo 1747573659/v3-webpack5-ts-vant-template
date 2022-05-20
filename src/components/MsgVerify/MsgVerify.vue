@@ -8,29 +8,38 @@
       gutter="13px"
       :value="verifyCode"
       :mask="false"
-      :focused="showKeyboard"
       @focus="passwordInputFocus"
+      :focused="true"
+      type="tel"
     />
     <div class="password-input-footer">
       <resend-verify-code class="password-resend" :showResend="showResend" @resend="resend"></resend-verify-code>
       <div class="error-msg" v-if="errorMsg"><img class="warn-icon" :src="warnIcon" alt="警告"><div>{{errorMsg}}</div></div>
     </div>
-    <number-keyboard
+    <van-field
+      style="opacity: 0;"
+      ref="hiddenField"
+      autocomplete="one-time-code"
+      type="tel"
       v-model="verifyCode"
-      :show="showKeyboard"
-      @blur="showKeyboard = false"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch, toRefs } from 'vue';
-import { PasswordInput, NumberKeyboard } from 'vant'
+import { computed, ref, watch, toRefs, onMounted } from 'vue';
+import { PasswordInput } from 'vant'
 import { VerifyCode, CountDown } from './types'
 import { useStore } from 'vuex'
 import ResendVerifyCode from './ResendVerifyCode.vue'
 import warn from '@/assets/icons/warn.png';
 const warnIcon = ref(warn)
+
+const hiddenField = ref()
+
+onMounted(() => {
+  hiddenField.value.focus()
+})
 
 const props = defineProps<{
   errorMsg: string
@@ -45,6 +54,7 @@ const { loginName } = useStore().state.userInfo
 // 将loginName格式化显示
 const getLoginNameForDisplay = computed(() => {
   let arr = loginName.split('')
+  arr.splice(3, 4, ...['*','*','*','*']);
   arr.splice(3, 0, ' ');
   arr.splice(8, 0, ' ');
   return arr.join("");
@@ -53,10 +63,8 @@ const getLoginNameForDisplay = computed(() => {
 // 验证码
 const verifyCode = ref<VerifyCode>('')
 // 是否展示键盘
-const showKeyboard = ref(true)
 // 当选中输入框时调起键盘并且清空输入框
 const passwordInputFocus = () => {
-  showKeyboard.value = true
   verifyCode.value = ''
 }
 // 将方法抛出  否则无法父组件无法通过ref调用
@@ -73,7 +81,6 @@ const emit = defineEmits<{
 // 验证码输入完毕直接调用发送验证码
 watch(verifyCode, () => {
   if(verifyCode.value && verifyCode.value.length === 6) {
-    showKeyboard.value = false
     handleVerifyCode()
   }
 })
