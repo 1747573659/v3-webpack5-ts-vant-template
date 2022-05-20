@@ -35,6 +35,7 @@ const request = new Request({
           cancelButtonColor: '#00A3FF',
           className: 'wallet-dialog',
         }).then(() => {
+          store.dispatch('resetUserInfo')
           router.replace('login')
         })
         return Promise.reject(result)
