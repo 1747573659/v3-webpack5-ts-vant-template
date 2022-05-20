@@ -1,9 +1,9 @@
 <script lang="ts" setup>
   import { useRouter } from 'vue-router'
   import OverlayLoading from '@/components/OverlayLoading/OverlayLoading.vue'
-
+  
   import useWalletDetail from '@/hooks/useWalletDetail'
-
+  
   const { walletDetailInfo, loading } = useWalletDetail()
 
   const router = useRouter()
