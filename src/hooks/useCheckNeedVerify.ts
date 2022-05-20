@@ -17,7 +17,7 @@ export default (func: SendMsgFunc, loginName?: Ref<string>) => {
   const checkNeedVerifySlider = async () => {
     try {
       const res = await checkNeedVerifySliderApi({
-        sendItem: loginName?.value || store.state.userInfo.loginName as string,
+        sendItem: loginName?.value.replace(/ /g, '') || store.state.userInfo.loginName as string,
         shopAdminId: store.state.userInfo.shopAdminId
       })
       if (!res) {

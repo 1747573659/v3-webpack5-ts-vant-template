@@ -3,7 +3,7 @@
     <login-box v-model="loginName" @loginItemTypeChange="loginItemTypeChange" :errorMsg="errorMsg"></login-box>
   </div>
   <div class="login-btn">
-    <large-button type="primary" loading-text="获取短信验证码" :loading="loginBtnLoading" :disabled="loginBtnDisabled" @click="checkNeedVerify" size="large">获取短信验证码</large-button>
+    <large-button type="primary" loading-text="获取短信验证码" :loading="loginBtnLoading" :disabled="loginBtnDisabled" @click="login" size="large">获取短信验证码</large-button>
   </div>
 </template>
 
@@ -37,12 +37,16 @@ const emit = defineEmits<{
 
 const store = useStore()
 
+const login = () => {
+  loginBtnLoading.value = true
+  checkNeedVerify()
+}
+
 // 登录事件
 const handleLogin = async () => {
-  loginBtnLoading.value = true
   let data = {
     loginItemType: loginItemType.value,
-    loginItem: loginName.value,
+    loginItem: loginName.value.replace(/ /g, ''),
     shopAdminId: store.state.userInfo.shopAdminId,
     openId: store.state.userInfo.openId
   }

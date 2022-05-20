@@ -39,7 +39,8 @@ const myWalletRoutes: Array<RouteRecordRaw> = [
     path: '/walletWithdraw',
     name: 'walletWithdraw',
     meta: {
-      title: '提现'
+      title: '提现',
+      showBackBtn: true
     },
     component: () => import('@/views/WalletWithdraw/WalletWithdraw.vue')
   },

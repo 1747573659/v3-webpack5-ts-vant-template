@@ -30,8 +30,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, toRefs } from 'vue'
-import { onMounted } from 'vue';
+import { computed, ref, toRefs, watch } from 'vue'
 import { Money } from '../../types'
 import ToolTip from '@/components/ToolTip/ToolTip.vue'
 import useInjectInfo from '../../hooks/useInjectInfo'
@@ -42,7 +41,7 @@ const warnIcon = ref(warn)
 
 const withdrawDetailInfo = useInjectInfo() as withdrawDetailRep
 
-onMounted(() => {
+watch(withdrawDetailInfo, () => {
   input.value.focus()
 })
 

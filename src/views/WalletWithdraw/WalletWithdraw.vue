@@ -8,7 +8,7 @@
       <large-button :loading="withdrawLoading" :disabled="withdrawDisabled" @click="withdrawApply">提现</large-button>
     </div>
     <!-- 验证码 -->
-    <popur-verify-code :money="money" v-model:show="showVerifyPopur" :error-msg="verifyErrorMsg" @handle-verify-code="handleVerifyCode"></popur-verify-code>
+    <popur-verify-code :money="money" v-model:show="showVerifyPopur" :error-msg="verifyErrorMsg" @click-close-icon="clickCloseIcon" @handle-verify-code="handleVerifyCode"></popur-verify-code>
     <!-- 接口loading -->
     <overlay-loading :show="showOverlay" :content="overLayContent"></overlay-loading>
     <!-- 确认提现弹窗 -->
@@ -176,6 +176,11 @@ const handleVerifyCode = async (verifyCode: VerifyCode) => {
   } finally {
     showOverlay.value = false
   }
+}
+
+// 短信验证弹窗点击关闭图标的事件
+const clickCloseIcon = () => {
+  withdrawLoading.value = false
 }
 
 const showWithdrawConfirm = ref(false)
