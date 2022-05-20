@@ -57,6 +57,7 @@ export interface walletDetailRep {
 export interface withdrawalInfoReq {
   shopAdminId: number
   walletId: string
+  openId: string
 }
 export interface withdrawalInfoRep {
   planType: number
@@ -109,6 +110,7 @@ export interface billStatementReq {
   page: number
   rows: number
   walletId: string
+  openId: string
   transactionType?: number
   startTime?: string
   endTime?: string
