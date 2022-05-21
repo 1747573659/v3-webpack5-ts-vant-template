@@ -4,12 +4,13 @@
       验证码将发送至<span class="phone-mention-num">{{getLoginNameForDisplay}}</span>
     </div>
     <password-input
+      @click="passwordInputFocus"
       class="password-input"
       gutter="13px"
       :value="verifyCode"
       :mask="false"
       @focus="passwordInputFocus"
-      :focused="true"
+      :focused="passwordFocus"
       type="tel"
     />
     <div class="password-input-footer">
@@ -20,6 +21,7 @@
       style="opacity: 0;"
       ref="hiddenField"
       autocomplete="one-time-code"
+      @blur="hiddenFieldBlur"
       type="tel"
       v-model="verifyCode"
     />
@@ -48,6 +50,12 @@ const { errorMsg } = toRefs(props)
 
 const showResend = computed(() => errorMsg.value !== '验证码输入错误次数已达上限，您的账号将会被锁定24小时')
 
+const passwordFocus = ref(true)
+
+const hiddenFieldBlur = () => {
+  passwordFocus.value = false
+}
+
 // 拿到vuex中存储的loginName
 const { loginName } = useStore().state.userInfo
 
@@ -65,6 +73,7 @@ const verifyCode = ref<VerifyCode>('')
 // 是否展示键盘
 // 当选中输入框时调起键盘并且清空输入框
 const passwordInputFocus = () => {
+  passwordFocus.value = true
   hiddenField.value.focus()
   verifyCode.value = ''
 }

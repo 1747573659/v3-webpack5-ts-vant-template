@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted, reactive, provide } from 'vue';
+import { ref, computed, onMounted, reactive, provide, watch } from 'vue';
 import OverlayLoading from '@/components/OverlayLoading/OverlayLoading.vue'
 import AccountInfo from './components/AccountInfo/AccountInfo.vue'
 import WithdrawBox from './components/WithdrawBox/WithdrawBox.vue'
@@ -189,8 +189,11 @@ const showWithdrawConfirm = ref(false)
 const dialogConfirm = () => {
   showWithdrawConfirm.value = true
 }
-
 const showResultPage = ref(false)
+// 从结果页返回的时候调用一遍详情接口
+watch(showResultPage, () => {
+  getWithdrawDetail()
+})
 
 // 已确认
 const resultPageErrorMsg = ref('')

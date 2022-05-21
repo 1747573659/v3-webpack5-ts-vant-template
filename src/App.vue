@@ -2,10 +2,16 @@
   <router-view v-slot="{ Component, route }">
     <keep-alive max="5">
       <component
+        v-if="route.meta.keepAlive"
         :is="Component"
         :key="route.meta.keepAlive"
       />
     </keep-alive>
+    <component
+      v-if="!route.meta.keepAlive"
+      :is="Component"
+      :key="route.meta.keepAlive"
+    />
   </router-view>
 
   <!-- 每小时发送五次后会调用一个滑动验证组件 -->
