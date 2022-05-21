@@ -18,8 +18,6 @@ const { walletId, openId }: UserInfo = store.state.userInfo
 const logout = () => {
   Dialog.confirm({
     width: '351px',
-    confirmButtonColor: '#00A3FF',
-    cancelButtonColor: '#00A3FF',
     className: 'wallet-dialog',
     message: '确定要退出登录吗？',
     beforeClose
@@ -71,6 +69,11 @@ const handleLogout = async () => {
   border-radius: 20px;
   .van-dialog__content--isolated {
     min-height: 155px;
+  }
+  .van-button--default {
+    @include themify {
+      color: themed('primaryColor');
+    }
   }
   .van-dialog__confirm,
   .van-dialog__cancel {

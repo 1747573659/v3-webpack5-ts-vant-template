@@ -163,7 +163,6 @@
     flex-direction: column;
     background-color: $bg-light-color-1;
   }
-
   .billstate-main-wrap {
     flex: 1 1 200px;
     overflow-y: auto;
@@ -268,8 +267,11 @@
     text-align: center;
     border-radius: 8px;
     &.active {
-      background-color: $primaryColor;
       color: #fff;
+
+      @include themify {
+        background-color: themed('primaryColor');
+      }
     }
   }
 </style>

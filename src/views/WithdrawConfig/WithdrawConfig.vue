@@ -76,8 +76,6 @@ import { UserInfo } from '@/store/storeTypes'
       // 关闭
       Dialog.confirm({
         width: '351px',
-        confirmButtonColor: '#00A3FF',
-        cancelButtonColor: '#00A3FF',
         className: 'wallet-dialog',
         message: '确定要关闭定时提现吗？'
       }).then(() => {
@@ -157,8 +155,11 @@ import { UserInfo } from '@/store/storeTypes'
     &-timing {
       display: inline-block;
       font-size: 28px;
-      color: $primaryColor;
       font-weight: 500;
+
+      @include themify {
+        color: themed('primaryColor');
+      }
     }
   }
   .withdrawConfig-edit {

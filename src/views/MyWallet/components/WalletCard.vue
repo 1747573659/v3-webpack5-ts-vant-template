@@ -54,8 +54,11 @@ const gotoDetail = () => {
 <style lang="scss" scoped>
 .wallet-card {
   height: 388px;
-  background: linear-gradient(180deg, #00a3ff 0%, rgba(0, 163, 255, .5) 67.19%, rgba(0, 163, 255, 0) 100%);
   overflow: hidden;
+
+  @include themify {
+    background: themed('walletCardColor');
+  }
   &-content {
     margin: 22px 24px 44px;
     background-color: $white;
@@ -78,15 +81,21 @@ const gotoDetail = () => {
       &-text {
         font-weight: 500;
         font-size: 48px;
-        color: $primaryColor;
+
+        @include themify {
+          color: themed('primaryColor');
+        }
       }
       &-withdraw {
         &:deep(.van-button) {
           width: 180px;
           height: 66px;
-          background: $primaryColor;
           border-radius: 10px;
           border: none;
+
+          @include themify {
+            background-color: themed('primaryColor');
+          }
         }
       }
     }

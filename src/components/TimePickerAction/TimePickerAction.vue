@@ -100,7 +100,10 @@
   }
   .timepicker-action-confirm {
     font-weight: 500;
-    color: $primaryColor;
+
+    @include themify {
+      color: themed('primaryColor');
+    }
   }
   .timepicker-action-main {
     padding: 0 24px;
@@ -113,7 +116,9 @@
     padding: 32px 0;
     color: $font-color-3;
     &.active {
-      color: $primaryColor;
+      @include themify {
+        color: themed('primaryColor');
+      }
       & > img {
         display: block;
       }

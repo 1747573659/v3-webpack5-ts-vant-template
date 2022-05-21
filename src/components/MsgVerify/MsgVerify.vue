@@ -127,10 +127,14 @@ const resend = (countDown: CountDown) => {
     font-size: 50px;
   }
   &:deep(.van-password-input__item--focus) {
-    border-bottom: solid 1px $primaryColor;
+    @include themify {
+      border-bottom: solid 1px themed('primaryColor');
+    }
   }
   &:deep(.van-password-input__cursor) {
-    background: $primaryColor;
+    @include themify {
+      background: themed('primaryColor');
+    }
   }
 }
 .password-input-footer {

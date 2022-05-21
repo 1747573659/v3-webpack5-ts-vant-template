@@ -164,10 +164,13 @@ const allinWithdraw = () => {
         line-height: 34px;
       }
       &:deep(.van-field__control) {
-        caret-color: $primaryColor;
         font-weight: 500;
         font-size: 70px;
         line-height: 68px;
+
+        @include themify {
+          caret-color: themed('primaryColor');
+        }
       }
     }
     .allin-btn {
@@ -185,7 +188,10 @@ const allinWithdraw = () => {
           font-weight: 400;
           font-size: 24px;
           line-height: 36px;
-          color: $primaryColor;
+
+          @include themify {
+            color: themed('primaryColor');
+          }
         }
       }
     }

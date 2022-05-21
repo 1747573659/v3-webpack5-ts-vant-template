@@ -151,7 +151,9 @@ const warnIcon = ref(warn)
 }
 .active-border {
   &:deep(.van-field__body) {
-    border-bottom: solid 1px $primaryColor;
+    @include themify {
+      border-bottom: solid 1px themed('primaryColor');
+    }
   }
 }
 .error-msg {

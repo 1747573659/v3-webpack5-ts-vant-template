@@ -85,5 +85,11 @@ watch(loginName, (newValue:string, oldValue:string) => {
 .login-btn {
   margin-top: 114px;
   padding: 0 32px;
+  &:deep(.van-button--primary) {
+    @include themify {
+      background-color: themed('primaryColor');
+      border-color: themed('primaryColor');
+    }
+  }
 }
 </style>
