@@ -33,7 +33,7 @@ export interface LoginPhoneCodeReq {
 }
 export interface WalletList {
   walletId: string
-  shortShopName: string
+  shopShortName: string
 }
 export interface LoginPhoneCodeRep {
   phone: string

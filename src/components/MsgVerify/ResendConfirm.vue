@@ -6,22 +6,16 @@
 </template>
 
 <script lang="ts" setup>
-import { toRefs } from 'vue'
+import { computed } from 'vue'
 import { Popup } from 'vant'
 import SlideBar from '@/components/SlideBar/SlideBar.vue'
-
-const prop = defineProps<{
-  show: boolean
-}>()
-const { show } = toRefs(prop)
-
-const emit = defineEmits<{
-  (e: 'sucess'): void
-}>()
+import { useStore } from 'vuex'
+const store = useStore()
+const show = computed(() => store.state.showSliderBar.showSliderBar)
 
 // 验证成功
 const sucess = () => {
-  emit('sucess')
+  store.dispatch('setShowSliderBar', false)
 }
 </script>
 

@@ -58,7 +58,8 @@ const myWalletRoutes: Array<RouteRecordRaw> = [
     name: 'billStatement',
     meta: {
       title: '账单明细',
-      showBackBtn: true
+      showBackBtn: true,
+      keepAlive: true
     },
     component: () => import('@/views/BillStatement/BillStatement.vue')
   },
