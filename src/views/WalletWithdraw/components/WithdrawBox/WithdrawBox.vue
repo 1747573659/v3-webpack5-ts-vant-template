@@ -156,6 +156,9 @@ const allinWithdraw = () => {
       }
       &:deep(.van-cell) {
         padding: 0 0 0 24px;
+        &:after {
+          border: none
+        }
       }
       ::-webkit-input-placeholder { /* WebKit browsers */
         color: $midColorPlaceholder;
