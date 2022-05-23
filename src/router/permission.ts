@@ -2,10 +2,12 @@ import router from '@/router'
 import store from '@/store'
 
 router.beforeEach((to, from, next) => {
-  console.log(to.query)
   // 第一次登陆的时候拿登陆的值
   if (to.query.openId) {
-    const {loginLogoUrl,token,shopAdminId,walletId,openId,shopShortName,walletShopLogoUrl} = to.query
+    const {loginLogoUrl,token,shopAdminId,walletId,openId,shopShortName,walletShopLogoUrl,themeStyle} = to.query as {[key: string]: any}
+    document
+      .getElementsByTagName("body")[0]
+      .setAttribute("data-theme", themeStyle || "offcial"); // 设置主题色
     store.dispatch('setUserInfo', {
       token,
       loginLogoUrl,

@@ -2,7 +2,8 @@
   <div class="wallet-card">
     <div class="wallet-card-content">
       <div class="wallet-card-content-title">
-        可用余额（元）
+        <span>可用余额（元）</span>
+        <img class="icon eye-icon" @click="showAmount = !showAmount" :src="eyePng" alt="eyePng">
       </div>
       <div class="wallet-card-content-money">
         <div class="wallet-card-content-money-text">{{ availableAmount }}</div>
@@ -23,6 +24,7 @@
 
 <script lang="ts" setup>
 import arrowRightS from '@/assets/icons/arrowRightS.svg'
+import eye from '@/assets/icons/eye.png'
 import { ref, toRefs } from '@vue/reactivity'
 import { useRouter } from 'vue-router'
 import { walletDetailRep } from '@/api/types'
@@ -36,9 +38,12 @@ const { walletDetailInfo } = toRefs<{
   walletDetailInfo: walletDetailRep
 }>(props)
 
-const availableAmount = computed(() => formatYuanAmount(String(walletDetailInfo.value.availableAmount)))
+const showAmount = ref(false)
+
+const availableAmount = computed(() => showAmount.value ? formatYuanAmount(String(walletDetailInfo.value.availableAmount)) : '***')
 
 const arrowRightSSvg = ref(arrowRightS)
+const eyePng = ref(eye)
 
 const router = useRouter()
 const gotoWithdraw = () => {
@@ -54,8 +59,11 @@ const gotoDetail = () => {
 <style lang="scss" scoped>
 .wallet-card {
   height: 388px;
-  background: linear-gradient(180deg, #00a3ff 0%, rgba(0, 163, 255, .5) 67.19%, rgba(0, 163, 255, 0) 100%);
   overflow: hidden;
+
+  @include themify {
+    background: themed('walletCardColor');
+  }
   &-content {
     margin: 22px 24px 44px;
     background-color: $white;
@@ -68,6 +76,8 @@ const gotoDetail = () => {
       color: $font-color-1;
       line-height: 40px;
       margin: 30px 24px 12px;
+      display: flex;
+      align-items: center;
     }
     &-money {
       height: 136px;
@@ -78,15 +88,21 @@ const gotoDetail = () => {
       &-text {
         font-weight: 500;
         font-size: 48px;
-        color: $primaryColor;
+
+        @include themify {
+          color: themed('primaryColor');
+        }
       }
       &-withdraw {
         &:deep(.van-button) {
           width: 180px;
           height: 66px;
-          background: $primaryColor;
           border-radius: 10px;
           border: none;
+
+          @include themify {
+            background-color: themed('primaryColor');
+          }
         }
       }
     }
@@ -103,13 +119,16 @@ const gotoDetail = () => {
         display: flex;
         align-items: center;
         justify-content: center;
-        .icon {
-          display: inline-block;
-          width: 40px;
-          height: 40px;
-        }
       }
     }
+  }
+  .icon {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+  }
+  .eye-icon {
+    margin-left: 16px;
   }
 }
 </style>

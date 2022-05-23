@@ -81,7 +81,10 @@ const confirmWithdraw = () => {
         font-style: normal;
         font-weight: 500;
         font-size: 32px;
-        color: $primaryColor;
+
+        @include themify {
+          color: themed('primaryColor');
+        }
       }
     }
     .confirm {

@@ -40,10 +40,13 @@ const copyText = ref('copyText')
 <style lang="scss" scoped>
 .wallet-info {
   height: 120px;
-  background-color: $primaryColor;
   padding: 24px 48px;
   display: flex;
   align-items: center;
+
+  @include themify {
+    background-color: themed('primaryColor');
+  }
   .shop-logo-wrap {
     width: 120px;
     height: 120px;

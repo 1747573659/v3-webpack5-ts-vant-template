@@ -8,7 +8,7 @@
       <large-button :loading="withdrawLoading" :disabled="withdrawDisabled" @click="withdrawApply">提现</large-button>
     </div>
     <!-- 验证码 -->
-    <popur-verify-code :money="money" v-model:show="showVerifyPopur" :error-msg="verifyErrorMsg" @handle-verify-code="handleVerifyCode"></popur-verify-code>
+    <popur-verify-code :money="money" v-model:show="showVerifyPopur" :error-msg="verifyErrorMsg" @click-close-icon="clickCloseIcon" @handle-verify-code="handleVerifyCode"></popur-verify-code>
     <!-- 接口loading -->
     <overlay-loading :show="showOverlay" :content="overLayContent"></overlay-loading>
     <!-- 确认提现弹窗 -->
@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted, reactive, provide } from 'vue';
+import { ref, computed, onMounted, reactive, provide, watch } from 'vue';
 import OverlayLoading from '@/components/OverlayLoading/OverlayLoading.vue'
 import AccountInfo from './components/AccountInfo/AccountInfo.vue'
 import WithdrawBox from './components/WithdrawBox/WithdrawBox.vue'
@@ -178,14 +178,22 @@ const handleVerifyCode = async (verifyCode: VerifyCode) => {
   }
 }
 
+// 短信验证弹窗点击关闭图标的事件
+const clickCloseIcon = () => {
+  withdrawLoading.value = false
+}
+
 const showWithdrawConfirm = ref(false)
 
 // 调用确认弹窗
 const dialogConfirm = () => {
   showWithdrawConfirm.value = true
 }
-
 const showResultPage = ref(false)
+// 从结果页返回的时候调用一遍详情接口
+watch(showResultPage, () => {
+  getWithdrawDetail()
+})
 
 // 已确认
 const resultPageErrorMsg = ref('')

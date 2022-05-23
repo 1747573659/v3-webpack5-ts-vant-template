@@ -1,5 +1,5 @@
 <template>
-  <van-popup v-model:show="showInner" position="bottom" :style="{ height: '100%' }" closeable >
+  <van-popup v-model:show="showInner" position="bottom" :style="{ height: '100%' }" closeable @click-close-icon="clickCloseIcon">
     <div class="title">短信验证</div>
     <div class="operation-type">提现</div>
     <div class="amout">¥{{moneyForShow}}</div>
@@ -28,6 +28,7 @@ const moneyForShow = computed(() => formatYuanAmount(money.value))
 const emits = defineEmits<{
   (e: 'update:show', show:boolean): void,
   (e: 'handleVerifyCode', verifyCode: VerifyCode): void
+  (e: 'clickCloseIcon'): void
 }>()
 
 const msgVerifyComp = ref()
@@ -45,7 +46,9 @@ const handleVerifyCode = (verifyCode: VerifyCode) => {
   emits('handleVerifyCode', verifyCode)
 }
 
-
+const clickCloseIcon = () => {
+  emits('clickCloseIcon')
+}
 </script>
 
 <style lang="scss" scoped>

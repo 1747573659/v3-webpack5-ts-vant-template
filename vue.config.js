@@ -17,7 +17,7 @@ module.exports = defineConfig({
     extract: IS_PROD, // 是否使用css分离插件
     loaderOptions: {
       sass: {
-        additionalData: `@import "@/assets/styles/_global.scss";`
+        additionalData: `@import "@/assets/styles/theme/index.scss";`
       }
     }
   },

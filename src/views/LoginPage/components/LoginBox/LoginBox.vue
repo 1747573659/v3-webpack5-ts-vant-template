@@ -11,8 +11,10 @@
       :type="loginItemType ? 'tel' : 'text'"
       @blur="loginNameBlur"
       :placeholder="placeholder"
+      :maxlength="loginItemType ? '13' : '25'"
       :clearable="true"
       v-model.trim="loginName"
+      @update:model-value="loginNameUpdate"
     />
     <Field
       v-if="[2].includes(loginItemType)"
@@ -26,6 +28,7 @@
       :placeholder="placeholder"
       :clearable="true"
       v-model.trim="loginName"
+      :formatter="idNumberUpdate"
     />
     <div class="error-msg" v-if="errorMsg"><img class="warn-icon" :src="warnIcon" alt="警告"><div>{{errorMsg}}</div></div>
     <van-number-keyboard
@@ -61,6 +64,34 @@ const loginName = computed<LoginName>({
     emits('update:modelValue', value)
   }
 })
+
+const loginNameUpdate = (mobile:string) => {
+  if (loginItemType.value === 1) {
+    let value = mobile.replace(/\D/g, '').substring(0, 11);
+    let valueLen = value.length;
+    if (valueLen > 3 && valueLen < 8) {
+          value = `${value.substr(0, 3)} ${value.substr(3)}`;
+    } else if (valueLen >= 8) {
+          value = `${value.substr(0, 3)} ${value.substr(3, 4)} ${value.substr(7)}`;
+    }
+    loginName.value = value
+  }
+}
+
+const idNumberUpdate = (oldValue: string) => {
+  let newValue = oldValue.replace(/[^a-z0-9A-Z]/g, '').substring(0, 18)
+  let valueLen = newValue.length
+  if (valueLen > 3 && valueLen < 7) {
+    newValue = newValue.replace(/^(...)/g, '$1 ')
+  } else if (valueLen >= 7 && valueLen < 11) {
+    newValue = newValue.replace(/^(...)(...)/g, '$1 $2 ')
+  } else if (valueLen >= 11 && valueLen < 15) {
+    newValue = newValue.replace(/^(...)(...)(....)/g, '$1 $2 $3 ')
+  } else {
+    newValue = newValue.replace(/^(...)(...)(....)(....)/g, '$1 $2 $3 $4 ')
+  }
+  return newValue
+}
 
 const loginItemTypeList = [
   {
@@ -120,7 +151,9 @@ const warnIcon = ref(warn)
 }
 .active-border {
   &:deep(.van-field__body) {
-    border-bottom: solid 1px $primaryColor;
+    @include themify {
+      border-bottom: solid 1px themed('primaryColor');
+    }
   }
 }
 .error-msg {

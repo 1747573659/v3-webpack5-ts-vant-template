@@ -1,5 +1,5 @@
 <template>
-  <van-button @click="copy" class="copy-btn" color="#0089E5" round size="mini" type="primary">复制</van-button>
+  <van-button @click="copy" class="copy-btn" round size="mini" type="primary">复制</van-button>
 </template>
 
 <script lang="ts" setup>
@@ -24,13 +24,18 @@ const copy = () => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .copy-btn {
   width: 100px;
   font-family: 'PingFang SC';
   font-style: normal;
   font-weight: 400;
   font-size: 28px;
+  border-radius: 70px;
   color: $copyBtnColor;
+
+  @include themify {
+    background: themed('copyBtnColor');
+  }
 }
 </style>

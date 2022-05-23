@@ -48,7 +48,7 @@
   import { useStore } from 'vuex'
 import { UserInfo } from '@/store/storeTypes'
   const store =  useStore()
-  const { shopAdminId, walletId }: UserInfo = store.state.userInfo
+  const { shopAdminId, walletId, openId }: UserInfo = store.state.userInfo
   type stateType = {
     planType: number // 1--每天
     planTime: string
@@ -76,8 +76,6 @@ import { UserInfo } from '@/store/storeTypes'
       // 关闭
       Dialog.confirm({
         width: '351px',
-        confirmButtonColor: '#00A3FF',
-        cancelButtonColor: '#00A3FF',
         className: 'wallet-dialog',
         message: '确定要关闭定时提现吗？'
       }).then(() => {
@@ -117,7 +115,8 @@ import { UserInfo } from '@/store/storeTypes'
   onMounted(async () => {
     const res: any = await queryTimingWithdrawalInfo({
       shopAdminId,
-      walletId
+      walletId,
+      openId
     })
     state.planTime = res.planTime || ''
     state.planType = res.planType
@@ -156,8 +155,11 @@ import { UserInfo } from '@/store/storeTypes'
     &-timing {
       display: inline-block;
       font-size: 28px;
-      color: $primaryColor;
       font-weight: 500;
+
+      @include themify {
+        color: themed('primaryColor');
+      }
     }
   }
   .withdrawConfig-edit {

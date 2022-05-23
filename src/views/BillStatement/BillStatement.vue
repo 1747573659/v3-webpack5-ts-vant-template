@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { reactive, ref, Ref } from 'vue'
   import { useRouter } from 'vue-router'
+  import { useStore } from 'vuex'
   import moment from 'moment'
   import DatePickerAction from '@/components/DatePickerAction/DatePickerAction.vue'
   import { formatYuanAmount } from '@/utils/formateMoney'
@@ -9,7 +10,7 @@
   import { BillAmountRep, billStatementReq, TableList } from '@/api/types'
 
   const router = useRouter()
-
+  const store = useStore()
   const dateRange: Ref<string[]> = ref([
     moment().format('YYYY-MM-DD'),
     moment().format('YYYY-MM-DD')
@@ -38,7 +39,8 @@
     let params: billStatementReq = {
       page: pageConfig.page,
       rows: pageConfig.rows,
-      walletId: 'QB0065757391780',
+      walletId: store.state.userInfo.walletId,
+      openId: store.state.userInfo.openId,
       transactionType: billTypeMapEnum.get(activeBillType.value).key,
       startTime: moment(dateRange.value[0]).format('YYYY-MM-DD 00:00:00'),
       endTime: moment(dateRange.value[1]).format('YYYY-MM-DD 23:59:59')
@@ -108,7 +110,7 @@
       v-model:loading="tableLoading"
       class="billstate-main-wrap"
       :finished="billList.tableFinished"
-      finished-text="没有更多了"
+      :finished-text="(billList.tableFinished &&!billList.list)?'暂无数据':'没有更多了'"
       @load="loadBillStatement">
       <van-cell
         v-for="item in billList.list"
@@ -161,7 +163,6 @@
     flex-direction: column;
     background-color: $bg-light-color-1;
   }
-
   .billstate-main-wrap {
     flex: 1 1 200px;
     overflow-y: auto;
@@ -266,8 +267,11 @@
     text-align: center;
     border-radius: 8px;
     &.active {
-      background-color: $primaryColor;
       color: #fff;
+
+      @include themify {
+        background-color: themed('primaryColor');
+      }
     }
   }
 </style>

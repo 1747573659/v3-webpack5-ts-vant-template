@@ -1,5 +1,5 @@
 <template>
-  <van-cell-group>
+  <van-cell-group class="wallet-list-warp">
     <template v-for="item in walletList" :key="item">
       <van-cell class="cell" label="商户简称" is-link @click="cellClick(item)">
         <template #title>
@@ -10,7 +10,7 @@
         </template>
         <template #value>
           <div class="walletId">{{item.walletId}}</div>
-          <span class="shortName">{{item.shortShopName}}</span>
+          <span class="shortName">{{item.shopShortName}}</span>
         </template>
       </van-cell>
     </template>
@@ -34,6 +34,9 @@ const cellClick = ({ walletId }: WalletList) => {
 </script>
 
 <style lang="scss" scoped>
+.wallet-list-warp {
+  margin-top: 24px;
+}
 .cell {
   &:deep(.van-cell__title) {
     width: 160px;

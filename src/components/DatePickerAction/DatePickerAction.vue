@@ -1,11 +1,6 @@
 <script lang="ts" setup>
-  import { ref, watch, toRefs, Ref, onMounted, nextTick, reactive, computed } from 'vue'
+  import { ref, watch, toRefs, Ref, reactive,  } from 'vue'
   import moment from 'moment'
-  type commonTimeEnumType = {
-    key: number
-    label: string
-    value: () => string[]
-  }
   type selectTimeType = {
     commonType: boolean
     index: Ref<number> | number
@@ -130,7 +125,7 @@
     <img src="../../assets/img/date.png" />
     <span>{{ selectTimeData.label }}</span>
   </div>
-  <van-action-sheet v-model:show="visible" :closeable="false">
+  <van-action-sheet class="date-picker-root" v-model:show="visible" :closeable="false">
     <div class="datepicker-action-header">
       <span class="datepicker-action-back" v-show="cusVisible" @click="cusVisible = false"
         >取消</span
@@ -174,7 +169,6 @@
       class="van-calendar-wrap"
       :poppable="false"
       :show-mark="false"
-      color="#00A3FF"
       first-day-of-week="1"
       allow-same-day
       :row-height="60"
@@ -204,116 +198,130 @@
   </van-calendar> -->
 </template>
 <style lang="scss" scoped>
-  .billstate-date {
-    font-size: 28px;
-    padding: 14px 18px;
-    color: $primaryColor;
-    background-color: $painColor;
+.billstate-date {
+  font-size: 28px;
+  padding: 14px 18px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+
+  @include themify {
+    color: themed('primaryColor');
+    background-color: themed('painColor');
+  }
+  img {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+  }
+}
+.date-picker-root {
+  @include themify {
+    --van-button-primary-background-color: themed('primaryColor');
+  }
+}
+.van-calendar {
+  height: 900px !important;
+  padding: 0 24px;
+}
+:deep(.van-calendar__footer) {
+  .van-button {
     border-radius: 8px;
-    display: flex;
-    align-items: center;
-    img {
-      width: 40px;
-      height: 40px;
-      margin-right: 10px;
-    }
   }
-  .van-calendar {
-    height: 900px !important;
-    padding: 0 24px;
-  }
-  :deep(.van-calendar__footer) {
-    .van-button {
-      border-radius: 8px;
-    }
-  }
-  :deep(.van-calendar__header-title) {
-    display: none;
-  }
-  :deep(.van-calendar__header) {
-    box-shadow: none;
-  }
-  .datepicker-action-footer {
-    width: calc(100% - 48px);
-    margin: 0 24px;
-    position: absolute;
-    bottom: 20px;
-    .van-button {
-      width: 100%;
-      height: 68px;
-      border-radius: 8px;
-    }
-  }
-  .data-range-current {
-    font-size: 28px;
-    padding: 14px 18px;
-    color: $primaryColor;
-    background-color: $painColor;
+}
+:deep(.van-calendar__header-title) {
+  display: none;
+}
+:deep(.van-calendar__header) {
+  box-shadow: none;
+}
+.datepicker-action-footer {
+  width: calc(100% - 48px);
+  margin: 0 24px;
+  position: absolute;
+  bottom: 20px;
+  .van-button {
+    width: 100%;
+    height: 68px;
     border-radius: 8px;
-    img {
-      width: 40px;
-      height: 40px;
-      margin-right: 10px;
-    }
   }
-  .datepicker-action-wrap {
-    height: 900px;
-    font-size: 32px;
+}
+.data-range-current {
+  font-size: 28px;
+  padding: 14px 18px;
+  border-radius: 8px;
+
+  @include themify {
+    color: themed('primaryColor');
+    background-color: themed('painColor');
   }
-  .datepicker-action-header {
+  img {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+  }
+}
+.datepicker-action-wrap {
+  height: 900px;
+  font-size: 32px;
+}
+.datepicker-action-header {
+  text-align: center;
+  padding: 34px 24px 60px;
+  position: relative;
+}
+.datepicker-action-title {
+  color: $font-color-1;
+  font-size: 36px;
+  font-weight: 500;
+}
+.datepicker-action-back {
+  color: $font-color-2;
+  position: absolute;
+  font-size: 32px;
+  top: 32px;
+  left: 24px;
+  margin-top: 6px;
+}
+.close-btn {
+  width: 48px;
+  height: 48px;
+  position: absolute;
+  right: 34px;
+  top: 32px;
+}
+.datepicker-action-content {
+  padding: 0 24px;
+  margin-top: 60px;
+  &:first-child {
+    margin-top: 0;
+  }
+  .title {
+    font-size: 28px;
+    color: $font-color-3;
+  }
+  .item-wrap {
+    margin-top: 30px;
+    display: grid;
+    justify-content: space-between;
+    grid-template-columns: repeat(3, 218px);
+    grid-gap: 24px;
+  }
+  .item {
+    height: 64px;
+    line-height: 64px;
     text-align: center;
-    padding: 34px 24px 60px;
-    position: relative;
-  }
-  .datepicker-action-title {
-    color: $font-color-1;
-    font-size: 36px;
-    font-weight: 500;
-  }
-  .datepicker-action-back {
-    color: $font-color-2;
-    position: absolute;
+    border-radius: 8px;
+    background-color: $bg-light-color-1;
+    color: $font-color-3;
     font-size: 32px;
-    top: 32px;
-    left: 24px;
-    margin-top: 6px;
-  }
-  .close-btn {
-    width: 48px;
-    height: 48px;
-    position: absolute;
-    right: 34px;
-    top: 32px;
-  }
-  .datepicker-action-content {
-    padding: 0 24px;
-    margin-top: 60px;
-    &:first-child {
-      margin-top: 0;
-    }
-    .title {
-      font-size: 28px;
-      color: $font-color-3;
-    }
-    .item-wrap {
-      margin-top: 30px;
-      display: grid;
-      justify-content: space-between;
-      grid-template-columns: repeat(3, 218px);
-      grid-gap: 24px;
-    }
-    .item {
-      height: 64px;
-      line-height: 64px;
-      text-align: center;
-      border-radius: 8px;
-      background-color: $bg-light-color-1;
-      color: $font-color-3;
-      font-size: 32px;
-      &.active {
-        background-color: $primaryColor;
-        color: #fff;
+    &.active {
+      color: #fff;
+
+      @include themify {
+        background-color: themed('primaryColor');
       }
     }
   }
+}
 </style>
