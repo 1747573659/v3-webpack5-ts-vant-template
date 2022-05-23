@@ -58,6 +58,7 @@ class Request {
           resolve(res)
         })
         .catch((err: AxiosError) => {
+          console.log('err:', err)
           reject(err)
         })
     })

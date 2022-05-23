@@ -1,13 +1,17 @@
 import router from '@/router'
 import store from '@/store'
 
+const getTheme = (themeStyle: string) => [null, undefined, 'null', 'undefined'].includes(themeStyle) ? "offcial" : themeStyle
+
 router.beforeEach((to, from, next) => {
   // 第一次登陆的时候拿登陆的值
   if (to.query.openId) {
     const {loginLogoUrl,token,shopAdminId,walletId,openId,shopShortName,walletShopLogoUrl,themeStyle} = to.query as {[key: string]: any}
+    const theme = getTheme(themeStyle)
+    console.log('themeStyle：' + theme)
     document
       .getElementsByTagName("body")[0]
-      .setAttribute("data-theme", themeStyle || "offcial"); // 设置主题色
+      .setAttribute("data-theme", theme || "offcial"); // 设置主题色
     store.dispatch('setUserInfo', {
       token,
       loginLogoUrl,

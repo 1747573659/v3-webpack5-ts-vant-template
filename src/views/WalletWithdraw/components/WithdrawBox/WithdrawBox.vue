@@ -19,11 +19,18 @@
     <div class="info">
       <div class="remain-amount" v-if="!errorMsg">
         <span>交易户余额 ¥{{withdrawDetailInfo?.tradeBalanceAmount}}</span>
-        <tool-tip class="tooltip-wallet"></tool-tip>
+        <tool-tip class="tooltip-wallet">
+          通过转账、网商小程序支付交易转入的资金会进入交易户
+        </tool-tip>
       </div>
       <div class="error-msg" v-if="errorMsg"><img class="warn-icon" :src="warnIcon" alt="警告"><div>{{errorMsg}}</div></div>
       <div class="tips">
-        温馨提示：微信仅支持交易户提现，<span class="special">充值户(余额 ¥{{withdrawDetailInfo?.tradeDepositAmount}})</span>请登录支付宝网商小程序操作
+        温馨提示：微信仅支持交易户提现，
+        <span class="special">充值户（余额 ¥{{withdrawDetailInfo?.tradeDepositAmount}}）</span>
+        <tool-tip class="tooltip-wallet">
+          提现金额只能小于等于交易户余额
+        </tool-tip>
+        请登录支付宝网商小程序操作
       </div>
     </div>
   </div>
@@ -62,8 +69,6 @@ const moneyInner = computed<Money>({
 
 const input = ref()
 
-const amount = ref()
-
 const placeholder = computed(() => `最多可转出¥${withdrawDetailInfo?.tradeBalanceAmount}`)
 
 const tagArr = [null, '个', '十', '百', '千', '万', '十万', '百万', '千万', '亿', '十亿', '百亿', '千亿'] 
@@ -71,12 +76,12 @@ const tagArr = [null, '个', '十', '百', '千', '万', '十万', '百万', '�
 const tag = computed(() => tagArr[String(moneyInner.value).split('.')[0].length])
 
 const moneyBlur = () => {
-  moneyInner.value = Math.min(Number(moneyInner.value), 100000) || ''
-  // moneyInner.value = Math.min(Number(moneyInner.value), withdrawDetailInfo?.tradeBalanceAmount) || ''
+  // moneyInner.value = Math.min(Number(moneyInner.value), 100000) || ''
+  moneyInner.value = Math.min(Number(moneyInner.value), withdrawDetailInfo?.tradeBalanceAmount) || ''
 }
 
 const allinWithdraw = () => {
-  moneyInner.value = amount.value
+  moneyInner.value = withdrawDetailInfo?.tradeBalanceAmount
 }
 </script>
 
@@ -211,7 +216,7 @@ const allinWithdraw = () => {
       color: $font-color-3;
       display: flex;
       align-items: center;
-      .tooltip-walle {
+      .tooltip-wallet {
         margin-left: 8px;
       }
     }
@@ -225,6 +230,8 @@ const allinWithdraw = () => {
       font-weight: 400;
       font-size: 24px;
       color: $font-color-2;
+      display: flex;
+      flex-wrap: wrap;
       .special {
         color: $font-color-1;
       }

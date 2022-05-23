@@ -18,6 +18,7 @@
     <login-for-verify :loginData="LoginData" v-if="hasInputedLoginName"></login-for-verify>
     <!-- 返回 -->
     <back-btn v-if="hasInputedLoginName" @click="back()"></back-btn>
+    <div v-if="!hasInputedLoginName" class="bot-info">科脉享多多技术提供</div>
   </div>
 </template>
 
@@ -88,5 +89,17 @@ const back = () => {
       padding-left: 20px;
     }
   }
+}
+.bot-info {
+  font-family: 'PingFang SC';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 39px;
+  color: $font-color-2;
+  text-align: center;
+  position: fixed;
+  bottom: 24px;
+  width: 100%;
 }
 </style>

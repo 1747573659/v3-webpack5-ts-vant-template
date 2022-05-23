@@ -5,7 +5,7 @@
     <!-- 提现信息 -->
     <withdraw-box :error-msg="withdrawErrorMsg" v-model:money="money"></withdraw-box>
     <div class="withdraw-btn">
-      <large-button :loading="withdrawLoading" :disabled="withdrawDisabled" @click="withdrawApply">提现</large-button>
+      <large-button type="primary" :loading="withdrawLoading" :disabled="withdrawDisabled" @click="withdrawApply">提现</large-button>
     </div>
     <!-- 验证码 -->
     <popur-verify-code :money="money" v-model:show="showVerifyPopur" :error-msg="verifyErrorMsg" @click-close-icon="clickCloseIcon" @handle-verify-code="handleVerifyCode"></popur-verify-code>
@@ -140,7 +140,6 @@ const handlewithdrawApply = async () => {
     // 如果成功就调用确认弹窗
     if(typeof res === 'string') {
       withdrawErrorMsg.value = res
-      withdrawLoading.value = false
     } else {
       confirmRequestData.value = {
         sn: res.sn,
@@ -151,6 +150,7 @@ const handlewithdrawApply = async () => {
     }
   } catch(e) {
     dialogConfirm()
+  } finally {
     withdrawLoading.value = false
   }
 }
@@ -201,6 +201,7 @@ const confirmWithdraw = async () => {
   resultPageErrorMsg.value = ''
   try {
     const res = await handleConfirm()
+    console.log(res)
     if (typeof res === 'string') {
       resultPageErrorMsg.value = res
     }
@@ -208,7 +209,6 @@ const confirmWithdraw = async () => {
     showResultPage.value = true
   } catch(e) {}
 }
-
 const handleConfirm = async () => {
   try {
     const res = await withdrawConfirmApi(confirmRequestData.value)
@@ -221,6 +221,11 @@ const handleConfirm = async () => {
 <style lang="scss" scoped>
 .withdraw-btn {
   padding: 32px;
+  &:deep(.van-button--primary) {
+    @include themify {
+      background-color: themed('primaryColor');
+    }
+  }
 }
 </style>
 <style lang="scss">
