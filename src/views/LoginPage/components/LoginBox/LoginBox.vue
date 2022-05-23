@@ -48,6 +48,8 @@ import { ref, toRefs, computed } from '@vue/reactivity'
 
 import { LoginName } from '@/store/storeTypes'
 
+// const loginField = ref()
+
 const props = defineProps<{
   errorMsg: string,
   modelValue: LoginName
@@ -109,9 +111,9 @@ const loginItemTypeList = [
 ]
 const loginItemType = ref(0)
 const placeholder = computed(() => loginItemTypeList[loginItemType.value].placeHolder)
-const loginItemTypeChange = () => {
-  loginName.value = ''
-  emits('loginItemTypeChange', loginItemType.value)
+const loginItemTypeChange = async () => {
+  loginName.value = '';
+  emits('loginItemTypeChange', loginItemType.value);
 }
 
 const loginNameShowBorder = ref<boolean>(false)
