@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { reactive, ref, Ref } from 'vue'
+  import { onActivated, reactive, ref, Ref } from 'vue'
   import { useRouter } from 'vue-router'
   import { useStore } from 'vuex'
   import moment from 'moment'
@@ -110,7 +110,7 @@
       v-model:loading="tableLoading"
       class="billstate-main-wrap"
       :finished="billList.tableFinished"
-      :finished-text="(billList.tableFinished &&!billList.list)?'暂无数据':'没有更多了'"
+      :finished-text="billList.tableFinished && !billList.list ? '暂无数据' : '没有更多了'"
       @load="loadBillStatement">
       <van-cell
         v-for="item in billList.list"
@@ -166,6 +166,7 @@
   .billstate-main-wrap {
     flex: 1 1 200px;
     overflow-y: auto;
+    padding-bottom: 160px;
   }
   .billstate-title-wrap {
     padding: 32px 24px;

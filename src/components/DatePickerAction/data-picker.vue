@@ -31,6 +31,10 @@
     time.start = new Date(newVal[0])
     time.end = new Date(newVal[1])
   })
+  watch(visible, () => {
+    time.start = new Date(modelValue.value[0])
+    time.end = new Date(modelValue.value[1])
+  })
   const getTime = () => [
     moment(time['start']).format('YYYY-MM-DD'),
     moment(time['end']).format('YYYY-MM-DD')

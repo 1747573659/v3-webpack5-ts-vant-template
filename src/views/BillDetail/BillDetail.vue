@@ -18,21 +18,25 @@
       </div>
     </div>
     <div class="billdetail-main">
-      <div class="billdetail-item" v-for="billItem in currentItem.detailList" :key="billItem.key">
-        <div class="billdetail-item-left">
-          {{ billItem.label }}
-        </div>
-        <div class="billdetail-item-right">
-          {{ billItem.value }}
+      <div class="inner">
+        <div class="billdetail-item" v-for="billItem in currentItem.detailList" :key="billItem.key">
+          <div class="billdetail-item-left">
+            {{ billItem.label }}
+          </div>
+          <div class="billdetail-item-right">
+            {{ billItem.value }}
+          </div>
         </div>
       </div>
     </div>
+    <overlay-loading :show="loading" content="加载中..."></overlay-loading>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, reactive, computed } from 'vue'
+  import { ref, onMounted, reactive, computed } from 'vue'
   import { useRoute } from 'vue-router'
+  import OverlayLoading from '@/components/OverlayLoading/OverlayLoading.vue'
   import { formatYuanAmount } from '@/utils/formateMoney'
   import { queryBillDetails } from '@/api/wallet'
   import { getBillItemList } from '@/enum/billStatement'
@@ -44,18 +48,22 @@
     // [propName: string]: string | number
   }
   const route = useRoute()
+  const loading = ref(false)
   const state = reactive({
     queryData: route.query as billDetailQueryType,
     billDetail: {
-      orderType: 0,
+      orderType: Number(route.query.categoryType),
       category: 0
     }
   })
 
   const getBillDetails = () => {
-    queryBillDetails(state.queryData).then(res => {
-      state.billDetail = res
-    })
+    loading.value = true
+    queryBillDetails(state.queryData)
+      .then(res => {
+        state.billDetail = res
+      })
+      .finally(() => (loading.value = false))
   }
 
   const currentItem = computed(() => {
@@ -94,8 +102,11 @@
     }
   }
   .billdetail-main {
-    background-color: #fff;
-    padding: 0 24px;
+    padding-bottom: 160px;
+    .inner {
+      padding: 0 24px;
+      background-color: #fff;
+    }
   }
   .billdetail-item {
     display: flex;

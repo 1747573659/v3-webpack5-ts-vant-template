@@ -11,7 +11,7 @@
   const props = defineProps<{
     confirm: (time: string[]) => Promise<any>
   }>()
-  const minDate = ref(new Date('2021-5-6'))
+  const minDate = ref(new Date('2022-5-6'))
   const maxDate = ref(new Date())
   const { confirm } = toRefs(props)
   const visible = ref(false)
@@ -77,12 +77,7 @@
       }
     }
   ]
-  console.log(moment().get('date'))
-  // 日期范围
-  const dateRange = reactive({
-    minDate: new Date('2022-5-6'),
-    maxDate: new Date()
-  })
+
   const cusVisible = ref(false)
 
   // 历史日期
@@ -116,6 +111,9 @@
     time.map(item => moment(item).format('YYYY/MM/DD')).join(' 至 ')
   // 选择时间(常规)
   const handleChangeDate = (index: number) => {
+    if (index === selectTimeData.index) {
+      return handleBack()
+    }
     selectTimeData.index = index
     selectTimeData.commonType = true
     selectTimeData.value = commonTimeListEnum[index].value()
@@ -123,8 +121,8 @@
   }
   const submitCommonData = async () => {
     await confirm.value(selectTimeData.value).then(() => {
+      visible.value = false
       changeLabel()
-      handleBack()
     })
   }
   const timePickerRef = ref()
@@ -138,7 +136,6 @@
       moment(time[1]).format('YYYY-MM-DD')
     ]
     await submitCommonData()
-    visible.value = false
   }
 
   watch(visible, (newVal: boolean) => {
