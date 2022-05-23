@@ -3,7 +3,7 @@
     <div class="title">短信验证</div>
     <div class="operation-type">提现</div>
     <div class="amout">¥{{moneyForShow}}</div>
-    <msg-verify ref="msgVerifyComp" @handleVerifyCode="handleVerifyCode" :error-msg="errorMsg"></msg-verify>
+    <msg-verify ref="msgVerifyComp" v-if="showInner" @resend="resend" @handleVerifyCode="handleVerifyCode" :error-msg="errorMsg"></msg-verify>
   </van-popup>
 </template>
 
@@ -29,7 +29,12 @@ const emits = defineEmits<{
   (e: 'update:show', show:boolean): void,
   (e: 'handleVerifyCode', verifyCode: VerifyCode): void
   (e: 'clickCloseIcon'): void
+  (e: 'resend', resetVerify: () => void): void
 }>()
+
+const resend = (resetVerify: () => void) => {
+  emits('resend', resetVerify)
+}
 
 const msgVerifyComp = ref()
 const showInner = computed({

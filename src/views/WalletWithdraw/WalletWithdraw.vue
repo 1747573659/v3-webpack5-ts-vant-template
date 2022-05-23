@@ -8,7 +8,7 @@
       <large-button type="primary" :loading="withdrawLoading" :disabled="withdrawDisabled" @click="withdrawApply">提现</large-button>
     </div>
     <!-- 验证码 -->
-    <popur-verify-code :money="money" v-model:show="showVerifyPopur" :error-msg="verifyErrorMsg" @click-close-icon="clickCloseIcon" @handle-verify-code="handleVerifyCode"></popur-verify-code>
+    <popur-verify-code :money="money" v-model:show="showVerifyPopur" @resend="resend" :error-msg="verifyErrorMsg" @click-close-icon="clickCloseIcon" @handle-verify-code="handleVerifyCode"></popur-verify-code>
     <!-- 接口loading -->
     <overlay-loading :show="showOverlay" :content="overLayContent"></overlay-loading>
     <!-- 确认提现弹窗 -->
@@ -101,21 +101,44 @@ const handledMsgSend = async () => {
   }
   try {
     const res = await smsSend(data)
-    console.log(res)
-    // 如果成功
-    if (res === userInfo.loginName) {
-      showVerifyPopur.value = true
-    } else {
-      withdrawErrorMsg.value = res
-      withdrawLoading.value = false
+    verifyErrorMsg.value = ''
+    // 分两种情况，一种是提现按钮发起的短信发送
+    // 另一种是，重新发送按钮发起的短信发送
+    // 通过当前弹窗是否展示来判断
+
+    if (showVerifyPopur.value) { // 如果是重新发送的逻辑
+      // 如果成功
+      if (res === userInfo.loginName) {
+        resetVerifyFunc()
+      } else {
+        verifyErrorMsg.value = res
+      }
+    } else { // 如果是提现发送短信的逻辑
+      // 如果成功
+      if (res === userInfo.loginName) {
+        showVerifyPopur.value = true
+      } else {
+        withdrawErrorMsg.value = res
+        withdrawLoading.value = false
+      }
     }
   } catch (e) {
-    withdrawLoading.value = false
+    if (!showVerifyPopur.value) {
+      withdrawLoading.value = false
+    }
   } finally {
   }
 }
-
 const sendMsg = useCheckNeedVerify(handledMsgSend)
+
+// 用于保存重置定时器的方法
+let resetVerifyFunc: () => void
+const resend = async (resetVerify: () => void) => {
+  resetVerifyFunc = resetVerify
+  try {
+    await sendMsg()
+  } catch(e) {}
+}
 
 const withdrawApply = async () => {
   withdrawLoading.value = true

@@ -9,7 +9,7 @@
         />
       </div>
       <div class="shop-content">
-        <div class="shop-name">{{shopShortNameRef}}</div>
+        <div class="shop-name">{{welcomeMessageRef}}</div>
       </div>
     </div>
     <!-- input phoneNum -->
@@ -37,9 +37,9 @@ import { LoginReq } from '@/api/types'
 
 const store = useStore()
 
-const { shopShortName, loginLogoUrl } = store.state.userInfo
+const { welcomeMessage, loginLogoUrl } = store.state.userInfo
 
-const shopShortNameRef = ref(shopShortName)
+const welcomeMessageRef = ref(welcomeMessage)
 
 // 定义图片
 const shopImg = ref(loginLogoUrl || shopImgDefault)

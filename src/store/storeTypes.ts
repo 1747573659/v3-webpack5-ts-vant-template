@@ -8,7 +8,7 @@ export type UserInfo = {
   walletId: string,
   openId: string,
   loginLogoUrl: string,
-  shopShortName: string,
+  welcomeMessage: string,
   walletShopLogoUrl: string
 }
 type Wallet = {

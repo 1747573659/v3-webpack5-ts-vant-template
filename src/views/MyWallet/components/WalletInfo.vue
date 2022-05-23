@@ -21,6 +21,7 @@ import shopImgDefault from '@/assets/img/shopImgDefault.png'
 import { useStore } from 'vuex'
 import { walletDetailRep } from '@/api/types'
 import CopyBtn from '@/components/CopyBtn/CopyBtn.vue'
+import { computed } from 'vue'
 
 const store = useStore()
 
@@ -34,7 +35,7 @@ const { walletDetailInfo } = toRefs<{
 }>(props)
 
 const shopImg = ref(walletShopLogoUrl || shopImgDefault)
-const copyText = ref('copyText')
+const copyText = computed(() => walletDetailInfo.value.shortShopName + walletDetailInfo.value.walletId)
 </script>
 
 <style lang="scss" scoped>

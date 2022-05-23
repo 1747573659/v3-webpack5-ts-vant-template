@@ -116,7 +116,7 @@ const onDragHandlerTouchMove = (e:TouchEvent) => {
   currentStatus.value = MOVE
   // 获取滑动值和可滑动值中小的那一个
   const left = Math.min(touch.clientX - offsetLeft, maxHandlerOffset)
-  console.log('left: ' + left, 'offsetLeft: ' + offsetLeft, 'touch.clientX' + touch.clientX)
+  // console.log('left: ' + left, 'offsetLeft: ' + offsetLeft, 'touch.clientX' + touch.clientX)
   // 如果滑到底
   if (left === maxHandlerOffset) {
     sucess()

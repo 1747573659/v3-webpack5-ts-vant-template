@@ -39,7 +39,9 @@ const store = useStore()
 
 const login = () => {
   loginBtnLoading.value = true
-  checkNeedVerify()
+  checkNeedVerify().catch(() => {
+    loginBtnLoading.value = false
+  })
 }
 
 // 登录事件

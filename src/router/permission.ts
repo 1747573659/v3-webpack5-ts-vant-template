@@ -6,7 +6,7 @@ const getTheme = (themeStyle: string) => [null, undefined, 'null', 'undefined'].
 router.beforeEach((to, from, next) => {
   // 第一次登陆的时候拿登陆的值
   if (to.query.openId) {
-    const {loginLogoUrl,token,shopAdminId,walletId,openId,shopShortName,walletShopLogoUrl,themeStyle} = to.query as {[key: string]: any}
+    const {loginLogoUrl,token,shopAdminId,walletId,openId,welcomeMessage,walletShopLogoUrl,themeStyle} = to.query as {[key: string]: any}
     const theme = getTheme(themeStyle)
     console.log('themeStyle：' + theme)
     document
@@ -18,7 +18,7 @@ router.beforeEach((to, from, next) => {
       shopAdminId,
       walletId,
       openId,
-      shopShortName,
+      welcomeMessage,
       walletShopLogoUrl
     })
     // 如果有token，即走30天免登录的逻辑，直接跳转到钱包主页

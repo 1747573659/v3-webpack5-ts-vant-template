@@ -9,7 +9,7 @@ const state: UserInfo = {
   walletId: '',
   openId: '',
   loginLogoUrl: '',
-  shopShortName: '',
+  welcomeMessage: '',
   walletShopLogoUrl: ''
 }
 
@@ -21,7 +21,7 @@ const getters: GetterTree<UserInfo, null> = {
   walletId: (state: UserInfo): string => state.walletId,
   openId: (state: UserInfo): string => state.openId,
   loginLogoUrl: (state: UserInfo): string => state.loginLogoUrl,
-  shopShortName: (state: UserInfo): string => state.shopShortName,
+  welcomeMessage: (state: UserInfo): string => state.welcomeMessage,
   walletShopLogoUrl: (state: UserInfo): string => state.walletShopLogoUrl,
 }
 
@@ -47,8 +47,8 @@ const mutations: MutationTree<UserInfo> = {
   SET_lOGINLOGOURL: (state: UserInfo, loginLogoUrl: string): void => {
     state.loginLogoUrl = loginLogoUrl
   },
-  SET_SHOPShORTNAME: (state: UserInfo, shopShortName: string): void => {
-    state.shopShortName = shopShortName
+  SET_MESSAGE: (state: UserInfo, welcomeMessage: string): void => {
+    state.welcomeMessage = welcomeMessage
   },
   SET_WALLETSHOPLOGOURL: (state: UserInfo, walletShopLogoUrl: string): void => {
     state.walletShopLogoUrl = walletShopLogoUrl
@@ -62,7 +62,7 @@ const mutations: MutationTree<UserInfo> = {
 }
 
 const actions: ActionTree<UserInfo, null> = {
-  setUserInfo({ commit }: { commit: Commit }, { loginName, token, loginItemType, shopAdminId, walletId, openId, loginLogoUrl, shopShortName, walletShopLogoUrl }: UserInfo) {
+  setUserInfo({ commit }: { commit: Commit }, { loginName, token, loginItemType, shopAdminId, walletId, openId, loginLogoUrl, welcomeMessage, walletShopLogoUrl }: UserInfo) {
     loginName && commit('SET_LOGIN_NAME', loginName)
     token && commit('SET_TOKEN', token)
     loginItemType && commit('SET_LOGIN_ITEM_TYPE', loginItemType)
@@ -70,7 +70,7 @@ const actions: ActionTree<UserInfo, null> = {
     walletId && commit('SET_WALLETID', walletId)
     openId && commit('SET_OPENID', openId)
     loginLogoUrl && commit('SET_lOGINLOGOURL', loginLogoUrl)
-    shopShortName && commit('SET_SHOPShORTNAME', shopShortName)
+    welcomeMessage && commit('SET_MESSAGE', welcomeMessage)
     walletShopLogoUrl && commit('SET_WALLETSHOPLOGOURL', walletShopLogoUrl)
   },
   resetUserInfo({ commit }: { commit: Commit }) {
