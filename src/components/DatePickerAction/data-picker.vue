@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, toRefs, watch, computed, reactive } from 'vue'
+  import { ref, toRefs, watch, reactive } from 'vue'
   import moment from 'moment'
   const props = defineProps<{
     modelValue: string[]
@@ -7,7 +7,7 @@
   }>()
   const { visible, modelValue } = toRefs(props)
   const activeTab = ref('start') // start end
-  const time = reactive({
+  const time = reactive<{[key: string]: Date}>({
     start: new Date(),
     end: new Date()
   })

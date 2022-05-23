@@ -89,7 +89,6 @@
   }
   // 当前展示数据
   const selectTimeData = reactive<selectTimeType>({ ...oldTimeData })
-  const dateRef = ref()
   const handleShowCus = () => {
     cusVisible.value = true
   }
@@ -283,8 +282,10 @@
   }
   .datepicker-action-back {
     color: $font-color-2;
+
     // position: absolute;
     font-size: 32px;
+
     // top: 32px;
     // left: 24px;
     // margin-top: 6px;

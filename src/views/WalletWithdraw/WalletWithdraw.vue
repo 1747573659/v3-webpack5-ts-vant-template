@@ -200,20 +200,15 @@ const resultPageErrorMsg = ref('')
 const confirmWithdraw = async () => {
   resultPageErrorMsg.value = ''
   try {
-    const res = await handleConfirm()
+    const res = await withdrawConfirmApi(confirmRequestData.value)
     console.log(res)
     if (typeof res === 'string') {
       resultPageErrorMsg.value = res
     }
-    showWithdrawConfirm.value = false
     showResultPage.value = true
-  } catch(e) {}
-}
-const handleConfirm = async () => {
-  try {
-    const res = await withdrawConfirmApi(confirmRequestData.value)
-    return res
-  } catch(e) {}
+  } catch(e) {
+    showWithdrawConfirm.value = false
+  }
 }
 
 </script> 
