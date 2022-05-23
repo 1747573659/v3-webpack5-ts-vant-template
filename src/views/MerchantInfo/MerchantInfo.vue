@@ -1,9 +1,9 @@
 <script lang="ts" setup>
   import { useRouter } from 'vue-router'
   import OverlayLoading from '@/components/OverlayLoading/OverlayLoading.vue'
-  
+
   import useWalletDetail from '@/hooks/useWalletDetail'
-  
+
   const { walletDetailInfo, loading } = useWalletDetail()
 
   const router = useRouter()
@@ -30,7 +30,10 @@
         },
         {
           key: 'businessLicense',
-          label: '营业执照号'
+          label: '营业执照号',
+          hidden(info: { merchantType: number }) {
+            return info.merchantType === 3
+          }
         },
         {
           key: 'legalName',
@@ -74,12 +77,16 @@
     <div class="merchantInfo-main">
       <div class="merchantInfo-card" v-for="(item, index) in merchantEnum" :key="index">
         <div class="merchantInfo-title">{{ item.title }}</div>
-        <div class="merchantInfo-item" v-for="childItem in item.children" :key="childItem.key">
-          <div class="merchantInfo-item-inner">
-            <div class="left">{{ childItem.label }}</div>
-            <div class="right">{{ walletDetailInfo[childItem.key] }}</div>
+        <template v-for="childItem in item.children" :key="childItem.key">
+          <div
+            class="merchantInfo-item"
+            v-if="!childItem.hidden || (childItem.hidden && !childItem.hidden(walletDetailInfo))">
+            <div class="merchantInfo-item-inner">
+              <div class="left">{{ childItem.label }}</div>
+              <div class="right">{{ walletDetailInfo[childItem.key] }}</div>
+            </div>
           </div>
-        </div>
+        </template>
       </div>
     </div>
     <div class="merchantInfo-policy">

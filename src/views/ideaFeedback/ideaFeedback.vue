@@ -30,5 +30,7 @@
 <style lang="scss" scoped>
   #kmtechPolicy-wrap {
     height: 100%;
+    padding-bottom: 160px;
+    box-sizing: border-box;
   }
 </style>
