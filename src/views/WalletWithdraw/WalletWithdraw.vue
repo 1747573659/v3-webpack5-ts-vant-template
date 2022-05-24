@@ -156,7 +156,7 @@ const handlewithdrawApply = async () => {
   let data = {
     walletId,
     shopAdminId,
-    totalAmount: Number(money.value)
+    totalAmount: Number(money.value) * 100
   }
   try {
     const res = await withdrawApplyApi(data)
@@ -224,7 +224,6 @@ const confirmWithdraw = async () => {
   resultPageErrorMsg.value = ''
   try {
     const res = await withdrawConfirmApi(confirmRequestData.value)
-    console.log(res)
     if (typeof res === 'string') {
       resultPageErrorMsg.value = res
     }

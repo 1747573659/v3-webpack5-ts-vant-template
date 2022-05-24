@@ -1,7 +1,7 @@
 <template>
   <van-popup v-model:show="show" position="right" :style="{ height: '100%', width: '100%' }" >
     <div class="content">
-      <template v-if="errorMsg">
+      <template v-if="!errorMsg">
         <img class="png" :src="withdrawSucessPng" alt="withdrawSucess">
         <div class="title">提现成功</div>
       </template>
