@@ -64,9 +64,17 @@ module.exports = defineConfig({
           reuseExistingChunk: true,
           enforce: true
         },
-        element: {
+        vant: {
           name: 'chunk-vant',
           test: /[\\/]node_modules[\\/]vant[\\/]/,
+          chunks: 'all',
+          priority: 3,
+          reuseExistingChunk: true,
+          enforce: true
+        },
+        moment: {
+          name: 'chunk-moment',
+          test: /[\\/]node_modules[\\/]moment[\\/]/,
           chunks: 'all',
           priority: 3,
           reuseExistingChunk: true,
