@@ -42,6 +42,7 @@
     "commitizen": "^4.2.4",
     "commitlint": "^16.2.4",
     "commitlint-config-cz": "^0.13.3",
+    "compression-webpack-plugin": "^9.2.0",
     "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.3.0",
     "cz-customizable": "^6.3.0",
