@@ -1,5 +1,6 @@
 const { defineConfig } = require('@vue/cli-service')
 const IS_PROD = ['production'].includes(process.env.NODE_ENV)
+const webpack = require('webpack')
 const VConsolePlugin = require('vconsole-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
@@ -115,6 +116,7 @@ module.exports = defineConfig({
           deleteOriginalAssets: false // 是否删除源文件
         })
       )
+      config.plugins.push(new webpack.IgnorePlugin(/\.\/locale$/, /moment$/))
     }
   }
 })
