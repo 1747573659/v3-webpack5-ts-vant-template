@@ -2,6 +2,7 @@
   import { ref, watch, toRefs, Ref, reactive } from 'vue'
   import moment from 'moment'
   import timePicker from './data-picker.vue'
+  import { formatIosDate } from '@/utils/commonFunc'
   type selectTimeType = {
     commonType: boolean
     index: Ref<number> | number
@@ -11,7 +12,7 @@
   const props = defineProps<{
     confirm: (time: string[]) => Promise<any>
   }>()
-  const minDate = ref(new Date('2022-5-6'))
+  const minDate = ref(new Date(formatIosDate('2022-5-6')))
   const maxDate = ref(new Date())
   const { confirm } = toRefs(props)
   const visible = ref(false)

@@ -1,13 +1,15 @@
 <script lang="ts" setup>
   import { ref, toRefs, watch, reactive } from 'vue'
   import moment from 'moment'
+  import { formatIosDate } from '@/utils/commonFunc'
   const props = defineProps<{
     modelValue: string[]
     visible: boolean
   }>()
   const { visible, modelValue } = toRefs(props)
   const activeTab = ref('start') // start end
-  const time = reactive<{[key: string]: Date}>({
+
+  const time = reactive<{ [key: string]: Date }>({
     start: new Date(),
     end: new Date()
   })
@@ -28,12 +30,13 @@
   }
 
   watch(modelValue, newVal => {
-    time.start = new Date(newVal[0])
-    time.end = new Date(newVal[1])
+    time.start = new Date(formatIosDate(newVal[0] || ''))
+    time.end = new Date(formatIosDate(newVal[1] || ''))
   })
   watch(visible, () => {
-    time.start = new Date(modelValue.value[0])
-    time.end = new Date(modelValue.value[1])
+    time.start = new Date(formatIosDate(modelValue.value[0] || ''))
+    time.end = new Date(formatIosDate(modelValue.value[1] || ''))
+    handleChangeTab('start')
   })
   const getTime = () => [
     moment(time['start']).format('YYYY-MM-DD'),
