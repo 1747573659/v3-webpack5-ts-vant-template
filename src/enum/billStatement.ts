@@ -117,13 +117,25 @@ export const billTypeMapEnum = new Map<string | number, any>([
       isAdd: false,
       src: transfer,
       shortShopName: true,
-      detailList: [
-        detailListEnum.transferTime,
-        detailListEnum.payeeId,
-        detailListEnum.serialNumber,
-        detailListEnum.partnerSerialNumber,
-        detailListEnum.remark
-      ]
+      detailList(info: billDetailType){
+        if (info.partnerId) {
+          return [
+            detailListEnum.transferTime,
+            detailListEnum.payeeId,
+            detailListEnum.serialNumber,
+            detailListEnum.partnerSerialNumber,
+            detailListEnum.remark
+          ]
+        } else {
+          // 合作方id为空，不显示合作方流水
+          return [
+            detailListEnum.transferTime,
+            detailListEnum.payeeId,
+            detailListEnum.serialNumber,
+            detailListEnum.remark
+          ]
+        }
+      }
     }
   ],
   [
