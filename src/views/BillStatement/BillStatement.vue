@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { onActivated, reactive, ref, Ref } from 'vue'
+  import { reactive, ref, Ref } from 'vue'
   import { useRouter } from 'vue-router'
   import { useStore } from 'vuex'
   import moment from 'moment'

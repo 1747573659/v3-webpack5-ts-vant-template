@@ -124,6 +124,7 @@ export type TableList = {
   transactionSuccessTime: string
   shopAdminName: string
   transactionNo: string
+  counterpartShortShopName: string
 }
 export interface billStatementRep {
   orderType: number

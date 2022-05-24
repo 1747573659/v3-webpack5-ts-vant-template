@@ -227,6 +227,7 @@ const confirmWithdraw = async () => {
     if (typeof res === 'string') {
       resultPageErrorMsg.value = res
     }
+    showWithdrawConfirm.value = false
     showResultPage.value = true
   } catch(e) {
     showWithdrawConfirm.value = false
