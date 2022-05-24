@@ -56,6 +56,7 @@ const copyText = computed(() => walletDetailInfo.value.shortShopName + walletDet
     .shop-logo {
       width: 120px;
       height: 120px;
+      border-radius: 32px;
     }
   }
   .shop-info {
