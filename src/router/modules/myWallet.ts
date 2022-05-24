@@ -76,8 +76,7 @@ const myWalletRoutes: Array<RouteRecordRaw> = [
     path: '/ideaFeedback',
     name: 'ideaFeedback',
     meta: {
-      title: '意见反馈',
-      showBackBtn: true
+      title: '意见反馈'
     },
     component: () => import('@/views/ideaFeedback/ideaFeedback.vue')
   },
