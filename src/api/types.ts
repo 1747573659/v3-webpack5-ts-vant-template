@@ -47,11 +47,11 @@ export interface walletDetailReq {
   openId: string
 }
 export interface walletDetailRep {
-  accountName: string,
-  availableAmount: number,
-  bankCard: string,
-  walletId: string,
-  shortShopName: string,
+  accountName: string
+  availableAmount: number
+  bankCard: string
+  walletId: string
+  shortShopName: string
   [key: string]: string | number
 }
 export interface withdrawalInfoReq {
@@ -104,6 +104,7 @@ export interface billDetailsReq {
 export interface billDetailsRep {
   orderType: number
   category: number
+  counterpartInfoList: []
   [propName: string]: string | number | Array<{ counterpartWalletId: string }> | null | undefined
 }
 export interface billStatementReq {
@@ -121,7 +122,7 @@ export type TableList = {
   amount: number
   category: number // 收支类别 1-收入； 2-支出
   transactionSuccessTime: string
-  shopAdminName: string,
+  shopAdminName: string
   transactionNo: string
 }
 export interface billStatementRep {
@@ -172,16 +173,16 @@ export interface logoutReq {
 }
 
 export interface checkNeedVerifySliderReq {
-  sendItem: string,
+  sendItem: string
   shopAdminId: number
 }
 
 export interface smsSendReq {
-  phone: string,
+  phone: string
   smsBusinessType: number
 }
 
 export interface smsValidCodeReq {
-  code: string,
+  code: string
   phone: string
 }

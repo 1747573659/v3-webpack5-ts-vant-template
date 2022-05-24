@@ -20,6 +20,7 @@ type _billTypeItem = {
   label: string
   isAdd?: boolean
   src?: string
+  shortShopName?: boolean
   detailList: Array<_detailItem> | ((item: billDetailType) => Array<_detailItem>)
 }
 const bankMethodsMapEnum = new Map([

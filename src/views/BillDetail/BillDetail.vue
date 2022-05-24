@@ -3,14 +3,7 @@
     <div class="billdetail-header">
       <div class="billdetail-header-main">
         <img :src="currentItem.src" alt="" />
-        <div class="billdetail-header-info">
-          {{ currentItem.label
-          }}{{
-            state.billDetail.shortShopName && currentItem.shortShopName
-              ? `-${state.billDetail.shortShopName}`
-              : ''
-          }}
-        </div>
+        <div class="billdetail-header-info">{{ currentItem.label }}{{ getTitle() }}</div>
         <div class="billdetail-header-mount">
           {{ state.billDetail.category === 1 ? '+' : '-'
           }}{{ formatYuanAmount(state.billDetail.amount || 0) }}
@@ -53,7 +46,8 @@
     queryData: route.query as billDetailQueryType,
     billDetail: {
       orderType: Number(route.query.categoryType),
-      category: 0
+      category: 0,
+      counterpartInfoList: []
     }
   })
 
@@ -69,6 +63,16 @@
   const currentItem = computed(() => {
     return getBillItemList(state.billDetail)
   })
+
+  const getTitle = () => {
+    if (state.billDetail.counterpartInfoList && currentItem.value.shortShopName) {
+      const counterpartShortShopName = state.billDetail.counterpartInfoList.map(
+        (item: { counterpartShortShopName: string }) => item.counterpartShortShopName
+      )
+      return `-${counterpartShortShopName.join(',')}`
+    }
+    return ''
+  }
   onMounted(() => {
     getBillDetails()
   })

@@ -130,7 +130,7 @@
           <div class="detail">
             <div class="title">
               {{ billTypeMapEnum.get(item.transactionType).label
-              }}{{ item.shopAdminName ? `-${item.shopAdminName}` : '' }}
+              }}{{ item.counterpartShortShopName ? `-${item.counterpartShortShopName}` : '' }}
             </div>
             <div class="time">{{ item.transactionSuccessTime }}</div>
           </div>

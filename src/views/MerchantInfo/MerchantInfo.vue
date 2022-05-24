@@ -127,6 +127,7 @@
       color: $font-color-3;
     }
     .right {
+      line-height: 44px;
       word-break: break-all;
       color: $font-color-1;
     }
@@ -135,8 +136,10 @@
     text-align: center;
     height: 110px;
     line-height: 110px;
-    color: $font-color-2;
     background-color: $bg-light-color-1;
+    @include themify {
+      color: themed('primaryColor');
+    }
   }
   .merchantInfo-back {
     padding: 24px 32px;
