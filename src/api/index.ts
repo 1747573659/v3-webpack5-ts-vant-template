@@ -1,5 +1,10 @@
+
 import Request from './request'
 import type { RequestConfig } from './types'
+import { Toast, Dialog } from 'vant'
+import errorCode from './errorCode'
+import store from '@/store/index'
+import router from '@/router'
 
 const request = new Request({
   baseURL: process.env.VUE_APP_BASE_API,
@@ -8,15 +13,38 @@ const request = new Request({
   interceptors: {
     // 请求拦截器
     requestInterceptors: config => {
-      console.log('实例请求拦截器')
-
+      const token = store.getters.token
+      if (token) {
+        config.headers && (config.headers['token'] = token)
+      }
       return config
     },
     // 响应拦截器
-    responseInterceptors: result => {
-      console.log('实例响应拦截器')
-      return result
-    },
+    responseInterceptors: <T>(result: MyResponse<T>): T | any => {
+      if (!errorCode.includes(result.code)) {
+        if (result.code === 0) {
+          return result.data
+        } else {
+          return result.msg
+        }
+      } else if (result.code === 190001) {
+        // token过期
+        Dialog.alert({
+          message: result.msg,
+          confirmButtonColor: '#00A3FF',
+          cancelButtonColor: '#00A3FF',
+          className: 'wallet-dialog',
+        }).then(() => {
+          store.dispatch('resetUserInfo')
+          router.replace('login')
+        })
+        return Promise.reject(result)
+      } else {
+        // 常规错误
+        Toast.fail(result.msg);
+        return Promise.reject(result)
+      }
+    }
   },
 })
 
@@ -26,16 +54,14 @@ interface MyRequestConfig<T> extends RequestConfig {
 
 interface MyResponse<T> {
   code: number,
-  message: string,
-  data: T,
   msg: string,
+  data: T,
   resultCode: string,
   success: boolean
 }
 
 const myRequest = <D, T>(config: MyRequestConfig<D>) => {
-  console.log(config)
-  return request.request<MyResponse<T>>(config)
+  return request.request<T>(config)
 }
 
 export default myRequest

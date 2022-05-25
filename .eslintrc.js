@@ -1,7 +1,8 @@
 module.exports = {
   root: true,
   env: {
-    node: true
+    node: true,
+    "vue/setup-compiler-macros": true,
   },
   extends: ['plugin:vue/vue3-essential', 'eslint:recommended', '@vue/typescript/recommended', 'plugin:prettier/recommended'],
   parserOptions: {
@@ -12,6 +13,7 @@ module.exports = {
     'generator-star-spacing': 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-tabs': 'off',
+    "@typescript-eslint/no-explicit-any": ["off"],
     // 'nonblock-statement-body-position': 1,
     'object-curly-spacing': 'off',
     "vue/no-use-v-if-with-v-for": ["error", {

@@ -1,0 +1,6 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<line x1="1.5" y1="-1.5" x2="18.5" y2="-1.5" transform="matrix(-1 8.74228e-07 9.71364e-08 1 33.9999 20)" stroke="#00A3FF" stroke-width="3" stroke-linecap="round"/>
+<line x1="1.5" y1="-1.5" x2="18.5" y2="-1.5" transform="matrix(-1 8.74228e-07 9.71364e-08 1 33.9999 26)" stroke="#00A3FF" stroke-width="3" stroke-linecap="round"/>
+<line x1="1.5" y1="-1.5" x2="12.5" y2="-1.5" transform="matrix(-1 8.74228e-07 9.71364e-08 1 27.9999 32)" stroke="#00A3FF" stroke-width="3" stroke-linecap="round"/>
+<rect x="7.5" y="6.5" width="33" height="35" rx="4.5" stroke="#31353C" stroke-width="3"/>
+</svg>

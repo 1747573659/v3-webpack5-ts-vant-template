@@ -19,6 +19,8 @@
     "axios": "^0.27.2",
     "core-js": "^3.8.3",
     "cosmiconfig": "^7.0.1",
+    "moment": "^2.29.3",
+    "number-precision": "^1.5.2",
     "vant": "^3.4.8",
     "vue": "^3.2.13",
     "vue-class-component": "^8.0.0-0",
@@ -61,7 +63,8 @@
     "stylelint-config-html": "^1.0.0",
     "stylelint-config-standard": "^25.0.0",
     "stylelint-config-standard-scss": "^3.0.0",
-    "typescript": "~4.5.5"
+    "typescript": "~4.5.5",
+    "vconsole-webpack-plugin": "^1.7.3"
   },
   "lint-staged": {
     "*.{vue,js,ts}": "eslint --fix"

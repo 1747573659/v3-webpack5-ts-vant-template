@@ -2,34 +2,92 @@ import { RouteRecordRaw } from 'vue-router'
 
 const myWalletRoutes: Array<RouteRecordRaw> = [
   {
-    path: '/myWallet',
-    name: 'myWallet',
-    component: () => import(/* webpackChunkName: "about" */ '@/views/MyWallet/MyWallet.vue')
+    path: '/walletList',
+    name: 'walletList',
+    meta: {
+      title: '选择钱包'
+    },
+    component: () => import('@/views/WalletList/WalletList.vue')
   },
   {
-    path: '/walletDetail',
-    name: 'walletDetail',
-    component: () => import(/* webpackChunkName: "about" */ '@/views/WalletDetail/WalletDetail.vue')
+    path: '/myWallet',
+    name: 'myWallet',
+    meta: {
+      title: '钱包首页'
+    },
+    component: () => import('@/views/MyWallet/MyWallet.vue')
+  },
+  {
+    path: '/merchantInfo',
+    name: 'merchantInfo',
+    meta: {
+      title: '详情',
+      showBackBtn: true
+    },
+    component: () => import('@/views/MerchantInfo/MerchantInfo.vue')
+  },
+  {
+    path: '/kmTechPolicy',
+    name: 'kmTechPolicy',
+    meta: {
+      title: '科脉技术隐私政策',
+      showBackBtn: true
+    },
+    component: () => import('@/views/MerchantInfo/KmTechPolicy.vue')
   },
   {
     path: '/walletWithdraw',
     name: 'walletWithdraw',
-    component: () => import(/* webpackChunkName: "about" */ '@/views/WalletWithdraw/WalletWithdraw.vue')
+    meta: {
+      title: '提现',
+      showBackBtn: true
+    },
+    component: () => import('@/views/WalletWithdraw/WalletWithdraw.vue')
   },
   {
     path: '/withdrawConfig',
     name: 'withdrawConfig',
-    component: () => import(/* webpackChunkName: "about" */ '@/views/WithdrawConfig/WithdrawConfig.vue')
+    meta: {
+      title: '提现设置',
+      showBackBtn: true
+    },
+    component: () => import('@/views/WithdrawConfig/WithdrawConfig.vue')
   },
   {
     path: '/billStatement',
     name: 'billStatement',
-    component: () => import(/* webpackChunkName: "about" */ '@/views/BillStatement/BillStatement.vue')
+    meta: {
+      title: '账单明细',
+      showBackBtn: true,
+      keepAlive: true
+    },
+    component: () => import('@/views/BillStatement/BillStatement.vue')
   },
   {
     path: '/billDetail',
     name: 'billDetail',
-    component: () => import(/* webpackChunkName: "about" */ '@/views/BillDetail/BillDetail.vue')
+    meta: {
+      title: '账单详情',
+      showBackBtn: true
+    },
+    component: () => import('@/views/BillDetail/BillDetail.vue')
+  },
+  {
+    path: '/ideaFeedback',
+    name: 'ideaFeedback',
+    meta: {
+      title: '意见反馈'
+    },
+    component: () => import('@/views/ideaFeedback/ideaFeedback.vue')
+  },
+  {
+    path: '/commonProblem',
+    name: 'commonProblem',
+    meta: {
+      title: '常见问题',
+      showBackBtn: true
+    },
+    component: () => import('@/views/commonProblem/commonProblem.vue')
   }
 ]
 
