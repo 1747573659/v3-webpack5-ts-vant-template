@@ -3,6 +3,7 @@
   import moment from 'moment'
   import timePicker from './data-picker.vue'
   import { formatIosDate } from '@/utils/commonFunc'
+  import { Toast } from 'vant'
   type selectTimeType = {
     commonType: boolean
     index: Ref<number> | number
@@ -129,6 +130,14 @@
   // 选择时间 自定义-确认
   const handleCusConfirm = async () => {
     const time = timePickerRef.value.getTime()
+    const start = moment(time[0]).format('YYYY-MM-DD')
+    const end = moment(time[1]).format('YYYY-MM-DD')
+    if (moment(start).add(30, 'days').isBefore(moment(end))) {
+      return Toast('最多选择31天')
+    }
+    if (moment(start).isAfter(moment(end))) {
+      return Toast('开始时间不能大于结束时间')
+    }
     selectTimeData.index = -1
     selectTimeData.commonType = false
     selectTimeData.value = [
@@ -137,6 +146,10 @@
     ]
     await submitCommonData()
   }
+  const getTime = () => [...selectTimeData.value]
+  defineExpose({
+    getTime
+  })
 
   watch(visible, (newVal: boolean) => {
     if (newVal) {
