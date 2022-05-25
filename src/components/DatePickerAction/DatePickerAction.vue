@@ -161,7 +161,14 @@
 </script>
 <template>
   <div class="billstate-date" @click="visible = true">
-    <img src="../../assets/img/date.png" />
+    <svg class="date-svg" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="6" y="7" width="28" height="28" rx="4" stroke="#00A3FF" stroke-width="2.5"/>
+      <line x1="14.25" y1="4.25" x2="14.25" y2="9.75" stroke="#00A3FF" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="25.9166" y1="4.25" x2="25.9166" y2="9.75" stroke="#00A3FF" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="6" y1="15.75" x2="34" y2="15.75" stroke="#00A3FF" stroke-width="2.5"/>
+      <line x1="13.25" y1="22.75" x2="26.75" y2="22.75" stroke="#00A3FF" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="13.25" y1="28.75" x2="26.75" y2="28.75" stroke="#00A3FF" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
     <span>{{ selectTimeData.label }}</span>
   </div>
   <van-action-sheet class="date-picker-root" v-model:show="visible" :closeable="false">
@@ -224,12 +231,14 @@
 
     @include themify {
       color: themed('primaryColor');
-      background-color: themed('painColor');
+      background-color: themed('primaryColorHalfOpacity');
     }
-    img {
-      width: 40px;
-      height: 40px;
+    .date-svg {
       margin-right: 10px;
+
+      @include themify {
+        stroke: themed('primaryColor');
+      }
     }
   }
   .date-picker-root {

@@ -31,11 +31,12 @@ const copy = () => {
   font-style: normal;
   font-weight: 400;
   font-size: 28px;
+  border: none;
   border-radius: 70px;
-  color: $copyBtnColor;
+  background-color: rgba(0, 0, 0, .2);
 
   @include themify {
-    background: themed('copyBtnColor');
+    color: themed('copyBtnColor');
   }
 }
 </style>
