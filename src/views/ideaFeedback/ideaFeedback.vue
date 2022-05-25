@@ -5,32 +5,26 @@
       src="https://www.wjx.cn/vj/QDNYSwE.aspx"
       frameborder="0"
       width="100%"
-      :height="iframeHeight"></iframe>
+      height="100%"></iframe>
   </div>
+  <back-btn @click="goBack"></back-btn>
 </template>
 <script lang="ts">
   import { defineComponent } from 'vue'
-
+  import BackBtn from '@/components/BackBtn/BackBtn.vue'
+  import router from '@/router'
   export default defineComponent({
-    // 已启用类型推断
-    data(): { iframeHeight: string } {
-      return {
-        iframeHeight: '400'
-      }
-    },
-    mounted() {
-      const oWrap = document.getElementById('kmtechPolicy-wrap')
-      if (oWrap) {
-        console.log(oWrap.offsetHeight + 'px')
-        this.iframeHeight = oWrap.offsetHeight - 10 + 'px'
+    components: {BackBtn},
+    methods: {
+      goBack() {
+        router.replace('myWallet')
       }
     }
   })
 </script>
 <style lang="scss" scoped>
   #kmtechPolicy-wrap {
-    height: 100%;
-    padding-bottom: 160px;
+    height: calc(100% - 170px);
     box-sizing: border-box;
   }
 </style>
