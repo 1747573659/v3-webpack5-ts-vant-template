@@ -140,14 +140,38 @@ const resend = async (resetVerify: () => void) => {
   } catch(e) {}
 }
 
+watch(money, () => {
+  withdrawErrorMsg.value = ''
+})
+
+const checkMoney = () => {
+  return new Promise((resolve, reject) => {
+    let trueMoney = Number(money.value) * 100
+    if (trueMoney === 0) {
+      reject('提现金额不能为0')
+    } else if (trueMoney > withdrawDetailInfo.tradeBalanceAmount) {
+      reject('提现金额只能小于等于交易户余额')
+    } else {
+      resolve(true)
+    }
+  })
+}
+
 const withdrawApply = async () => {
   withdrawLoading.value = true
   withdrawErrorMsg.value = ''
-  try {
-    await sendMsg()
-  } catch(e) {
-  } finally {
-  }
+  checkMoney().then(async () => {
+    try {
+      await sendMsg()
+    } catch(e) {
+    } finally {
+    }
+  },
+  err => {
+    withdrawErrorMsg.value = err
+  }).finally(() => {
+    withdrawLoading.value = false
+  })
 }
 
 // 提现申请
@@ -243,6 +267,8 @@ const confirmWithdraw = async () => {
 .withdraw-btn {
   padding: 32px;
   &:deep(.van-button--primary) {
+    border: none;
+
     @include themify {
       background-color: themed('primaryColor');
     }

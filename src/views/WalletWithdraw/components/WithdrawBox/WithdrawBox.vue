@@ -28,7 +28,7 @@
         温馨提示：微信仅支持交易户提现，
         <span class="special">充值户（余额 ¥{{withdrawDetailInfo?.tradeDepositAmount}}）</span>
         <tool-tip class="tooltip-wallet">
-          提现金额只能小于等于交易户余额
+          通过同名银行卡充值的资金会进入充值户
         </tool-tip>
         请登录支付宝网商小程序操作
       </div>
@@ -77,7 +77,7 @@ const tag = computed(() => tagArr[String(moneyInner.value).split('.')[0].length]
 
 const moneyBlur = () => {
   // moneyInner.value = Math.min(Number(moneyInner.value), 100000) || ''
-  moneyInner.value = Math.min(Number(moneyInner.value), withdrawDetailInfo?.tradeBalanceAmount) || ''
+  // moneyInner.value = Math.min(Number(moneyInner.value), withdrawDetailInfo?.tradeBalanceAmount) || ''
 }
 
 const allinWithdraw = () => {

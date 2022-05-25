@@ -39,7 +39,7 @@ export interface LoginPhoneCodeRep {
   phone: string
   shopAdminId: number
   token: string
-  walletList: WalletList
+  walletList: WalletList[]
 }
 export interface walletDetailReq {
   shopAdminId: number
