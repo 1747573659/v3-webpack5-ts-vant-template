@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-  import { reactive, ref, Ref } from 'vue'
-  import { useRouter } from 'vue-router'
+  import { reactive, ref, Ref, watch } from 'vue'
+  import { useRouter, useRoute } from 'vue-router'
   import { useStore } from 'vuex'
   import moment from 'moment'
   import DatePickerAction from '@/components/DatePickerAction/DatePickerAction.vue'
@@ -10,6 +10,12 @@
   import { BillAmountRep, billStatementReq, TableList } from '@/api/types'
 
   const router = useRouter()
+  const route = useRoute()
+  watch(() => route.name, () => {
+    if (route.name === 'billStatement') {
+      loadBillStatement(true)
+    }
+  })
   const store = useStore()
   const dateRange: Ref<string[]> = ref([
     moment().format('YYYY-MM-DD'),

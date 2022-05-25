@@ -71,7 +71,7 @@ const input = ref()
 
 const placeholder = computed(() => `最多可转出¥${withdrawDetailInfo?.tradeBalanceAmount}`)
 
-const tagArr = [null, '个', '十', '百', '千', '万', '十万', '百万', '千万', '亿', '十亿', '百亿', '千亿'] 
+const tagArr = [null, null, null, '百', '千', '万', '十万', '百万', '千万', '亿', '十亿', '百亿', '千亿'] 
 
 const tag = computed(() => tagArr[String(moneyInner.value).split('.')[0].length])
 

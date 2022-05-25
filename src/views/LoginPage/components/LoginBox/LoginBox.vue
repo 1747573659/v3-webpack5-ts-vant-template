@@ -83,14 +83,12 @@ const loginNameUpdate = (mobile:string) => {
 const idNumberUpdate = (oldValue: string) => {
   let newValue = oldValue.replace(/[^a-z0-9A-Z]/g, '').substring(0, 18)
   let valueLen = newValue.length
-  if (valueLen > 3 && valueLen < 7) {
-    newValue = newValue.replace(/^(...)/g, '$1 ')
-  } else if (valueLen >= 7 && valueLen < 11) {
-    newValue = newValue.replace(/^(...)(...)/g, '$1 $2 ')
+  if (valueLen >= 7 && valueLen < 11) {
+    newValue = newValue.replace(/^(......)/g, '$1 ')
   } else if (valueLen >= 11 && valueLen < 15) {
-    newValue = newValue.replace(/^(...)(...)(....)/g, '$1 $2 $3 ')
+    newValue = newValue.replace(/^(......)(....)/g, '$1 $2 ')
   } else {
-    newValue = newValue.replace(/^(...)(...)(....)(....)/g, '$1 $2 $3 $4 ')
+    newValue = newValue.replace(/^(......)(....)(....)/g, '$1 $2 $3 ')
   }
   return newValue
 }

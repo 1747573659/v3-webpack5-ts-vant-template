@@ -213,9 +213,12 @@ const dialogConfirm = () => {
   showWithdrawConfirm.value = true
 }
 const showResultPage = ref(false)
-// 从结果页返回的时候调用一遍详情接口
-watch(showResultPage, () => {
-  getWithdrawDetail()
+// 从结果页返回的时候调用一遍详情接口并且将金额清空
+watch(showResultPage, (newVal) => {
+  if (!newVal) {
+    money.value = ''
+    getWithdrawDetail()
+  }
 })
 
 // 已确认
