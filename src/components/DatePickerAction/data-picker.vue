@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import { ref, toRefs, watch, reactive } from 'vue'
+  import { Toast } from 'vant'
   import moment from 'moment'
   import { formatIosDate } from '@/utils/commonFunc'
   const props = defineProps<{
@@ -28,7 +29,33 @@
   const handleChangeTab = (tabName: string) => {
     activeTab.value = tabName
   }
-
+  const handleChange = (val: Date) => {
+    if (activeTab.value === 'start') {
+      // 选择开始时间
+      const end = moment(time['end']).format('YYYY-MM-DD')
+      const start = moment(val).format('YYYY-MM-DD')
+      console.log(moment(start).isAfter(moment(end)), '开始时间')
+      if (moment(start).isAfter(moment(end))) {
+        // Toast('开始时间不能大于结束时间')
+        time['end'] = val
+      } else if (moment(start).add(30, 'days').isBefore(moment(end))) {
+        Toast('最多选择31天')
+        // time['start'] = new Date(moment(time['start']).add(30, 'days').format('YYYY/MM/DD'))
+      }
+    } else {
+      // 选结束时间
+      const end = moment(val).format('YYYY-MM-DD')
+      const start = moment(time['start']).format('YYYY-MM-DD')
+      console.log(moment(end).isBefore(moment(start)), '结束时间')
+      if (moment(end).isBefore(moment(start))) {
+        // Toast('结束时间不能小于开始时间')
+        time['start'] = val
+      } else if (moment(end).subtract(30, 'days').isAfter(moment(start))) {
+        Toast('最多选择31天')
+        // time['start'] = new Date(moment(time['end']).subtract(30, 'days').format('YYYY/MM/DD'))
+      }
+    }
+  }
   watch(modelValue, newVal => {
     time.start = new Date(formatIosDate(newVal[0] || ''))
     time.end = new Date(formatIosDate(newVal[1] || ''))
@@ -66,6 +93,7 @@
       v-bind="$attrs"
       title="自定义列排序"
       :columns-order="['year', 'month', 'day']"
+      @change="handleChange"
       :formatter="formatter" />
   </div>
 </template>

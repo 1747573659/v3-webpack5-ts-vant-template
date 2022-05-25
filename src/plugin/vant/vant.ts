@@ -17,7 +17,8 @@ import {
   NumberKeyboard,
   Calendar,
   Loading,
-  DatetimePicker
+  DatetimePicker,
+  PullRefresh
 } from 'vant'
 import './reset.scss'
 type stringKey = Record<string, any>
@@ -39,7 +40,8 @@ const components: stringKey = {
   NumberKeyboard,
   Calendar,
   Loading,
-  DatetimePicker
+  DatetimePicker,
+  PullRefresh
 }
 export default function (app: ReturnType<typeof createApp>) {
   for (const key in components) {

@@ -17,14 +17,11 @@
     }
   })
   const store = useStore()
-  const dateRange: Ref<string[]> = ref([
-    moment().format('YYYY-MM-DD'),
-    moment().format('YYYY-MM-DD')
-  ])
   let totalAmount: BillAmountRep = reactive({
     expenditureAmount: null,
     incomeAmount: null
   })
+  const datePickerActionRef = ref()
   let tableLoading = ref(false)
   let billList: { list: TableList[]; tableFinished: boolean } = reactive({
     list: [],
@@ -34,8 +31,14 @@
     page: 1,
     rows: 20
   })
+  const pullRefreshLoading = ref(false)
+  const getDate = () => {
+    return datePickerActionRef.value.getTime()
+  }
+  const isLoading = ref(false)
   let loadBillStatement = async (init?: boolean, data?: any) => {
-    console.log('加载数据', init, data)
+    if (isLoading.value) return
+    isLoading.value = true
     tableLoading.value = true
     if (init) {
       pageConfig.page = 1
@@ -48,11 +51,10 @@
       walletId: store.state.userInfo.walletId,
       openId: store.state.userInfo.openId,
       transactionType: billTypeMapEnum.get(activeBillType.value).key,
-      startTime: moment(dateRange.value[0]).format('YYYY-MM-DD 00:00:00'),
-      endTime: moment(dateRange.value[1]).format('YYYY-MM-DD 23:59:59')
+      startTime: moment(getDate()[0]).format('YYYY-MM-DD 00:00:00'),
+      endTime: moment(getDate()[1]).format('YYYY-MM-DD 23:59:59')
     }
     data && (params = Object.assign(params, { ...data }))
-    console.log(params, 'params')
     return Promise.all([queryBillStatement(params), queryBillAmount(params)])
       .then(res => {
         billList.list = billList.list.concat(res[0].results || [])
@@ -61,10 +63,12 @@
         totalAmount.incomeAmount = res[1].incomeAmount
         tableLoading.value = false
         pageConfig.page += 1
+        isLoading.value = false
       })
       .catch(() => {
         billList.tableFinished = true
         tableLoading.value = false
+        isLoading.value = false
         return Promise.reject()
       })
   }
@@ -73,7 +77,6 @@
   let activeBillType: Ref<string | number> = ref('')
   // 账单类型变化
   const handleChangeActiveType = (key: string | number) => {
-    console.log(key, 'key_value')
     showSelectTypeDialog.value = false
     if (activeBillType.value !== key) {
       loadBillStatement(true, {
@@ -81,15 +84,13 @@
       }).then(() => (activeBillType.value = key))
     }
   }
-  const handleTimeChange = (time: string[]) => {
-    const startTime = moment(time[0]).format('YYYY-MM-DD 00:00:00')
-    const endTime = moment(time[1]).format('YYYY-MM-DD 23:59:59')
-    return loadBillStatement(true, {
-      startTime,
-      endTime
-    }).then(() => {
-      console.log('then')
-      dateRange.value = time
+  const handleTimeChange = () => {
+    return loadBillStatement(true)
+  }
+  const onRefresh = () => {
+    pullRefreshLoading.value = true
+    loadBillStatement(true).finally(() => {
+      pullRefreshLoading.value = false
     })
   }
 </script>
@@ -101,8 +102,9 @@
           <span>{{ billTypeMapEnum.get(activeBillType).label }}</span>
           <img src="../../assets/img/vector.png" />
         </div>
-        <DatePickerAction :confirm="handleTimeChange" />
+        <DatePickerAction :confirm="handleTimeChange" ref="datePickerActionRef" />
       </div>
+
       <div class="billstate-amount-wrap">
         <div class="billstate-amount-item">
           支出：￥ {{ formatYuanAmount(totalAmount.expenditureAmount || 0) }}
@@ -112,40 +114,42 @@
         </div>
       </div>
     </div>
-    <van-list
-      v-model:loading="tableLoading"
-      class="billstate-main-wrap"
-      :finished="billList.tableFinished"
-      :finished-text="billList.tableFinished && !billList.list ? '暂无数据' : '没有更多了'"
-      @load="loadBillStatement">
-      <van-cell
-        v-for="item in billList.list"
-        :key="item.id"
-        @click="
-          router.push({
-            name: 'billDetail',
-            query: {
-              transactionNo: item.transactionNo,
-              categoryType: item.category,
-              transactionType: item.transactionType
-            }
-          })
-        ">
-        <div class="billstate-main-item">
-          <img :src="billTypeMapEnum.get(item.transactionType).src" alt="" />
-          <div class="detail">
-            <div class="title">
-              {{ billTypeMapEnum.get(item.transactionType).label
-              }}{{ item.counterpartShortShopName ? `-${item.counterpartShortShopName}` : '' }}
+    <van-pull-refresh v-model="pullRefreshLoading" @refresh="onRefresh">
+      <van-list
+        v-model:loading="tableLoading"
+        class="billstate-main-wrap"
+        :finished="billList.tableFinished"
+        :finished-text="billList.tableFinished && !billList.list ? '暂无数据' : '没有更多了'"
+        @load="loadBillStatement">
+        <van-cell
+          v-for="item in billList.list"
+          :key="item.id"
+          @click="
+            router.push({
+              name: 'billDetail',
+              query: {
+                transactionNo: item.transactionNo,
+                categoryType: item.category,
+                transactionType: item.transactionType
+              }
+            })
+          ">
+          <div class="billstate-main-item">
+            <img :src="billTypeMapEnum.get(item.transactionType).src" alt="" />
+            <div class="detail">
+              <div class="title">
+                {{ billTypeMapEnum.get(item.transactionType).label
+                }}{{ item.counterpartShortShopName ? `-${item.counterpartShortShopName}` : '' }}
+              </div>
+              <div class="time">{{ item.transactionSuccessTime }}</div>
             </div>
-            <div class="time">{{ item.transactionSuccessTime }}</div>
+            <div :class="{ amount: true, isAdd: item.category === 1 }">
+              {{ item.category === 1 ? '+' : '-' }}{{ formatYuanAmount(item.amount || 0) }}
+            </div>
           </div>
-          <div :class="{ amount: true, isAdd: item.category === 1 }">
-            {{ item.category === 1 ? '+' : '-' }}{{ formatYuanAmount(item.amount || 0) }}
-          </div>
-        </div>
-      </van-cell>
-    </van-list>
+        </van-cell>
+      </van-list>
+    </van-pull-refresh>
   </div>
   <van-action-sheet v-model:show="showSelectTypeDialog" title="选择账单类型">
     <div class="billstate-type-wrap">
@@ -163,16 +167,16 @@
 <style lang="scss" scoped>
   .billstate-wrap {
     text-align: left;
-    height: 100%;
+    height: calc(100% - 160px);
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     background-color: $bg-light-color-1;
   }
   .billstate-main-wrap {
-    flex: 1 1 200px;
+    height: 100%;
+    box-sizing: border-box;
     overflow-y: auto;
-    padding-bottom: 160px;
   }
   .billstate-title-wrap {
     padding: 32px 24px;
@@ -279,6 +283,14 @@
       @include themify {
         background-color: themed('primaryColor');
       }
+    }
+  }
+  .van-pull-refresh {
+    height: 100%;
+    flex: 1 1 200px;
+    :deep(.van-pull-refresh__track) {
+      overflow-y: auto;
+      height: 100%;
     }
   }
 </style>
