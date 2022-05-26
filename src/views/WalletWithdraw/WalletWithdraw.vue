@@ -149,7 +149,7 @@ const checkMoney = () => {
     let trueMoney = Number(money.value) * 100
     if (trueMoney === 0) {
       reject('提现金额不能为0')
-    } else if (trueMoney > withdrawDetailInfo.tradeBalanceAmount) {
+    } else if (trueMoney > withdrawDetailInfo.tradeBalanceAmount * 100) {
       reject('提现金额只能小于等于交易户余额')
     } else {
       resolve(true)
