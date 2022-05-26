@@ -5,7 +5,7 @@
       src="https://docs.qq.com/doc/DWUlUUU9nT0l3TURu"
       frameborder="0"
       width="100%"
-      :height="iframeHeight"></iframe>
+      height="100%"></iframe>
   </div>
 </template>
 <script lang="ts">
@@ -29,8 +29,7 @@
 </script>
 <style lang="scss" scoped>
   #kmtechPolicy-wrap {
-    height: 100%;
-    padding-bottom: 160px;
+    height: calc(100% - 170px);
     box-sizing: border-box;
   }
 </style>
