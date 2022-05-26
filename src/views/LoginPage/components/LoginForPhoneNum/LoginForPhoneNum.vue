@@ -27,7 +27,7 @@ const loginItemTypeChange = (type: number) => {
 
 const errorMsg = ref('')
 
-const loginBtnDisabled = computed(() => !loginName.value.length || !!errorMsg.value)
+const loginBtnDisabled = computed(() => !loginName.value.length)
 
 const loginBtnLoading = ref(false)
 
