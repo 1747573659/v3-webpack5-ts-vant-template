@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-  import { reactive, ref, Ref, watch } from 'vue'
-  import { useRouter, useRoute } from 'vue-router'
+  import { onActivated, reactive, ref, Ref, nextTick } from 'vue'
+  import { useRouter, onBeforeRouteLeave } from 'vue-router'
   import { useStore } from 'vuex'
   import moment from 'moment'
   import DatePickerAction from '@/components/DatePickerAction/DatePickerAction.vue'
@@ -10,13 +10,25 @@
   import { BillAmountRep, billStatementReq, TableList } from '@/api/types'
 
   const router = useRouter()
-  const route = useRoute()
-  watch(() => route.name, () => {
-    if (route.name === 'billStatement') {
-      loadBillStatement(true)
-    }
-  })
   const store = useStore()
+  const scrollY = ref(0)
+  onActivated(() => {
+    nextTick(() => {
+      const oWrap:any = document.getElementById('billstate-main-wrap')
+      oWrap.scrollTop = scrollY.value || 0
+    })
+  })
+  onBeforeRouteLeave((to, from ,next)=> {
+    if (to.path === '/billDetail') {
+      const oWrap = document.getElementById('billstate-main-wrap')
+      scrollY.value = oWrap ? oWrap.scrollTop : 0
+      store.dispatch('addCachedView', {name: 'billStatement'})
+    } else {
+      scrollY.value = 0
+      store.dispatch('delCachedView', {name: 'billStatement'})
+    }
+    next()
+  })
   let totalAmount: BillAmountRep = reactive({
     expenditureAmount: null,
     incomeAmount: null
@@ -93,6 +105,13 @@
       pullRefreshLoading.value = false
     })
   }
+  
+</script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({
+    name: 'billStatement'
+  })
 </script>
 <template>
   <div class="billstate-wrap">
@@ -117,6 +136,7 @@
     <van-pull-refresh v-model="pullRefreshLoading" @refresh="onRefresh">
       <van-list
         v-model:loading="tableLoading"
+        id="billstate-main-wrap"
         class="billstate-main-wrap"
         :finished="billList.tableFinished"
         :finished-text="billList.tableFinished && !billList.list ? '暂无数据' : '没有更多了'"

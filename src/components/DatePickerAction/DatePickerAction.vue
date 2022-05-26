@@ -13,7 +13,7 @@
   const props = defineProps<{
     confirm: (time: string[]) => Promise<any>
   }>()
-  const minDate = ref(new Date(formatIosDate('2022-5-6')))
+  const minDate = ref(new Date(formatIosDate('2022-5-7')))
   const maxDate = ref(new Date())
   const { confirm } = toRefs(props)
   const visible = ref(false)
