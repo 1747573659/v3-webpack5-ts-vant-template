@@ -1,17 +1,8 @@
 <template>
-  <router-view v-slot="{ Component, route }">
-    <keep-alive max="5">
-      <component
-        v-if="route.meta.keepAlive"
-        :is="Component"
-        :key="route.meta.keepAlive"
-      />
+  <router-view v-slot="{ Component }">
+    <keep-alive max="5" :include="routerList">
+      <component :is="Component"/>
     </keep-alive>
-    <component
-      v-if="!route.meta.keepAlive"
-      :is="Component"
-      :key="route.meta.keepAlive"
-    />
   </router-view>
 
   <!-- 每小时发送五次后会调用一个滑动验证组件 -->
@@ -25,6 +16,16 @@
 <script lang="ts" setup>
 import ResendConfirm from '@/components/MsgVerify/ResendConfirm.vue'
 import AppBackBtn from '@/components/AppBackBtn/AppBackBtn.vue'
+import { watch, ref } from 'vue'
+import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
+  const store = useStore()
+  const route = useRoute()
+  const routerList = ref([])
+  watch(() => route.name, () => {
+    routerList.value = store.state.keepAliveView.cachedViews
+  })
+
 </script>
 
 <style lang="scss">

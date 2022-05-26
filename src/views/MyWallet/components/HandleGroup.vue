@@ -26,6 +26,8 @@
   import billDetail from '@/assets/icons/billDetail.svg'
   import type { HandleItem } from '../types'
   import { useRouter } from 'vue-router'
+  import { useStore } from 'vuex'
+  const store = useStore()
   const arrowRightGreySvg = ref(arrowRightGrey)
   const feedBackSvg = ref<string>(feedBack)
   const withdrawConfigSvg = ref<string>(withdrawConfig)
@@ -39,6 +41,7 @@
       icon: billDetailSvg,
       title: '账单明细',
       goTo: () => {
+        store.dispatch('addCachedView', { name: 'billStatement' })
         router.push('/billStatement')
       }
     },
