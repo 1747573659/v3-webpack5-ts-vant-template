@@ -18,7 +18,7 @@
     <login-for-verify :loginData="LoginData" v-if="hasInputedLoginName"></login-for-verify>
     <!-- 返回 -->
     <back-btn v-if="hasInputedLoginName" @click="back()"></back-btn>
-    <div v-if="!hasInputedLoginName" class="bot-info">
+    <div v-if="!hasInputedLoginName && !keyBoardShow" class="bot-info">
       科脉享多多技术提供
       <!-- 安全区适配 -->
       <div class="van-safe-area-bottom"></div>
@@ -38,7 +38,9 @@ import BackBtn from '@/components/BackBtn/BackBtn.vue'
 
 import { useStore } from 'vuex'
 import { LoginReq } from '@/api/types'
-
+import useKeyBoardShowForPage from '@/hooks/useKeyBoardShowForPage'
+// 安卓端键盘被调起时隐藏fixed元素
+const { keyBoardShow } = useKeyBoardShowForPage()
 const store = useStore()
 
 const { welcomeMessage, loginLogoUrl } = store.state.userInfo

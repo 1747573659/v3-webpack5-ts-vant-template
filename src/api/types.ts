@@ -187,3 +187,8 @@ export interface smsValidCodeReq {
   code: string
   phone: string
 }
+
+export interface withdrawQueryRep {
+  status: number
+  errorDesc: string
+}

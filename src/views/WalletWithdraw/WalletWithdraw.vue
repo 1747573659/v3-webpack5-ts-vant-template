@@ -14,7 +14,7 @@
     <!-- 确认提现弹窗 -->
     <withdraw-confirm v-model:show="showWithdrawConfirm" @confirmWithdraw="confirmWithdraw"></withdraw-confirm>
     <!-- 结果页 -->
-    <result-page @closed="resultPageClosed" :money="money" :errorMsg="resultPageErrorMsg" v-model:show="showResultPage"></result-page> 
+    <result-page @closed="resultPageClosed" :status="resultPageStatus" :money="money" :errorMsg="resultPageErrorMsg" v-model:show="showResultPage"></result-page> 
   </div>
 </template>
 
@@ -32,7 +32,7 @@ import ResultPage from './components/ResultPage/ResultPage.vue'
 import { useStore } from 'vuex'
 import { UserInfo } from '@/store/storeTypes';
 import { withdrawDetailRep, withdrawConfirmReq } from '@/api/types';
-import { withdrawApplyApi, withdrawDetail, withdrawConfirmApi, smsSend, smsValidCode } from '@/api/wallet'
+import { withdrawApplyApi, withdrawDetail, withdrawConfirmApi, smsSend, smsValidCode, withdrawQuery } from '@/api/wallet'
 import useCheckNeedVerify from '@/hooks/useCheckNeedVerify'
 import store from '@/store';
 
@@ -247,7 +247,11 @@ const resultPageClosed = () => {
   getWithdrawDetail()
 }
 
+const resultPageStatus = ref(1) // 1query 2sucess 3error 4loading
 // 已确认
+// 如果确认接口返回报错 那么就进入结果页的错误界面
+// 如果确认接口返回true 那么就进去查询结果页面，查询是否真的成功
+// 查询结果之后
 const resultPageErrorMsg = ref('')
 const confirmWithdraw = async () => {
   resultPageErrorMsg.value = ''
@@ -255,6 +259,10 @@ const confirmWithdraw = async () => {
     const res = await withdrawConfirmApi(confirmRequestData.value)
     if (typeof res === 'string') {
       resultPageErrorMsg.value = res
+      resultPageStatus.value = 3
+    } else {
+      resultPageStatus.value = 1
+      handlewithdrawQuery()()
     }
     showWithdrawConfirm.value = false
     showResultPage.value = true
@@ -263,6 +271,34 @@ const confirmWithdraw = async () => {
   }
 }
 
+// 确认成功后的查询接口
+const handlewithdrawQuery = () => {
+  let cnt = 6
+  async function looper() {
+    cnt--
+    if (cnt >= 0) {
+      try {
+        const { status, errorDesc } = await withdrawQuery(confirmRequestData.value)
+        // 0 支付失败 1 支付中 2 支付成功
+        if (status === 0) {
+          resultPageErrorMsg.value = errorDesc
+          resultPageStatus.value = 3
+        } else if (status === 1) {
+          setTimeout(() => {
+            looper()
+          }, 1000);
+          // 如果第六次已经是查询中则进去结果页查询状态
+          if (!cnt) {
+            resultPageStatus.value = 4
+          }
+        } else if (status === 2) {
+          resultPageStatus.value = 2
+        }
+      } catch(e) {}
+    }
+  }
+  return looper
+}
 </script> 
 
 <style lang="scss" scoped>
