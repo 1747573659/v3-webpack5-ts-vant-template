@@ -18,7 +18,7 @@
         <template v-if="status === 4">
           <img class="png" :src="withdrawLoadingPng" alt="withdrawLoading">
           <div class="title">提现中</div>
-          <div class="desc">银行暂未返回提现结果，请稍后查看</div>
+          <div class="desc">{{errorMsg}}</div>
         </template>
         <div class="money">-{{moneyForShow}}</div>
       </div>
@@ -110,6 +110,7 @@ const moneyForShow = computed(() => formatYuanAmount(money.value))
     font-size: 28px;
     line-height: 48px;
     color: $font-color-2;
+    text-align: center;
   }
   .money {
     margin-top: 40px;
