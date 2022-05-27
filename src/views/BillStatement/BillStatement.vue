@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-  import { onActivated, reactive, ref, Ref, nextTick } from 'vue'
+  import { onActivated, reactive, ref, Ref, nextTick, onMounted } from 'vue'
   import { useRouter, onBeforeRouteLeave } from 'vue-router'
   import { useStore } from 'vuex'
   import moment from 'moment'
   import DatePickerAction from '@/components/DatePickerAction/DatePickerAction.vue'
+  import OverlayLoading from '@/components/OverlayLoading/OverlayLoading.vue'
   import { formatYuanAmount } from '@/utils/formateMoney'
   import { queryBillStatement, queryBillAmount } from '@/api/wallet'
   import { billTypeMapEnum } from '@/enum/billStatement'
@@ -14,8 +15,7 @@
   const scrollY = ref(0)
   onActivated(() => {
     nextTick(() => {
-      const oWrap:any = document.getElementById('billstate-main-wrap')
-      oWrap.scrollTop = scrollY.value || 0
+      setScrollTop(scrollY.value || 0)
     })
   })
   onBeforeRouteLeave((to, from ,next)=> {
@@ -29,6 +29,11 @@
     }
     next()
   })
+  
+  const setScrollTop = (top = 0) => {
+    const oWrap = document.getElementById('billstate-main-wrap')
+    oWrap && (oWrap.scrollTop = top)
+  }
   let totalAmount: BillAmountRep = reactive({
     expenditureAmount: null,
     incomeAmount: null
@@ -47,15 +52,12 @@
   const getDate = () => {
     return datePickerActionRef.value.getTime()
   }
-  const isLoading = ref(false)
+  const pageLoading = ref(false)
   let loadBillStatement = async (init?: boolean, data?: any) => {
-    if (isLoading.value) return
-    isLoading.value = true
-    tableLoading.value = true
     if (init) {
+      
       pageConfig.page = 1
-      billList.list = []
-      billList.tableFinished = false
+      pageLoading.value = true
     }
     let params: billStatementReq = {
       page: pageConfig.page,
@@ -69,18 +71,22 @@
     data && (params = Object.assign(params, { ...data }))
     return Promise.all([queryBillStatement(params), queryBillAmount(params)])
       .then(res => {
+        if (init) {
+          billList.list = []
+          setScrollTop(0)
+        }
         billList.list = billList.list.concat(res[0].results || [])
         billList.tableFinished = !res[0].results || res[0].results.length < pageConfig.rows
         totalAmount.expenditureAmount = res[1].expenditureAmount
         totalAmount.incomeAmount = res[1].incomeAmount
         tableLoading.value = false
+        pageLoading.value = false
         pageConfig.page += 1
-        isLoading.value = false
       })
       .catch(() => {
         billList.tableFinished = true
         tableLoading.value = false
-        isLoading.value = false
+        pageLoading.value = false
         return Promise.reject()
       })
   }
@@ -100,12 +106,17 @@
     return loadBillStatement(true)
   }
   const onRefresh = () => {
-    pullRefreshLoading.value = true
     loadBillStatement(true).finally(() => {
       pullRefreshLoading.value = false
     })
   }
-  
+  const loadMore = () => {
+    tableLoading.value = true
+    loadBillStatement()
+  }
+  onMounted(() => {
+    onRefresh()
+  })
 </script>
 <script lang="ts">
 import { defineComponent } from 'vue'
@@ -133,43 +144,45 @@ export default defineComponent({
         </div>
       </div>
     </div>
-    <van-pull-refresh v-model="pullRefreshLoading" @refresh="onRefresh">
-      <van-list
-        v-model:loading="tableLoading"
-        id="billstate-main-wrap"
-        class="billstate-main-wrap"
-        :finished="billList.tableFinished"
-        :finished-text="billList.tableFinished && !billList.list ? '暂无数据' : '没有更多了'"
-        @load="loadBillStatement">
-        <van-cell
-          v-for="item in billList.list"
-          :key="item.id"
-          @click="
-            router.push({
-              name: 'billDetail',
-              query: {
-                transactionNo: item.transactionNo,
-                categoryType: item.category,
-                transactionType: item.transactionType
-              }
-            })
-          ">
-          <div class="billstate-main-item">
-            <img :src="billTypeMapEnum.get(item.transactionType).src" alt="" />
-            <div class="detail">
-              <div class="title">
-                {{ billTypeMapEnum.get(item.transactionType).label
-                }}{{ item.counterpartShortShopName ? `-${item.counterpartShortShopName}` : '' }}
+    <div id="billstate-main-wrap">
+      <van-pull-refresh v-model="pullRefreshLoading" @refresh="onRefresh">
+        <van-list
+          v-model:loading="tableLoading"
+          class="billstate-main-wrap"
+          :immediate-check="false"
+          :finished="billList.tableFinished"
+          :finished-text="billList.tableFinished && !billList.list ? '暂无数据' : '没有更多了'"
+          @load="loadMore">
+          <van-cell
+            v-for="item in billList.list"
+            :key="item.id"
+            @click="
+              router.push({
+                name: 'billDetail',
+                query: {
+                  transactionNo: item.transactionNo,
+                  categoryType: item.category,
+                  transactionType: item.transactionType
+                }
+              })
+            ">
+            <div class="billstate-main-item">
+              <img :src="billTypeMapEnum.get(item.transactionType).src" alt="" />
+              <div class="detail">
+                <div class="title">
+                  {{ billTypeMapEnum.get(item.transactionType).label
+                  }}{{ item.counterpartShortShopName ? `-${item.counterpartShortShopName}` : '' }}
+                </div>
+                <div class="time">{{ item.transactionSuccessTime }}</div>
               </div>
-              <div class="time">{{ item.transactionSuccessTime }}</div>
+              <div class="amount" :class="{ amount: true, isAdd: item.category === 1 }">
+                {{ item.category === 1 ? '+' : '-' }}{{ formatYuanAmount(item.amount || 0) }}
+              </div>
             </div>
-            <div class="amount" :class="{ amount: true, isAdd: item.category === 1 }">
-              {{ item.category === 1 ? '+' : '-' }}{{ formatYuanAmount(item.amount || 0) }}
-            </div>
-          </div>
-        </van-cell>
-      </van-list>
-    </van-pull-refresh>
+          </van-cell>
+        </van-list>
+      </van-pull-refresh>
+    </div>
   </div>
   <van-action-sheet v-model:show="showSelectTypeDialog" title="选择账单类型">
     <div class="billstate-type-wrap">
@@ -182,6 +195,7 @@ export default defineComponent({
       </div>
     </div>
   </van-action-sheet>
+  <overlay-loading :show="pageLoading" content="加载中..."></overlay-loading>
 </template>
 
 <style lang="scss" scoped>
@@ -193,10 +207,12 @@ export default defineComponent({
   flex-direction: column;
   background-color: $bg-light-color-1;
 }
-.billstate-main-wrap {
-  height: 100%;
-  box-sizing: border-box;
+#billstate-main-wrap {
   overflow-y: auto;
+  flex: 1;
+}
+.billstate-main-wrap {
+  min-height: calc(100vh - 400px);
 }
 .billstate-title-wrap {
   padding: 32px 24px;
@@ -253,9 +269,9 @@ export default defineComponent({
     flex: 0;
   }
   .detail {
-    flex: 1 1 auto;
+    flex: 1 1 900px;
     overflow: hidden;
-    padding-right: 20px;
+    padding-right: 40px;
   }
   .title {
     width: 100%;
@@ -310,14 +326,6 @@ export default defineComponent({
     @include themify {
       background-color: themed('primaryColor');
     }
-  }
-}
-.van-pull-refresh {
-  height: 100%;
-  flex: 1 1 200px;
-  :deep(.van-pull-refresh__track) {
-    overflow-y: auto;
-    height: 100%;
   }
 }
 </style>
