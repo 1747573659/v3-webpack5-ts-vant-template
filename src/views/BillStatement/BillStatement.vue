@@ -107,10 +107,10 @@
 
       <div class="billstate-amount-wrap">
         <div class="billstate-amount-item">
-          支出：￥ {{ formatYuanAmount(totalAmount.expenditureAmount || 0) }}
+          支出 ¥ {{ formatYuanAmount(totalAmount.expenditureAmount || 0) }}
         </div>
         <div class="billstate-amount-item">
-          收入：￥ {{ formatYuanAmount(totalAmount.incomeAmount || 0) }}
+          收入 ¥ {{ formatYuanAmount(totalAmount.incomeAmount || 0) }}
         </div>
       </div>
     </div>
@@ -143,7 +143,7 @@
               </div>
               <div class="time">{{ item.transactionSuccessTime }}</div>
             </div>
-            <div :class="{ amount: true, isAdd: item.category === 1 }">
+            <div class="amount" :class="{ amount: true, isAdd: item.category === 1 }">
               {{ item.category === 1 ? '+' : '-' }}{{ formatYuanAmount(item.amount || 0) }}
             </div>
           </div>
@@ -165,132 +165,139 @@
 </template>
 
 <style lang="scss" scoped>
-  .billstate-wrap {
-    text-align: left;
-    height: calc(100% - 160px);
-    box-sizing: border-box;
+.billstate-wrap {
+  text-align: left;
+  height: calc(100% - 160px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background-color: $bg-light-color-1;
+}
+.billstate-main-wrap {
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+.billstate-title-wrap {
+  padding: 32px 24px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .left {
     display: flex;
-    flex-direction: column;
-    background-color: $bg-light-color-1;
-  }
-  .billstate-main-wrap {
-    height: 100%;
-    box-sizing: border-box;
-    overflow-y: auto;
-  }
-  .billstate-title-wrap {
-    padding: 32px 24px;
-    background-color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    .left {
-      display: flex;
-      height: 44px;
-      line-height: 44px;
-      vertical-align: middle;
-      > span {
-        color: $font-color-4;
-        font-weight: 500;
-        font-size: 36px;
-      }
-      img {
-        width: 44px;
-        display: inline-block;
-      }
-    }
-    .right {
-      float: right;
-    }
-  }
-  .billstate-amount-wrap {
-    line-height: 87px;
-    padding: 0 24px;
-    background-color: $bg-light-color-1;
-    display: flex;
-    flex-wrap: wrap;
-    :first-child {
-      margin-right: 40px;
-    }
-  }
-  .billstate-amount-item {
-    min-width: 200px;
-  }
-  .billstate-main-item {
-    display: flex;
-    align-items: center;
-    .van-list {
-      :deep(.van-cell) {
-        padding: 36px 24px;
-      }
+    height: 44px;
+    line-height: 44px;
+    vertical-align: middle;
+    > span {
+      color: $font-color-4;
+      font-weight: 500;
+      font-size: 36px;
     }
     img {
-      width: 72px;
-      margin-right: 24px;
-      flex: 0;
-    }
-    .detail {
-      flex: 1 1 auto;
-      overflow: hidden;
-      padding-right: 20px;
-    }
-    .title {
-      width: 100%;
-      font-size: 32px;
-      font-weight: 500;
-      color: $font-color-1;
-      line-height: 48px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .time {
-      color: $font-color-2;
-      font-size: 24px;
-    }
-    .amount {
-      flex: 1 1 300px;
-      text-align: right;
-      color: $font-color-1;
-      font-size: 40px;
-      &.isAdd {
-        color: $warnColor;
-      }
+      width: 44px;
+      display: inline-block;
     }
   }
-  .billstate-type-wrap {
-    display: flex;
-    min-height: 800px;
-    justify-content: space-between;
-    align-content: flex-start;
-    flex-wrap: wrap;
-    margin-bottom: 100px;
-    padding: 0 24px;
-    font-size: 32px;
+  .right {
+    float: right;
   }
-  .billstate-type-item {
-    width: 218px;
-    height: 120px;
-    margin-top: 20px;
-    line-height: 120px;
-    background-color: $bg-light-color-1;
-    color: $font-color-3;
-    text-align: center;
-    border-radius: 8px;
-    &.active {
-      color: #fff;
+}
+.billstate-amount-wrap {
+  line-height: 87px;
+  padding: 0 24px;
+  background-color: $bg-light-color-1;
+  display: flex;
+  flex-wrap: wrap;
+  :first-child {
+    margin-right: 40px;
+  }
+}
+.billstate-amount-item {
+  font-weight: 400;
+  font-size: 28px;
 
-      @include themify {
-        background-color: themed('primaryColor');
-      }
+  // min-width: 200px;
+}
+.billstate-main-item {
+  display: flex;
+  align-items: center;
+  .van-list {
+    :deep(.van-cell) {
+      padding: 36px 24px;
     }
   }
-  .van-pull-refresh {
+  img {
+    width: 72px;
+    margin-right: 24px;
+    flex: 0;
+  }
+  .detail {
+    flex: 1 1 auto;
+    overflow: hidden;
+    padding-right: 20px;
+  }
+  .title {
+    width: 100%;
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 48px;
+    color: $font-color-1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .time {
+    color: $font-color-2;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 34px;
+  }
+  .amount {
+    flex: 1 1 300px;
+    text-align: right;
+    color: $font-color-1;
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 56px;
+    &.isAdd {
+      color: $warnColor;
+    }
+  }
+}
+.billstate-type-wrap {
+  display: flex;
+  min-height: 800px;
+  justify-content: space-between;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  margin-bottom: 100px;
+  padding: 0 24px;
+  font-size: 32px;
+}
+.billstate-type-item {
+  width: 218px;
+  height: 120px;
+  margin-top: 34px;
+  line-height: 120px;
+  background-color: $bg-light-color-1;
+  color: $font-color-3;
+  text-align: center;
+  border-radius: 8px;
+  &.active {
+    color: #fff;
+
+    @include themify {
+      background-color: themed('primaryColor');
+    }
+  }
+}
+.van-pull-refresh {
+  height: 100%;
+  flex: 1 1 200px;
+  :deep(.van-pull-refresh__track) {
+    overflow-y: auto;
     height: 100%;
-    flex: 1 1 200px;
-    :deep(.van-pull-refresh__track) {
-      overflow-y: auto;
-      height: 100%;
-    }
   }
+}
 </style>

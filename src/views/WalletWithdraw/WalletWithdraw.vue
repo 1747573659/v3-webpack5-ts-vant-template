@@ -14,7 +14,7 @@
     <!-- 确认提现弹窗 -->
     <withdraw-confirm v-model:show="showWithdrawConfirm" @confirmWithdraw="confirmWithdraw"></withdraw-confirm>
     <!-- 结果页 -->
-    <result-page :money="money" :errorMsg="resultPageErrorMsg" v-model:show="showResultPage"></result-page> 
+    <result-page @closed="resultPageClosed" :money="money" :errorMsg="resultPageErrorMsg" v-model:show="showResultPage"></result-page> 
   </div>
 </template>
 
@@ -149,11 +149,14 @@ const checkMoney = () => {
     let trueMoney = Number(money.value) * 100
     if (trueMoney === 0) {
       reject('提现金额不能为0')
+      // resolve(true)
     } else if (trueMoney > withdrawDetailInfo.tradeBalanceAmount * 100) {
       reject('提现金额只能小于等于交易户余额')
+      // resolve(true)
     } else {
       resolve(true)
     }
+    // resolve(true)
   })
 }
 
@@ -237,13 +240,12 @@ const dialogConfirm = () => {
   showWithdrawConfirm.value = true
 }
 const showResultPage = ref(false)
+
 // 从结果页返回的时候调用一遍详情接口并且将金额清空
-watch(showResultPage, (newVal) => {
-  if (!newVal) {
-    money.value = ''
-    getWithdrawDetail()
-  }
-})
+const resultPageClosed = () => {
+  money.value = ''
+  getWithdrawDetail()
+}
 
 // 已确认
 const resultPageErrorMsg = ref('')

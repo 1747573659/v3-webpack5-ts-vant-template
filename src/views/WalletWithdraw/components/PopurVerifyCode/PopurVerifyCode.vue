@@ -1,8 +1,8 @@
 <template>
-  <van-popup v-model:show="showInner" position="bottom" :style="{ height: '100%' }" closeable @click-close-icon="clickCloseIcon">
+  <van-popup class="popup" v-model:show="showInner" position="bottom" :style="{ height: '100%' }" closeable @click-close-icon="clickCloseIcon">
     <div class="title">短信验证</div>
     <div class="operation-type">提现</div>
-    <div class="amout">¥{{moneyForShow}}</div>
+    <div class="amout"><span class="icon">¥ </span>{{moneyForShow}}</div>
     <msg-verify ref="msgVerifyComp" v-if="showInner" @resend="resend" @handleVerifyCode="handleVerifyCode" :error-msg="errorMsg"></msg-verify>
   </van-popup>
 </template>
@@ -57,6 +57,9 @@ const clickCloseIcon = () => {
 </script>
 
 <style lang="scss" scoped>
+.popup {
+  border-radius: 20px 20px 0 0;
+}
 .title {
   height: 48px;
   line-height: 48px;
@@ -78,13 +81,18 @@ const clickCloseIcon = () => {
   color: $font-color-3;
 }
 .amout {
-  padding: 40px 0 142px;
+  padding: 40px 0 60px;
+  margin: 0 40px 80px;
   text-align: center;
   font-family: 'PingFang SC';
   font-style: normal;
   font-weight: 600;
-  font-size: 50px;
+  font-size: 70px;
   line-height: 100%;
   color: $font-color-1;
+  border-bottom: 2px solid $border-split-color-1;
+  .icon {
+    font-size: 50px;
+  }
 }
 </style>

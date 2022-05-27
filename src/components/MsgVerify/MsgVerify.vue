@@ -6,7 +6,6 @@
     <password-input
       @click="passwordInputFocus"
       class="password-input"
-      gutter="13px"
       :value="verifyCode"
       :mask="false"
       @focus="passwordInputFocus"
@@ -18,6 +17,7 @@
       <div class="error-msg" v-if="errorMsg"><img class="warn-icon" :src="warnIcon" alt="警告"><div>{{errorMsg}}</div></div>
     </div>
     <van-field
+      :autofocus="true"
       style="opacity: 0;"
       ref="hiddenField"
       autocomplete="one-time-code"
@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch, toRefs, onMounted } from 'vue';
+import { computed, ref, watch, toRefs } from 'vue';
 import { PasswordInput } from 'vant'
 import { VerifyCode, CountDown } from './types'
 import { useStore } from 'vuex'
@@ -39,9 +39,10 @@ const warnIcon = ref(warn)
 
 const hiddenField = ref()
 
-onMounted(() => {
-  hiddenField.value.focus()
-})
+// onMounted(() => {
+//   // console.log(hiddenField.value.focus)
+//   passwordInputFocus()
+// })
 
 const props = defineProps<{
   errorMsg: string
@@ -124,23 +125,40 @@ const resend = (countDown: CountDown) => {
   padding-left: 40px;
   text-align: left;
   &-num {
+    font-weight: 500;
     color: $font-color-1;
     margin-left: 10px;
   }
 }
 .password-input {
   margin: 106px 42px 0;
+  &:deep(.van-hairline--left) {
+    margin-left: 13px;
+  }
+  &:deep(.van-password-input__security) {
+    &::after {
+      content: none;
+    }
+  }
   &:deep(.van-password-input__item) {
-    border-bottom: solid 1px $borderColor;
+    border-bottom: solid 2px $borderColor;
     color: $font-color-1;
     font-size: 50px;
+    width: 100px;
+    flex: none;
+    &::after {
+      content: none;
+    }
   }
   &:deep(.van-password-input__item--focus) {
     @include themify {
-      border-bottom: solid 1px themed('primaryColor');
+      border-bottom: solid 2px themed('primaryColor');
     }
   }
   &:deep(.van-password-input__cursor) {
+    width: 4px;
+    height: 50px;
+
     @include themify {
       background: themed('primaryColor');
     }
@@ -150,20 +168,21 @@ const resend = (countDown: CountDown) => {
   display: flex;
   justify-content: space-between;
   flex-direction: row-reverse;
+  line-height: 58px;
+  margin-top: 30px;
 }
 .password-resend {
   // margin: 30px 42px 0;
-  line-height: 45px;
-  margin: 20px 42px 0 0;
+  line-height: 58px;
+  margin: 0 42px;
 }
 .error-msg {
-  margin-top: 20px;
   padding-left: 40px;
   font-size: 32px;
   color: $errorColor;
   display: flex;
   align-items: center;
-  height: 45px;
+  height: 58px;
   div {
     padding-left: 8px;
   }

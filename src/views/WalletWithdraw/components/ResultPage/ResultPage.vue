@@ -1,5 +1,5 @@
 <template>
-  <van-popup v-model:show="show" position="right" :style="{ height: '100%', width: '100%' }" >
+  <van-popup @closed="closed" v-model:show="show" position="right" :style="{ height: '100%', width: '100%' }" >
     <div class="content">
       <template v-if="!errorMsg">
         <img class="png" :src="withdrawSucessPng" alt="withdrawSucess">
@@ -12,7 +12,7 @@
       </template>
       <div class="money">-{{moneyForShow}}</div>
     </div>
-    <back-btn @click="emits('update:show', false)"></back-btn>
+    <back-btn @click="emits('update:show', false)">完成</back-btn>
   </van-popup>
 </template>
 
@@ -34,8 +34,13 @@ const props = defineProps<{
 }>()
 const emits = defineEmits<{
   (e: 'update:show', show:boolean): void
+  (e: 'closed'): void
 }>()
 const { show, money } = toRefs(props)
+
+const closed = () => {
+  emits('closed')
+}
 
 const moneyForShow = computed(() => formatYuanAmount(money.value))
 
@@ -57,6 +62,7 @@ const moneyForShow = computed(() => formatYuanAmount(money.value))
     font-style: normal;
     font-weight: 400;
     font-size: 36px;
+    line-height: 48px;
     color: $font-color-1;
   }
   .desc {

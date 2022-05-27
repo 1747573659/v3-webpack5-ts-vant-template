@@ -96,58 +96,67 @@
   <overlay-loading :show="loading" content="加载中..."></overlay-loading>
 </template>
 <style lang="scss" scoped>
-  .merchantInfo {
-    &-wrap {
-      text-align: left;
-      background-color: #fff;
-      padding-bottom: 160px;
-    }
-    &-title {
-      padding: 0 24px;
-      font-size: 28px;
-      color: $font-color-2;
-      height: 86px;
-      line-height: 86px;
-      background-color: $bg-light-color-1;
-    }
+.merchantInfo {
+  &-wrap {
+    text-align: left;
+    background-color: #fff;
+    padding-bottom: 160px;
   }
-  .merchantInfo-item {
+  &-title {
     padding: 0 24px;
-  }
-  .merchantInfo-item-inner {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 30px 0;
-    font-size: 32px;
-    background-color: #fff;
-    border-bottom: 1px solid $border-split-color-1;
-    .left {
-      flex: 0 0 300px;
-      color: $font-color-3;
-    }
-    .right {
-      line-height: 44px;
-      word-break: break-all;
-      color: $font-color-1;
-    }
-  }
-  .merchantInfo-policy {
-    text-align: center;
-    height: 110px;
-    line-height: 110px;
+    font-size: 28px;
+    color: $font-color-2;
+    height: 86px;
+    line-height: 86px;
     background-color: $bg-light-color-1;
-    @include themify {
-      color: themed('primaryColor');
-    }
   }
-  .merchantInfo-back {
-    padding: 24px 32px;
-    background-color: #fff;
-    .van-button {
-      width: 100%;
-      border-radius: 10px;
-      background-color: $bg-light-color-1;
-    }
+}
+.merchantInfo-item {
+  padding: 0 24px;
+}
+.merchantInfo-item-inner {
+  display: flex;
+  justify-content: space-between;
+
+  // align-items: center;
+  padding: 30px 0;
+  font-size: 32px;
+  background-color: #fff;
+  border-bottom: 1px solid $border-split-color-1;
+  .left {
+    flex: 0 0 300px;
+    line-height: 44px;
+    color: $font-color-3;
   }
+  .right {
+    line-height: 44px;
+    word-break: break-all;
+    color: $font-color-1;
+    text-align: right;
+  }
+}
+.merchantInfo-policy {
+  text-align: center;
+  height: 110px;
+  line-height: 110px;
+  background-color: $bg-light-color-1;
+  font-weight: 400;
+  font-size: 28px;
+  span {
+    line-height: 39px;
+  }
+
+  @include themify {
+    color: themed('primaryColor');
+  }
+}
+.merchantInfo-back {
+  padding: 24px 32px;
+  background-color: #fff;
+  .van-button {
+    width: 100%;
+    border-radius: 10px;
+    background-color: $bg-light-color-1;
+  }
+}
 </style>

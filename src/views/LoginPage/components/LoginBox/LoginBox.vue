@@ -134,13 +134,17 @@ const warnIcon = ref(warn)
   padding: 0 40px;
   &:deep(.van-field__control) {
     font-size: 50px;
+
+    @include themify {
+      caret-color: themed('primaryColor');
+    }
   }
   ::-webkit-input-placeholder { /* WebKit browsers */
-    color: #999;
+    color: $midColorPlaceholder;
     font-size: 32px;
   }
   &:deep(.van-field__body) {
-    border-bottom: solid 1px $borderColor;
+    border-bottom: solid 2px $borderColor;
     height: 111px;
   }
 }
@@ -174,19 +178,24 @@ const warnIcon = ref(warn)
   height: 40px;
 }
 .tabs {
-  width: 600px;
   height: 126px;
+  padding: 0 40px;
+  margin-bottom: 20px;
   &:deep(.van-tabs__wrap) {
     height: 92px;
     .van-tab {
       font-family: 'PingFang SC';
       font-style: normal;
-      font-weight: 500;
+      font-weight: 400;
       font-size: 36px;
       line-height: 50px;
       color: $font-color-2;
+      flex: none;
+      margin-right: 64px;
+      padding: 0;
     }
     .van-tab--active {
+      font-weight: 500;
       color: $font-color-1;
     }
     .van-tabs__line {

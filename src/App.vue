@@ -25,6 +25,18 @@
 <script lang="ts" setup>
 import ResendConfirm from '@/components/MsgVerify/ResendConfirm.vue'
 import AppBackBtn from '@/components/AppBackBtn/AppBackBtn.vue'
+import { Toast } from 'vant';
+
+const getCurClientHeight = () => document.documentElement.clientHeight || document.body.clientHeight
+const appClientHeight = getCurClientHeight()
+
+
+window.addEventListener('resize', () => {
+  if (appClientHeight - getCurClientHeight() > 300) {
+    // Toast('keyBoard')
+  }
+})
+
 </script>
 
 <style lang="scss">
