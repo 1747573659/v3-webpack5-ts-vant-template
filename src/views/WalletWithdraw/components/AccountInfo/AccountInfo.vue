@@ -4,7 +4,7 @@
     <div class="card-info">
       <div class="card-num">
         <template v-if="withdrawDetailInfo?.bankCard">
-          {{withdrawDetailInfo?.accountName}}（{{withdrawDetailInfo?.bankCard}}）
+          {{withdrawDetailInfo?.accountName}}（{{crad}}）
         </template>
       </div>
       <div class="bank-location">{{withdrawDetailInfo?.openBankCnap}}</div>
@@ -13,8 +13,11 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue';
 import useInjectInfo from '../../hooks/useInjectInfo'
 const withdrawDetailInfo = useInjectInfo()
+
+const crad = computed(() => String(withdrawDetailInfo?.bankCard).replace(/(\d{4})(?=\d)/g,'$1 '))
 </script>
 
 <style lang="scss" scoped>

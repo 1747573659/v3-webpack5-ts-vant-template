@@ -1,13 +1,11 @@
 <template>
   <div class="login-wrap">
     <div class="shop-info">
-      <div class="shop-img">
-        <img
-          :src="shopImg"
-          alt="商家图片"
-          class="img"
-        />
-      </div>
+      <img
+        :src="shopImg"
+        alt="商家图片"
+        class="img"
+      />
       <div class="shop-content">
         <div class="shop-name">{{welcomeMessageRef}}</div>
       </div>
@@ -80,14 +78,14 @@ const back = () => {
     height: 224px;
     padding-left: 40px;
     padding-top: 80px;
-    .shop-img {
+    .img {
       display: inline-block;
-      width: 120px;
-      height: 120px;
-      .img {
-        width: 120px;
-        height: 120px;
-      }
+      width: 114px;
+      height: 114px;
+      border-style: solid;
+      border-width: 3px;
+      border-color: $white;
+      border-radius: 32px;
     }
     .shop-content {
       display: inline-block;

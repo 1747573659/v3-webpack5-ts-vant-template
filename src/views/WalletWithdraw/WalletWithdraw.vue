@@ -290,11 +290,22 @@ const handlewithdrawQuery = () => {
           // 如果第六次已经是查询中则进去结果页查询状态
           if (!cnt) {
             resultPageStatus.value = 4
+            resultPageErrorMsg.value = '银行暂未返回提现结果，请稍后查看'
           }
         } else if (status === 2) {
           resultPageStatus.value = 2
         }
-      } catch(e) {}
+      } catch(e) {
+        // 报错了继续查
+        setTimeout(() => {
+          looper()
+        }, 1000);
+        // 如果第六次还是报错则进去结果页查询状态
+        if (!cnt) {
+          resultPageStatus.value = 4
+          resultPageErrorMsg.value = '系统忙，请稍后查看'
+        }
+      }
     }
   }
   return looper

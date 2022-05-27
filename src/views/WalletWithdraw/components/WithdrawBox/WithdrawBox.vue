@@ -77,7 +77,7 @@ const tag = computed(() => tagArr[String(moneyInner.value).split('.')[0].length]
 
 const moneyBlur = () => {
   // moneyInner.value = Math.min(Number(moneyInner.value), 100000) || ''
-  // moneyInner.value = Math.min(Number(moneyInner.value), withdrawDetailInfo?.tradeBalanceAmount) || ''
+  moneyInner.value = Math.min(Number(moneyInner.value), withdrawDetailInfo?.tradeBalanceAmount) || ''
 }
 
 const allinWithdraw = () => {
@@ -110,7 +110,7 @@ const allinWithdraw = () => {
       font-weight: 500;
       font-size: 50px;
       color: $font-color-1;
-      line-height: 50px;
+      line-height: 70px;
       padding-bottom: 2px;
     }
     .input {

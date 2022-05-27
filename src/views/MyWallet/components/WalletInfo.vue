@@ -1,12 +1,10 @@
 <template>
   <div class="wallet-info">
-    <div class="shop-logo-wrap">
-      <img
-        :src="shopImg"
-        alt="商家图片"
-        class="shop-logo"
-      />
-    </div>
+    <img
+      :src="shopImg"
+      alt="商家图片"
+      class="shop-logo"
+    />
     <div class="shop-info">
       <div class="shop-info-name">{{walletDetailInfo.shortShopName}}</div>
       <div class="shop-info-walletID">{{walletDetailInfo.walletId}}</div>
@@ -41,23 +39,22 @@ const copyText = computed(() => walletDetailInfo.value.shortShopName + walletDet
 <style lang="scss" scoped>
 .wallet-info {
   height: 120px;
-  padding: 24px 48px;
+  padding: 46px 48px 24px;
   display: flex;
   align-items: center;
+
+  // border: 3px solid $white;
 
   @include themify {
     background-color: themed('primaryColor');
   }
-  .shop-logo-wrap {
-    width: 120px;
-    height: 120px;
+  .shop-logo {
+    width: 114px;
+    height: 114px;
+    border-style: solid;
+    border-width: 3px;
+    border-color: $white;
     border-radius: 32px;
-
-    // border: 3px solid $white;
-    .shop-logo {
-      width: 120px;
-      height: 120px;
-    }
   }
   .shop-info {
     margin-left: 32px;
