@@ -1,6 +1,8 @@
 <template>
   <div class="back-btn-wrap">
-    <large-button class="back-btn" v-model:color="color" type="primary" size="large">返回</large-button>
+    <large-button class="back-btn" v-model:color="color" type="primary" size="large"><slot>返回</slot></large-button>
+    <!-- 安全区适配 -->
+    <div class="van-safe-area-bottom"></div>
   </div>
 </template>
 
@@ -12,8 +14,8 @@ const color = ref('')
 
 <style lang="scss" scoped>
 .back-btn-wrap {
-  width: calc(100% - 48px);
-  padding: 32px 24px;
+  width: calc(100% - 64px);
+  padding: 24px 32px;
   position: fixed;
   bottom: 0;
   background-color: white;

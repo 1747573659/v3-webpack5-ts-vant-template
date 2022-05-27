@@ -44,7 +44,6 @@ const resend = () => {
   font-style: normal;
   font-weight: 400;
   font-size: 32px;
-  text-align: right;
   .countdown-text {
     color: $font-color-2;
   }

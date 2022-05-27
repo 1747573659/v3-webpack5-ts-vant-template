@@ -10,6 +10,7 @@
             </div>
           </div>
           <van-switch
+            class="switch"
             :modelValue="state.planType"
             size="24px"
             :active-value="1"
@@ -20,7 +21,7 @@
           <div class="withdrawConfig-tips-timing">每天 {{ state.planTime }}</div>
           <div class="withdrawConfig-icon-wrap" @click="() => (timePickerVisible = true)">
             <img class="withdrawConfig-icon-info" src="../../assets/img/edit.png" alt="" />
-            修改
+            <span class="text">修改</span>
           </div>
         </div>
       </div>
@@ -124,73 +125,86 @@ import { UserInfo } from '@/store/storeTypes'
   })
 </script>
 <style lang="scss" scoped>
-  .withdrawConfig-wrap {
-    height: 100%;
-    overflow: auto;
-    background-color: $bg-light-color-1;
-    padding-top: 20px;
-    box-sizing: border-box;
-    text-align: left;
-  }
-  .withdrawConfig-header-wrap {
-    padding: 0 24px;
-    background-color: #fff;
-  }
-  .withdrawConfig-header-inner {
-    border-bottom: 1px solid $border-split-color-1;
-  }
-  .withdrawConfig-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 30px 0;
-  }
-  .withdrawConfig-tips {
-    display: inline-block;
-    font-size: 24px;
-    line-height: 1.4;
-    color: $font-color-2;
-    text-align: left;
-    margin-top: 20px;
-    &-timing {
-      display: inline-block;
-      font-size: 28px;
-      font-weight: 500;
-
-      @include themify {
-        color: themed('primaryColor');
-      }
+.withdrawConfig-wrap {
+  height: 100%;
+  overflow: auto;
+  background-color: $bg-light-color-1;
+  padding-top: 24px;
+  box-sizing: border-box;
+  text-align: left;
+}
+.withdrawConfig-header-wrap {
+  padding: 0 24px;
+  background-color: #fff;
+}
+.withdrawConfig-header-inner {
+  border-bottom: 1px solid $border-split-color-1;
+}
+.withdrawConfig-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 31px 0;
+  &:deep(.van-switch--on) {
+    @include themify {
+      background-color: themed('primaryColor');
     }
   }
-  .withdrawConfig-edit {
-    display: flex;
-    align-items: center;
-    margin: 10px 0 38px;
-  }
-  .withdrawConfig-icon-wrap {
-    color: $font-color-1;
-    padding: 0 30px 0 34px;
-    background-color: $bg-light-color-1;
-    height: 52px;
-    line-height: 52px;
-    border-radius: 26px;
-    margin-left: 20px;
-  }
-  .withdrawConfig-icon-info {
+}
+.withdrawConfig-tips {
+  display: inline-block;
+  font-size: 24px;
+  line-height: 24px;
+  color: $font-color-2;
+  text-align: left;
+  margin-top: 20px;
+  &-timing {
     display: inline-block;
-    vertical-align: middle;
-    width: 30px;
-    height: 30px;
-    margin-right: 14px;
+    font-size: 28px;
+    font-weight: 500;
+
+    @include themify {
+      color: themed('primaryColor');
+    }
   }
-  .withdrawConfig-footer {
-    margin: 26px 24px 0;
+}
+.withdrawConfig-edit {
+  display: flex;
+  align-items: center;
+  margin-bottom: 37px;
+}
+.withdrawConfig-icon-wrap {
+  color: $font-color-1;
+  background-color: $bg-light-color-1;
+  height: 52px;
+  line-height: 52px;
+  width: 144px;
+  border-radius: 40px;
+  margin-left: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .text {
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 36px;
   }
-  .withdrawConfig-header-title {
-    font-size: 32px;
-    color: $font-color-1;
-  }
-  .withdrawConfig-header-top {
-    flex: 1;
-  }
+}
+.withdrawConfig-icon-info {
+  display: inline-block;
+  vertical-align: middle;
+  width: 28px;
+  height: 28px;
+  margin-right: 8px;
+}
+.withdrawConfig-footer {
+  margin: 26px 24px 0;
+}
+.withdrawConfig-header-title {
+  font-size: 32px;
+  color: $font-color-1;
+}
+.withdrawConfig-header-top {
+  flex: 1;
+}
 </style>

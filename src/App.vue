@@ -19,12 +19,23 @@ import AppBackBtn from '@/components/AppBackBtn/AppBackBtn.vue'
 import { watch, ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
+// import { Toast } from 'vant';
   const store = useStore()
   const route = useRoute()
   const routerList = ref([])
   watch(() => route.name, () => {
     routerList.value = store.state.keepAliveView.cachedViews
   })
+
+const getCurClientHeight = () => document.documentElement.clientHeight || document.body.clientHeight
+const appClientHeight = getCurClientHeight()
+
+
+window.addEventListener('resize', () => {
+  if (appClientHeight - getCurClientHeight() > 300) {
+    // Toast('keyBoard')
+  }
+})
 
 </script>
 
