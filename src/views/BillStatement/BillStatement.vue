@@ -269,9 +269,9 @@ export default defineComponent({
     flex: 0;
   }
   .detail {
-    flex: 1 1 auto;
+    flex: 1 1 900px;
     overflow: hidden;
-    padding-right: 20px;
+    padding-right: 40px;
   }
   .title {
     width: 100%;
