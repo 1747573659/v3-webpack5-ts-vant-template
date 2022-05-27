@@ -24,7 +24,8 @@ import {
   logoutReq,
   checkNeedVerifySliderReq,
   smsSendReq,
-  smsValidCodeReq
+  smsValidCodeReq,
+  withdrawQueryRep
 } from './types'
 
 // 获取登录短信验证码
@@ -162,6 +163,15 @@ export const smsSend = (data: smsSendReq) => {
 export const smsValidCode = (data: smsValidCodeReq) => {
   return request<smsValidCodeReq, string>({
     url: '/wallet/sms/validCode',
+    method: 'post',
+    data
+  })
+}
+
+// 提现结果查询
+export const withdrawQuery = (data: withdrawConfirmReq) => {
+  return request<withdrawConfirmReq, withdrawQueryRep>({
+    url: '/wallet/withdraw/query',
     method: 'post',
     data
   })
