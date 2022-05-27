@@ -88,6 +88,11 @@
         font-weight: 400;
         font-size: 32px;
         color: $font-color-1;
+        &:last-child {
+          .handle-item-content {
+            border-bottom: none;
+          }
+        }
         &-icon {
           width: 92px;
           height: 100%;

@@ -14,11 +14,15 @@
 </template>
 
 <script lang="ts" setup>
-import ResendConfirm from '@/components/MsgVerify/ResendConfirm.vue'
-import AppBackBtn from '@/components/AppBackBtn/AppBackBtn.vue'
-import { watch, ref } from 'vue'
-import { useStore } from 'vuex'
-import { useRoute } from 'vue-router'
+  import ResendConfirm from '@/components/MsgVerify/ResendConfirm.vue'
+  import AppBackBtn from '@/components/AppBackBtn/AppBackBtn.vue'
+  import useKeyBoardShow from '@/hooks/useKeyBoardShow'
+  import { watch, ref } from 'vue'
+  import { useStore } from 'vuex'
+  import { useRoute } from 'vue-router'
+
+  useKeyBoardShow()
+
   const store = useStore()
   const route = useRoute()
   const routerList = ref([])

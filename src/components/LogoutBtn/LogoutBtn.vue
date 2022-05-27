@@ -62,6 +62,8 @@ const handleLogout = async () => {
   font-weight: 400;
   font-size: 32px;
   color: $font-color-3;
+  border: none;
+  height: 100px;
 }
 </style>
 <style lang="scss">

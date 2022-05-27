@@ -10,7 +10,11 @@ import { Button } from 'vant'
 
 <style scoped>
 .van-button--large {
-  border-radius: 20px !important;
+  border-radius: 10px;
   height: 96px;
+  font-family: 'PingFang SC';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 36px;
 }
 </style>

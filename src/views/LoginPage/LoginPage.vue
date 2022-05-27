@@ -18,7 +18,11 @@
     <login-for-verify :loginData="LoginData" v-if="hasInputedLoginName"></login-for-verify>
     <!-- 返回 -->
     <back-btn v-if="hasInputedLoginName" @click="back()"></back-btn>
-    <div v-if="!hasInputedLoginName" class="bot-info">科脉享多多技术提供</div>
+    <div v-if="!hasInputedLoginName && !keyBoardShow" class="bot-info">
+      科脉享多多技术提供
+      <!-- 安全区适配 -->
+      <div class="van-safe-area-bottom"></div>
+    </div>
   </div>
 </template>
 
@@ -34,7 +38,9 @@ import BackBtn from '@/components/BackBtn/BackBtn.vue'
 
 import { useStore } from 'vuex'
 import { LoginReq } from '@/api/types'
-
+import useKeyBoardShowForPage from '@/hooks/useKeyBoardShowForPage'
+// 安卓端键盘被调起时隐藏fixed元素
+const { keyBoardShow } = useKeyBoardShowForPage()
 const store = useStore()
 
 const { welcomeMessage, loginLogoUrl } = store.state.userInfo
@@ -71,11 +77,11 @@ const back = () => {
   height: 100%;
   background-color: $white;
   .shop-info {
-    height: 304px;
-    display: flex;
-    align-items: center;
+    height: 224px;
     padding-left: 40px;
+    padding-top: 80px;
     .shop-img {
+      display: inline-block;
       width: 120px;
       height: 120px;
       .img {
@@ -84,9 +90,10 @@ const back = () => {
       }
     }
     .shop-content {
+      display: inline-block;
       font-size: 40px;
       text-align: left;
-      padding-left: 20px;
+      padding-left: 24px;
     }
   }
 }
@@ -96,10 +103,10 @@ const back = () => {
   font-weight: 400;
   font-size: 28px;
   line-height: 39px;
+  position: fixed;
+  bottom: 12px;
   color: $font-color-2;
   text-align: center;
-  position: fixed;
-  bottom: 24px;
   width: 100%;
 }
 </style>

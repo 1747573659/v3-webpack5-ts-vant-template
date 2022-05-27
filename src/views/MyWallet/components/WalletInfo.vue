@@ -52,11 +52,11 @@ const copyText = computed(() => walletDetailInfo.value.shortShopName + walletDet
     width: 120px;
     height: 120px;
     border-radius: 32px;
-    border: 3px solid $white;
+
+    // border: 3px solid $white;
     .shop-logo {
       width: 120px;
       height: 120px;
-      border-radius: 32px;
     }
   }
   .shop-info {
@@ -68,11 +68,13 @@ const copyText = computed(() => walletDetailInfo.value.shortShopName + walletDet
     &-name {
       font-weight: 500;
       font-size: 36px;
+      line-height: 50px;
     }
     &-walletID {
       margin-top: 8px;
       font-weight: 400;
       font-size: 28px;
+      line-height: 39px;
     }
   }
 }
