@@ -40,6 +40,7 @@ const crad = computed(() => String(withdrawDetailInfo?.bankCard).replace(/(\d{4}
       font-size: 36px;
       color: $font-color-1;
       padding-bottom: 10px;
+      min-height: 48px;
       .span {
         line-height: 48px;
       }
@@ -49,6 +50,7 @@ const crad = computed(() => String(withdrawDetailInfo?.bankCard).replace(/(\d{4}
       font-size: 24px;
       color: $font-color-2;
       line-height: 34px;
+      min-height: 34px;
     }
   }
 }

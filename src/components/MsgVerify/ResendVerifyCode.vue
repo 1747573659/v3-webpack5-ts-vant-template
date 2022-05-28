@@ -1,7 +1,7 @@
 <template>
   <div class="resend-verifycode">
     <div class="countdown-text" v-if="current.seconds">{{ current.seconds }}秒后可重新发送</div>
-    <div class="resend-text" @click="resend" v-else>重新发送</div>
+    <div class="resend-text" @click="resend" v-else v-btnStats><span>重新发送</span></div>
   </div>
 </template>
 

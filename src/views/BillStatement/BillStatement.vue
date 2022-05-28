@@ -156,6 +156,7 @@ export default defineComponent({
           <van-cell
             v-for="item in billList.list"
             :key="item.id"
+            v-btnStats="'账单详情'"
             @click="
               router.push({
                 name: 'billDetail',

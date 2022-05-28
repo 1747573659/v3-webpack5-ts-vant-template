@@ -10,6 +10,7 @@
             </div>
           </div>
           <van-switch
+            v-btnStats="'切换状态'"
             class="switch"
             :modelValue="state.planType"
             size="24px"
@@ -19,7 +20,7 @@
         </div>
         <div class="withdrawConfig-edit" v-if="state.planType === 1">
           <div class="withdrawConfig-tips-timing">每天 {{ state.planTime }}</div>
-          <div class="withdrawConfig-icon-wrap" @click="() => (timePickerVisible = true)">
+          <div v-btnStats class="withdrawConfig-icon-wrap" @click="() => (timePickerVisible = true)">
             <img class="withdrawConfig-icon-info" src="../../assets/img/edit.png" alt="" />
             <span class="text">修改</span>
           </div>

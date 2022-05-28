@@ -89,7 +89,7 @@
         </template>
       </div>
     </div>
-    <div class="merchantInfo-policy">
+    <div class="merchantInfo-policy" v-btnStats>
       <span @click="handleToTechPolicy">《科脉技术隐私政策》</span>
     </div>
   </div>

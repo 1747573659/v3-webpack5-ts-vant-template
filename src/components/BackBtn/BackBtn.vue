@@ -1,6 +1,6 @@
 <template>
   <div class="back-btn-wrap" v-if="!keyBoardShow">
-    <large-button class="back-btn" v-model:color="color" type="primary" size="large"><slot>返回</slot></large-button>
+    <large-button class="back-btn" v-btnStats v-model:color="color" type="primary" size="large"><slot>返回</slot></large-button>
     <!-- 安全区适配 -->
     <div class="van-safe-area-bottom"></div>
   </div>
