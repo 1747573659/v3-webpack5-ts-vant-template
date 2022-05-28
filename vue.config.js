@@ -116,7 +116,7 @@ module.exports = defineConfig({
           deleteOriginalAssets: false // 是否删除源文件
         })
       )
-      config.plugins.push(new webpack.IgnorePlugin(/\.\/locale$/, /moment$/))
+      config.plugins.push(new webpack.IgnorePlugin({resourceRegExp: /\.\/locale$/, contextRegExp: /moment$/}))
     }
   }
 })
