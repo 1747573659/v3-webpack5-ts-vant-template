@@ -18,12 +18,12 @@
       <div class="wallet-card-content-money">
         <div class="wallet-card-content-money-text">{{ availableAmount }}</div>
         <div class="wallet-card-content-money-withdraw">
-          <van-button size="small" type="primary" @click="gotoWithdraw">提现</van-button>
+          <van-button v-btnStats size="small" type="primary" @click="gotoWithdraw">提现</van-button>
         </div>
       </div>
       <div class="wallet-card-content-detail">
         <div>{{ walletDetailInfo.accountName }}</div>
-        <div class="wallet-card-content-detail-right" @click="gotoDetail">
+        <div v-btnStats class="wallet-card-content-detail-right" @click="gotoDetail">
           <span>详情</span>
           <img class="icon" :src="arrowRightSSvg" alt="arrowRightSSvg">
         </div>

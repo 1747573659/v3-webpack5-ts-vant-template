@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="allin-btn">
-        <van-button size="mini" type="primary" @click="allinWithdraw">全部提现</van-button>
+        <van-button v-btnStats size="mini" type="primary" @click="allinWithdraw">全部提现</van-button>
       </div>
     </div>
     <div class="info">

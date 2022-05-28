@@ -5,7 +5,7 @@
     <!-- 提现信息 -->
     <withdraw-box :error-msg="withdrawErrorMsg" v-model:money="money"></withdraw-box>
     <div class="withdraw-btn">
-      <large-button type="primary" :loading="withdrawLoading" :disabled="withdrawDisabled" @click="withdrawApply">提现</large-button>
+      <large-button type="primary" v-btnStats :loading="withdrawLoading" :disabled="withdrawDisabled" @click="withdrawApply">提现</large-button>
     </div>
     <!-- 验证码 -->
     <popur-verify-code :money="money" v-model:show="showVerifyPopur" @resend="resend" :error-msg="verifyErrorMsg" @click-close-icon="clickCloseIcon" @handle-verify-code="handleVerifyCode"></popur-verify-code>
@@ -245,6 +245,7 @@ const showResultPage = ref(false)
 const resultPageClosed = () => {
   money.value = ''
   getWithdrawDetail()
+  document.title = '提现'
 }
 
 const resultPageStatus = ref(1) // 1query 2sucess 3error 4loading
@@ -266,6 +267,7 @@ const confirmWithdraw = async () => {
     }
     showWithdrawConfirm.value = false
     showResultPage.value = true
+    document.title = ''
   } catch(e) {
     showWithdrawConfirm.value = false
   }

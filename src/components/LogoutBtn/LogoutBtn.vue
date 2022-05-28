@@ -1,5 +1,5 @@
 <template>
-  <large-button class="logou-btn" color="" @click="logout">退出登录</large-button>
+  <large-button v-btnStats class="logou-btn" color="" @click="logout">退出登录</large-button>
 </template>
 
 <script lang="ts" setup>

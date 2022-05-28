@@ -3,7 +3,7 @@
     <login-box v-model="loginName" @loginItemTypeChange="loginItemTypeChange" :errorMsg="errorMsg"></login-box>
   </div>
   <div class="login-btn">
-    <large-button type="primary" loading-text="获取短信验证码" :loading="loginBtnLoading" :disabled="loginBtnDisabled" @click="login" size="large">获取短信验证码</large-button>
+    <large-button type="primary" v-btnStats loading-text="获取短信验证码" :loading="loginBtnLoading" :disabled="loginBtnDisabled" @click="login" size="large">获取短信验证码</large-button>
   </div>
 </template>
 

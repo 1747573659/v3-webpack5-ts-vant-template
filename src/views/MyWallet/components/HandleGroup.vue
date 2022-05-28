@@ -1,12 +1,12 @@
 <template>
   <div class="handle-item-group">
     <div class="handle-item-wrap">
-      <div class="handle-item" v-for="item in handleList" :key="item.title" @click="item.goTo">
+      <div class="handle-item" v-btnStats v-for="item in handleList" :key="item.title" @click="item.goTo">
         <div class="handle-item-icon">
           <img class="icons" :src="item.icon.value" :alt="item.icon.value" />
         </div>
         <div class="handle-item-content">
-          <div class="title">{{ item.title }}</div>
+          <span class="title">{{ item.title }}</span>
           <div>
             <img class="icons" :src="arrowRightGreySvg" alt="arrowRightGreySvg" />
           </div>

@@ -1,5 +1,5 @@
 <template>
-  <van-button @click="copy" class="copy-btn" round size="mini" type="primary">复制</van-button>
+  <van-button v-btnStats @click="copy" class="copy-btn" round size="mini" type="primary">复制</van-button>
 </template>
 
 <script lang="ts" setup>
