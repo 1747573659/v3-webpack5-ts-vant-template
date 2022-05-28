@@ -4,7 +4,11 @@
     <div class="card-info">
       <div class="card-num">
         <template v-if="withdrawDetailInfo?.bankCard">
-          {{withdrawDetailInfo?.accountName}}（{{crad}}）
+          <span class="span" v-if="withdrawDetailInfo?.accountName.length <= 4">{{withdrawDetailInfo?.accountName}} ({{crad}})</span>
+          <div v-else>
+            <div>{{withdrawDetailInfo?.accountName}}</div>
+            <div>({{crad}})</div>
+          </div>
         </template>
       </div>
       <div class="bank-location">{{withdrawDetailInfo?.openBankCnap}}</div>
@@ -36,13 +40,15 @@ const crad = computed(() => String(withdrawDetailInfo?.bankCard).replace(/(\d{4}
       font-size: 36px;
       color: $font-color-1;
       padding-bottom: 10px;
-      min-height: 48px;
+      .span {
+        line-height: 48px;
+      }
     }
     .bank-location {
       font-weight: 400;
       font-size: 24px;
       color: $font-color-2;
-      min-height: 34px;
+      line-height: 34px;
     }
   }
 }
