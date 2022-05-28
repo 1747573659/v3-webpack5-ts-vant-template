@@ -296,7 +296,7 @@ const handlewithdrawQuery = () => {
           resultPageStatus.value = 2
         }
       } catch(e) {
-        // 报错了继续查
+        // 报错了继续查，即使这样会有弹窗
         setTimeout(() => {
           looper()
         }, 1000);
