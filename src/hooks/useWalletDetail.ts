@@ -32,6 +32,7 @@ export default () => {
     getWalletDetail()
   })
   return {
+    getWalletDetail,
     walletDetailInfo,
     loading
   }
