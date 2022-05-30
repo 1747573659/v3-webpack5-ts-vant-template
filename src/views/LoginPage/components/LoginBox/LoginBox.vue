@@ -44,7 +44,7 @@
 
 <script setup lang="ts">
 import warn from '@/assets/icons/warn.png';
-import { Field } from 'vant'
+import { Field, FieldType } from 'vant'
 import { ref, toRefs, computed } from '@vue/reactivity'
 
 import { LoginName } from '@/store/storeTypes'
@@ -63,12 +63,13 @@ const emits = defineEmits<{
 
 // 如果是钱包ID栏目需要唤起英文键盘,手机号则唤起数字键盘
 // 原本之后type="password"才能唤起英文键盘，那么我们先把钱包ID的默认键盘设置为password，当唤起之后改为text
-const filedType = computed(() => {
-  if (loginItemType.value === 0) {
-    if (loginNameShowBorder.value) {}
-    return loginNameShowBorder.value ? 'text' : 'password'
-  } else return 'tel'
-})
+const filedType = ref<FieldType>('password')
+// computed(() => {
+//   if (loginItemType.value === 0) {
+//     if (loginNameShowBorder.value) {}
+//     return loginNameShowBorder.value ? 'text' : 'password'
+//   } else return 'tel'
+// })
 
 const loginName = computed<LoginName>({
   get: () => modelValue.value,
@@ -121,11 +122,17 @@ const loginItemType = ref(0)
 const placeholder = computed(() => loginItemTypeList[loginItemType.value].placeHolder)
 const loginItemTypeChange = async () => {
   loginName.value = '';
+  if (loginItemType.value === 0) {
+    filedType.value = 'password'
+  } else if (loginItemType.value === 1) {
+    filedType.value = 'tel'
+  }
   emits('loginItemTypeChange', loginItemType.value);
 }
 
 const loginNameShowBorder = ref<boolean>(false)
 const loginNameFocus = () => {
+  loginItemType.value === 0 && (filedType.value = 'text')
   loginNameShowBorder.value = true
 }
 const loginNameBlur = () => {
