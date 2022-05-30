@@ -8,8 +8,9 @@
       class="login"
       :class="{'active-border': loginNameShowBorder, error: !!errorMsg}"
       @focus="loginNameFocus"
-      :type="loginItemType ? 'tel' : 'text'"
+      :type="filedType"
       @blur="loginNameBlur"
+      autocapitalize="on"
       :placeholder="placeholder"
       :maxlength="loginItemType ? '13' : '25'"
       :clearable="true"
@@ -59,6 +60,15 @@ const emits = defineEmits<{
   (e: 'update:modelValue', modelValue: LoginName): void
   (e: 'loginItemTypeChange', loginItemType: number): void
 }>()
+
+// 如果是钱包ID栏目需要唤起英文键盘,手机号则唤起数字键盘
+// 原本之后type="password"才能唤起英文键盘，那么我们先把钱包ID的默认键盘设置为password，当唤起之后改为text
+const filedType = computed(() => {
+  if (loginItemType.value === 0) {
+    if (loginNameShowBorder.value) {}
+    return loginNameShowBorder.value ? 'text' : 'password'
+  } else return 'tel'
+})
 
 const loginName = computed<LoginName>({
   get: () => modelValue.value,
