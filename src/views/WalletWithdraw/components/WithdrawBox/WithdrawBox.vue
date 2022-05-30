@@ -4,7 +4,7 @@
     <div class="money">
       <div class="unit">¥</div>
       <div class="input">
-        <van-field ref="input" v-model="moneyInner" type="number" @blur="moneyBlur" :placeholder="placeholder"/>
+        <van-field ref="input" v-model="moneyInner" type="number" :placeholder="placeholder"/>
         <div class="tag-wrap" v-show="tag">
           <div class="tag">
             {{tag}}
@@ -74,11 +74,6 @@ const placeholder = computed(() => `最多可转出¥${withdrawDetailInfo?.trade
 const tagArr = [null, null, null, '百', '千', '万', '十万', '百万', '千万', '亿', '十亿', '百亿', '千亿'] 
 
 const tag = computed(() => tagArr[String(moneyInner.value).split('.')[0].length])
-
-const moneyBlur = () => {
-  // moneyInner.value = Math.min(Number(moneyInner.value), 100000) || ''
-  moneyInner.value = Math.min(Number(moneyInner.value), withdrawDetailInfo?.tradeBalanceAmount) || ''
-}
 
 const allinWithdraw = () => {
   moneyInner.value = withdrawDetailInfo?.tradeBalanceAmount
