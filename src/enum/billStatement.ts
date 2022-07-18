@@ -24,7 +24,7 @@ type _billTypeItem = {
   detailList: Array<_detailItem> | ((item: billDetailType) => Array<_detailItem>)
 }
 const bankMethodsMapEnum = new Map([
-  [1, '钱包余额'],
+  [1, '余额'],
   [2, '网商活期'],
   [3, '非网商卡'],
   [4, '支付宝余额'],
@@ -73,7 +73,7 @@ const detailListEnum = {
         ? list.counterpartInfoList.map(item => item.counterpartWalletId).join(',')
         : ''
     },
-    label: '对方钱包ID'
+    label: '对方ID'
   },
   refundSerialNumber: {
     key: 'refundSn',

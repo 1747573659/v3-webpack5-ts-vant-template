@@ -5,7 +5,7 @@ const myWalletRoutes: Array<RouteRecordRaw> = [
     path: '/walletList',
     name: 'walletList',
     meta: {
-      title: '选择钱包'
+      title: '选择'
     },
     component: () => import('@/views/WalletList/WalletList.vue')
   },
@@ -13,7 +13,7 @@ const myWalletRoutes: Array<RouteRecordRaw> = [
     path: '/myWallet',
     name: 'myWallet',
     meta: {
-      title: '钱包首页'
+      title: '首页'
     },
     component: () => import('@/views/MyWallet/MyWallet.vue')
   },

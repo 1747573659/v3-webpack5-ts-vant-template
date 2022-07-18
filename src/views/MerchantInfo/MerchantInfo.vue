@@ -17,7 +17,7 @@
         },
         {
           key: 'walletId',
-          label: '钱包ID'
+          label: 'ID'
         }
       ]
     },

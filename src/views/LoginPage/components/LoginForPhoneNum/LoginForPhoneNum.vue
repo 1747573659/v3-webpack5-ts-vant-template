@@ -18,7 +18,6 @@ import useCheckNeedVerify from '@/hooks/useCheckNeedVerify'
 import { LoginReq } from '@/api/types'
 
 const loginName = ref('')
-// 1：钱包ID 2：法人手机号 3：法人身份证
 const loginItemType = ref(1)
 const loginItemTypeChange = (type: number) => {
   loginItemType.value = ++type

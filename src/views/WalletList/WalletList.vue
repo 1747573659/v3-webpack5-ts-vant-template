@@ -3,7 +3,7 @@
     <template v-for="item in walletList" :key="item">
       <van-cell class="cell" label="商户简称" is-link @click="cellClick(item)">
         <template #title>
-          <div class="walletId">钱包ID</div>
+          <div class="walletId">ID</div>
         </template>
         <template #label>
           <span class="shortName">商户简称</span>

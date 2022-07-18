@@ -21,7 +21,7 @@ router.beforeEach((to, from, next) => {
       welcomeMessage,
       walletShopLogoUrl
     })
-    // 如果有token，即走30天免登录的逻辑，直接跳转到钱包主页
+    // 如果有token，即走30天免登录的逻辑，直接跳转到主页
     if (token) {
       next({name: 'myWallet'})
     }

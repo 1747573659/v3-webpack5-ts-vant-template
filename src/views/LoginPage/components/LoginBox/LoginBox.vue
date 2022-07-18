@@ -1,3 +1,11 @@
+<!--
+ * @Author: chensheng chensheng@kemai.cn
+ * @Date: 2022-06-01 10:05:22
+ * @LastEditors: chensheng chensheng@kemai.cn
+ * @LastEditTime: 2022-06-01 11:51:21
+ * @FilePath: \v3-webpack5-ts-vant-template\src\views\LoginPage\components\LoginBox\LoginBox.vue
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 <template>
   <div class="login-box">
     <van-tabs v-model:active="loginItemType" color="#31353C" class="tabs" @change="loginItemTypeChange">
@@ -61,8 +69,8 @@ const emits = defineEmits<{
   (e: 'loginItemTypeChange', loginItemType: number): void
 }>()
 
-// 如果是钱包ID栏目需要唤起英文键盘,手机号则唤起数字键盘
-// 原本之后type="password"才能唤起英文键盘，那么我们先把钱包ID的默认键盘设置为password，当唤起之后改为text
+// 如果是ID栏目需要唤起英文键盘,手机号则唤起数字键盘
+// 原本之后type="password"才能唤起英文键盘，那么我们先把ID的默认键盘设置为password，当唤起之后改为text
 const filedType = ref<FieldType>('password')
 // computed(() => {
 //   if (loginItemType.value === 0) {
@@ -106,8 +114,8 @@ const idNumberUpdate = (oldValue: string) => {
 
 const loginItemTypeList = [
   {
-    title: '钱包ID',
-    placeHolder: '请输入钱包ID',
+    title: 'ID',
+    placeHolder: '请输入ID',
   },
   {
     title: '手机号',

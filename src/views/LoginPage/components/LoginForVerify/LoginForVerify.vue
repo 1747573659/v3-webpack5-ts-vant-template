@@ -77,7 +77,6 @@ const handleVerifyCode = async (verifyCode: VerifyCode) => {
     store.dispatch('setUserInfo', {
       token: res.token
     })
-    // 如果使用钱包登录或者只有一个钱包则直接replace path: myWallet
     if (loginItemType === 1) {
       router.replace('/myWallet')
     } else if (res.walletList.length === 1) {

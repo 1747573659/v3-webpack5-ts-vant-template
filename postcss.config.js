@@ -1,7 +1,7 @@
 module.exports = ({ file }) => {
-  let remUnit
-  // 判断条件
-  if (file && file.indexOf('vant') > -1) {
+  let remUnit = 37.5
+  // 如果UI的设计稿的宽为750px
+  if (file && file.indexOf('\\vant\\') > -1) {
     remUnit = 37.5
   } else {
     remUnit = 75
@@ -18,7 +18,7 @@ module.exports = ({ file }) => {
         ]
       },
       'postcss-pxtorem': {  
-        rootValue: remUnit, // 结果为：设计稿元素尺寸/16，比如元素宽320px,最终页面会换算成 20rem
+        rootValue: remUnit,
         propList: ['*']
       }
     }
